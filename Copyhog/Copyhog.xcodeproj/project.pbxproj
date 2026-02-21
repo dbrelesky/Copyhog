@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		A10001 /* CopyhogApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20001 /* CopyhogApp.swift */; };
 		A10002 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A20002 /* Assets.xcassets */; };
+		A10003 /* PopoverContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20006 /* PopoverContent.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -17,6 +18,7 @@
 		A20003 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A20004 /* Copyhog.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Copyhog.entitlements; sourceTree = "<group>"; };
 		A20005 /* Copyhog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Copyhog.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A20006 /* PopoverContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverContent.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -42,11 +44,20 @@
 			isa = PBXGroup;
 			children = (
 				A20001 /* CopyhogApp.swift */,
+				A40004 /* Views */,
 				A20002 /* Assets.xcassets */,
 				A20003 /* Info.plist */,
 				A20004 /* Copyhog.entitlements */,
 			);
 			path = Copyhog;
+			sourceTree = "<group>";
+		};
+		A40004 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A20006 /* PopoverContent.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		A40003 /* Products */ = {
@@ -127,6 +138,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A10001 /* CopyhogApp.swift in Sources */,
+				A10003 /* PopoverContent.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
