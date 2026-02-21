@@ -1,8 +1,9 @@
 # Roadmap: Copyhog
 
-## Overview
+## Milestones
 
-Copyhog is a native macOS menu bar app that captures clipboard items and screenshots into a browsable history with instant re-paste. The roadmap delivers in three phases: first the invisible engine (menu bar shell, clipboard observer, screenshot watcher, persistent store), then the browsable UI (preview pane, item list, hover interaction), and finally the paste actions that close the loop (single-click copy, multi-select batch paste, drag-out).
+- v1.0 MVP - Phases 1-3 (shipped 2026-02-21)
+- v1.1 Polish & Control - Phase 4 (in progress)
 
 ## Phases
 
@@ -12,11 +13,12 @@ Copyhog is a native macOS menu bar app that captures clipboard items and screens
 
 Decimal phases appear between their surrounding integers in numeric order.
 
+<details>
+<summary>v1.0 MVP (Phases 1-3) - SHIPPED 2026-02-21</summary>
+
 - [x] **Phase 1: Capture Engine** - Menu bar shell, clipboard observer, screenshot watcher, and persistent item store
 - [x] **Phase 2: Browse UI** - Split-view popover with preview pane, item list, and hover interaction
 - [x] **Phase 3: Paste Actions** - Single-click copy, multi-select batch paste, and drag-out
-
-## Phase Details
 
 ### Phase 1: Capture Engine
 **Goal**: The app runs silently in the menu bar, automatically capturing every clipboard copy and screenshot into a persistent local store
@@ -28,7 +30,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Copying text or an image anywhere on the system creates a new entry in the item store within 1 second
   4. Taking a screenshot (Cmd+Shift+3/4) results in the file appearing in ~/Documents/Screenies/ and the image being copied to the system clipboard
   5. The store holds exactly 20 items max, purging the oldest when exceeded, and items survive an app restart
-**Plans:** 2 plans
+**Plans:** 2/2 complete
 
 Plans:
 - [x] 01-01-PLAN.md — Xcode project scaffold, MenuBarExtra with popover, global hotkey, launch-at-login
@@ -42,7 +44,7 @@ Plans:
   1. The popover shows a scrollable list of captured items with 64x64 thumbnails (images) or 2-line text snippets, each with a relative timestamp
   2. Hovering over an item row updates the preview pane at the top to show the full-size image or full text
   3. When no items have been captured, a friendly empty state message is displayed instead of a blank screen
-**Plans:** 1/1 plans complete
+**Plans:** 1/1 complete
 
 Plans:
 - [x] 02-01-PLAN.md — Preview pane, item list with 64x64 thumbnails, hover-driven preview, and empty state
@@ -55,19 +57,44 @@ Plans:
   1. Clicking an item row copies it to the system clipboard, ready to paste into any app
   2. Toggling multi-select mode shows checkboxes on rows, and the "Copy N items" button writes selected image file URLs to the pasteboard for batch paste into apps like Slack or Figma
   3. Items can be dragged out of the popover directly into target apps (text or image)
-**Plans:** 2 plans
+**Plans:** 2/2 complete
 
 Plans:
 - [x] 03-01-PLAN.md — Single-click copy-to-clipboard and multi-select batch paste
 - [x] 03-02-PLAN.md — Drag-out support via Transferable and .draggable
 
+</details>
+
+## v1.1 Polish & Control
+
+**Milestone Goal:** Give the user full control over their clipboard history -- fix the broken hotkey, let them delete individual items, and wipe everything clean.
+
+- [ ] **Phase 4: User Control** - Global hotkey fix, single-item delete, and full history wipe
+
+## Phase Details
+
+### Phase 4: User Control
+**Goal**: Users have full control over the Copyhog popover and their clipboard history -- summoning it from anywhere and removing items at will
+**Depends on**: Phase 3
+**Requirements**: KEY-01, MGMT-01, MGMT-02
+**Success Criteria** (what must be TRUE):
+  1. User can press Shift+Ctrl+C from any app and the Copyhog popover toggles open or closed reliably
+  2. User can delete a single item from the history list and it disappears immediately from both the UI and the persistent store
+  3. User can trigger "Hog Wipe" and after confirming, all items are removed from the history list and persistent store
+  4. After a Hog Wipe, the popover shows the empty state message
+**Plans**: TBD
+
+Plans:
+- [ ] (to be planned)
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 
-| Phase | Plans Complete | Status | Completed |
-|-------|----------------|--------|-----------|
-| 1. Capture Engine | 2/2 | Complete | 2026-02-21 |
-| 2. Browse UI | 1/1 | Complete    | 2026-02-21 |
-| 3. Paste Actions | 2/2 | Complete | 2026-02-21 |
+| Phase | Milestone | Plans Complete | Status | Completed |
+|-------|-----------|----------------|--------|-----------|
+| 1. Capture Engine | v1.0 | 2/2 | Complete | 2026-02-21 |
+| 2. Browse UI | v1.0 | 1/1 | Complete | 2026-02-21 |
+| 3. Paste Actions | v1.0 | 2/2 | Complete | 2026-02-21 |
+| 4. User Control | v1.1 | 0/? | Not started | - |

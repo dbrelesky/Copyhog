@@ -115,16 +115,16 @@ Deferred to future release. Tracked but not in current roadmap.
 | PASTE-02 | Phase 3 | Complete |
 | PASTE-03 | Phase 3 | Complete |
 | PASTE-04 | Phase 3 | Complete |
-| KEY-01 | — | Pending |
-| MGMT-01 | — | Pending |
-| MGMT-02 | — | Pending |
+| KEY-01 | Phase 4 | Pending |
+| MGMT-01 | Phase 4 | Pending |
+| MGMT-02 | Phase 4 | Pending |
 
 **Coverage:**
 - v1.0 requirements: 21 total (all complete)
 - v1.1 requirements: 3 total
-- Mapped to phases: 0
-- Unmapped: 3 ⚠️
+- Mapped to phases: 3/3
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-02-20*
-*Last updated: 2026-02-21 after milestone v1.1 definition*
+*Last updated: 2026-02-21 after v1.1 roadmap creation*

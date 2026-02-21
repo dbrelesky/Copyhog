@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-21)
 
 **Core value:** Every screenshot and clipboard copy is captured and instantly accessible -- no hunting, no lost items, no broken workflow.
-**Current focus:** Milestone v1.1 — Polish & Control
+**Current focus:** Milestone v1.1 — Phase 4: User Control
 
 ## Current Position
 
-Phase: Not started (defining requirements)
-Plan: —
-Status: Defining requirements
-Last activity: 2026-02-21 — Milestone v1.1 started
+Phase: 4 of 4 (User Control)
+Plan: 0 of ? in current phase
+Status: Ready to plan
+Last activity: 2026-02-21 — Roadmap created for v1.1
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [##########] v1.0 complete | [░░░░░░░░░░] v1.1 0%
 
 ## Performance Metrics
 
@@ -44,32 +44,20 @@ Progress: [░░░░░░░░░░] 0%
 Decisions are logged in PROJECT.md Key Decisions table.
 Recent decisions affecting current work:
 
-- Used SwiftUI MenuBarExtra (.window style) over NSStatusItem + NSPopover for simpler lifecycle management
-- App Sandbox disabled in entitlements — required for NSEvent.addGlobalMonitorForEvents
-- SMAppService.mainApp.register() used for launch-at-login (macOS 13+ API)
-- Global hotkey (Shift+Up Arrow) registered but not functional — deferred to future plan; needs NSStatusItem-based toggle approach
-- Timer-based NSPasteboard.changeCount polling at 0.5s — simpler and reliable vs NSPasteboardObserver private API
-- DispatchSource O_EVTONLY directory watcher for screenshot detection — low-overhead kernel event approach
-- isOwnWrite/skipNextChange flag pattern prevents infinite loop when ScreenshotWatcher copies screenshots to clipboard
-- Relative paths in ClipItem for image storage — survive app relocation; resolved at runtime against App Support base
-- Used @State hoveredItemID with onHover last-writer-wins pattern for macOS hover bug workaround
-- PreviewPane height fixed at 200pt with aspect-fit images, scrollable text
-- ContentUnavailableView for empty state — native macOS 14 component
-- ClipboardObserver stored as optional var on ClipItemStore for view access — minimal change vs restructuring init chain
-- Batch paste uses NSString and NSURL as NSPasteboardWriting objects for cross-app compatibility
-- ProxyRepresentation throws for images to prevent exporting file path as text -- FileRepresentation handles images
-- PasteboardWriter.writeMultiple rewritten to write all items in single writeObjects call
+- Global hotkey (Shift+Up Arrow) was registered in v1.0 but not functional -- needs NSStatusItem-based toggle approach
+- v1.1 changes hotkey to Shift+Ctrl+C
+- App Sandbox disabled in entitlements -- required for NSEvent.addGlobalMonitorForEvents
 
 ### Pending Todos
 
-(Moved to v1.1 requirements — global hotkey fix)
+None.
 
 ### Blockers/Concerns
 
-(None — hotkey fix is now an active requirement)
+None.
 
 ## Session Continuity
 
 Last session: 2026-02-21
-Stopped at: Milestone v1.1 initialization — defining requirements
+Stopped at: Roadmap created for v1.1 milestone -- ready to plan Phase 4
 Resume file: None
