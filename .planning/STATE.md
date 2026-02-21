@@ -63,6 +63,8 @@ None.
 ### Roadmap Evolution
 
 - Phase 04.1 inserted after Phase 4: Settings menu with version display, attribution, and relocated actions (URGENT)
+- Phase 04.2 inserted after Phase 4: Liquid glass UI redesign (URGENT)
+- Phase 04.3 inserted after Phase 04.1: Remaining App Store readiness (security-scoped bookmarks, metadata, entitlement cleanup)
 
 ## Session Continuity
 
