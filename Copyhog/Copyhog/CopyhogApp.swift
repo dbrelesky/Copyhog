@@ -43,11 +43,23 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         registerGlobalHotkey()
         startCaptureServices()
 
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(hotkeyConfigChanged),
+            name: HotkeyConfig.configChangedNotification,
+            object: nil
+        )
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
             self?.statusButton = NSApp.windows
                 .compactMap({ $0.value(forKey: "statusItem") as? NSStatusItem })
                 .first?.button
         }
+    }
+
+    @objc private func hotkeyConfigChanged() {
+        removeMonitors()
+        registerGlobalHotkey()
     }
 
     private func startCaptureServices() {
@@ -102,12 +114,23 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     }
 
     private nonisolated func isHotkeyEvent(_ event: NSEvent) -> Bool {
-        // Shift + Ctrl + C (keyCode 8)
+        let (expectedKeyCode, expectedModifiers) = MainActor.assumeIsolated {
+            (HotkeyConfig.shared.keyCode, HotkeyConfig.shared.modifierFlags)
+        }
         let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
-        return event.keyCode == 8
-            && flags.contains([.shift, .control])
-            && !flags.contains(.option)
-            && !flags.contains(.command)
+
+        guard event.keyCode == expectedKeyCode, flags.contains(expectedModifiers) else {
+            return false
+        }
+
+        // Ensure no extra modifiers are pressed beyond what's expected
+        let allModifiers: [NSEvent.ModifierFlags] = [.shift, .control, .option, .command]
+        for mod in allModifiers {
+            if flags.contains(mod) && !expectedModifiers.contains(mod) {
+                return false
+            }
+        }
+        return true
     }
 
     private func togglePopover() {
