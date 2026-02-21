@@ -2,19 +2,19 @@
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-02-20)
+See: .planning/PROJECT.md (updated 2026-02-21)
 
 **Core value:** Every screenshot and clipboard copy is captured and instantly accessible -- no hunting, no lost items, no broken workflow.
-**Current focus:** Phase 3: Paste Actions
+**Current focus:** Milestone v1.1 — Polish & Control
 
 ## Current Position
 
-Phase: 3 of 3 (Paste Actions)
-Plan: 2 of 2 in current phase
-Status: Phase complete
-Last activity: 2026-02-21 -- Completed 03-02 drag-out plan
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-02-21 — Milestone v1.1 started
 
-Progress: [██████████] 100%
+Progress: [░░░░░░░░░░] 0%
 
 ## Performance Metrics
 
@@ -62,14 +62,14 @@ Recent decisions affecting current work:
 
 ### Pending Todos
 
-- Fix global hotkey toggle: MenuBarExtra doesn't expose programmatic open/close; next plan should use NSStatusItem button action or NSPanel ordering
+(Moved to v1.1 requirements — global hotkey fix)
 
 ### Blockers/Concerns
 
-- Known issue: Shift+Up Arrow global hotkey does not toggle the popover at runtime. Approved and deferred. Will need a different toggle mechanism (NSStatusItem direct control or NSPanel).
+(None — hotkey fix is now an active requirement)
 
 ## Session Continuity
 
 Last session: 2026-02-21
-Stopped at: Completed 03-02-PLAN.md (drag-out) -- All phases complete
+Stopped at: Milestone v1.1 initialization — defining requirements
 Resume file: None

@@ -12,21 +12,22 @@ Every screenshot and clipboard copy is captured and instantly accessible — no 
 
 ### Validated
 
-(None yet — ship to validate)
+- ✓ Automatically capture clipboard items (text + images) and screenshots into persistent history — v1.0
+- ✓ Run as macOS menu bar app with split-view popover (~360x480px): preview top, list bottom — v1.0
+- ✓ Observer mode — watch system clipboard + screenshot directory, don't replace native shortcuts — v1.0
+- ✓ When a screenshot is detected, automatically copy it to the system clipboard — v1.0
+- ✓ Move/save all detected screenshots to ~/Documents/Screenies/ — v1.0
+- ✓ Show browsable list of recent items with visual previews (thumbnails for images, text snippets for text) — v1.0
+- ✓ Single-select: clicking an item copies it to system clipboard for pasting — v1.0
+- ✓ Multi-select images: write multiple images as file URL references to pasteboard for batch paste — v1.0
+- ✓ Drag-and-drop: drag selected items from Copyhog into target apps — v1.0
+- ✓ Retain last 20 items, auto-purge oldest when limit exceeded — v1.0
 
 ### Active
 
-- [ ] Automatically capture clipboard items (text + images) and screenshots into persistent history
-- [ ] Run as macOS menu bar app with split-view popover (~360x480px): preview top, list bottom
-- [ ] Invoke via global hotkey (Shift+Up Arrow), in addition to menu bar click
-- [ ] Observer mode — watch system clipboard + screenshot directory, don't replace native shortcuts
-- [ ] When a screenshot is detected, automatically copy it to the system clipboard
-- [ ] Move/save all detected screenshots to ~/Documents/Screenies/
-- [ ] Show browsable list of recent items with visual previews (thumbnails for images, text snippets for text)
-- [ ] Single-select: clicking an item copies it to system clipboard for pasting
-- [ ] Multi-select images: write multiple images as file URL references to pasteboard for batch paste
-- [ ] Drag-and-drop: drag selected items from Copyhog into target apps
-- [ ] Retain last 20 items, auto-purge oldest when limit exceeded
+- [ ] Fix global hotkey (Shift+Up Arrow) to toggle popover open/close from any app
+- [ ] Delete individual item from clipboard history
+- [ ] Master wipe ("Hog Wipe") to clear all saved items at once
 
 ### Out of Scope
 
@@ -60,6 +61,15 @@ Every screenshot and clipboard copy is captured and instantly accessible — no 
 - **Hotkey**: Shift+Up Arrow registered via NSEvent.addGlobalMonitorForEvents
 - **Clipboard**: Observer mode only — poll NSPasteboard.general.changeCount every 0.5s
 
+## Current Milestone: v1.1 Polish & Control
+
+**Goal:** Give the user full control over their clipboard history — fix the broken hotkey, let them delete individual items, and wipe everything clean.
+
+**Target features:**
+- Fix global hotkey toggle (Shift+Up Arrow)
+- Delete individual clipboard items
+- Master "Hog Wipe" to clear all items
+
 ## Key Decisions
 
 | Decision | Rationale | Outcome |
@@ -72,4 +82,4 @@ Every screenshot and clipboard copy is captured and instantly accessible — no 
 | Split-view layout (preview top, list bottom) | 64px thumbnails aren't enough to distinguish screenshots; preview is the key differentiator | — Pending |
 
 ---
-*Last updated: 2026-02-20 after initialization*
+*Last updated: 2026-02-21 after milestone v1.1 started*
