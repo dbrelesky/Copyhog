@@ -97,6 +97,36 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | 2. Browse UI | v1.0 | 1/1 | Complete | 2026-02-21 |
 | 3. Paste Actions | v1.0 | 2/2 | Complete | 2026-02-21 |
 | 4. User Control | v1.1 | 0/1 | Not started | - |
+| 04.1 Settings Menu | v1.1 | 1/1 | Complete | 2026-02-21 |
+| 04.3 App Store Readiness | v1.1 | 0/? | Not started | - |
+| 04.2 Liquid Glass UI | v1.1 | 0/? | Not started | - |
+
+### Phase 04.3: Remaining App Store readiness (INSERTED)
+
+**Goal:** Resolve all remaining App Store rejection risks so the app passes review on first submission
+**Depends on:** Phase 04.1
+**Requirements:** STORE-01 through STORE-06
+**Success Criteria** (what must be TRUE):
+  1. ScreenshotWatcher uses security-scoped bookmarks for ~/Desktop and ~/Documents/Screenies/ so file access survives app restart
+  2. First-run onboarding prompts user to grant folder access via NSOpenPanel, saving bookmarks persistently
+  3. NSAccessibilityUsageDescription is updated (hotkeys were removed — current string is misleading and will cause rejection)
+  4. `com.apple.security.automation.apple-events` entitlement is removed (no longer needed since hotkeys were removed)
+  5. App Store metadata is prepared: privacy nutrition labels (clipboard, file access), category, age rating
+  6. Build archives and exports cleanly with `xcodebuild archive` using App Store distribution profile
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 04.3 to break down)
+
+### Phase 04.2: Liquid glass UI redesign (INSERTED)
+
+**Goal:** Transform the popover from a flat UI into a warm, translucent liquid glass aesthetic — translucent materials, elevated preview pane, floating toolbar, glow hover effects, copy confirmation, and hedgehog-themed empty state
+**Depends on:** Phase 4
+**Plans:** 2 plans
+
+Plans:
+- [ ] 04.2-01-PLAN.md — Glass popover shell, floating toolbar, elevated preview pane
+- [ ] 04.2-02-PLAN.md — Glass item rows with glow hover, copy confirmation, warm empty state
 
 ### Phase 04.1: Settings menu with version display, attribution, and relocated actions (INSERTED)
 
