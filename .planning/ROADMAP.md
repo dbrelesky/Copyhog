@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Capture Engine** - Menu bar shell, clipboard observer, screenshot watcher, and persistent item store
 - [x] **Phase 2: Browse UI** - Split-view popover with preview pane, item list, and hover interaction
-- [ ] **Phase 3: Paste Actions** - Single-click copy, multi-select batch paste, and drag-out
+- [x] **Phase 3: Paste Actions** - Single-click copy, multi-select batch paste, and drag-out
 
 ## Phase Details
 
@@ -58,8 +58,8 @@ Plans:
 **Plans:** 2 plans
 
 Plans:
-- [ ] 03-01-PLAN.md — Single-click copy-to-clipboard and multi-select batch paste
-- [ ] 03-02-PLAN.md — Drag-out support via Transferable and .draggable
+- [x] 03-01-PLAN.md — Single-click copy-to-clipboard and multi-select batch paste
+- [x] 03-02-PLAN.md — Drag-out support via Transferable and .draggable
 
 ## Progress
 
@@ -70,4 +70,4 @@ Phases execute in numeric order: 1 -> 2 -> 3
 |-------|----------------|--------|-----------|
 | 1. Capture Engine | 2/2 | Complete | 2026-02-21 |
 | 2. Browse UI | 1/1 | Complete    | 2026-02-21 |
-| 3. Paste Actions | 0/2 | Not started | - |
+| 3. Paste Actions | 2/2 | Complete | 2026-02-21 |
