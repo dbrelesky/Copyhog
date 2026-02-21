@@ -28,11 +28,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Copying text or an image anywhere on the system creates a new entry in the item store within 1 second
   4. Taking a screenshot (Cmd+Shift+3/4) results in the file appearing in ~/Documents/Screenies/ and the image being copied to the system clipboard
   5. The store holds exactly 20 items max, purging the oldest when exceeded, and items survive an app restart
-**Plans**: TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] 01-01: Menu bar shell and popover scaffold (SHELL-01, SHELL-02, SHELL-03, SHELL-04)
-- [ ] 01-02: Clipboard observer, screenshot watcher, and item store (CLIP-01, CLIP-02, CLIP-03, SCRN-01, SCRN-02, SCRN-03, STOR-01, STOR-02, STOR-03)
+- [ ] 01-01-PLAN.md — Xcode project scaffold, MenuBarExtra with popover, global hotkey, launch-at-login
+- [ ] 01-02-PLAN.md — Clipboard observer, screenshot watcher, image store, persistent item store
 
 ### Phase 2: Browse UI
 **Goal**: Users can visually browse their capture history and preview any item at full size
