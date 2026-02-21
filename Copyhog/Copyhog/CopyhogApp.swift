@@ -82,11 +82,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     private func registerGlobalHotkey() {
         // Monitor events when other apps are frontmost
         globalMonitor = NSEvent.addGlobalMonitorForEvents(matching: .keyDown) { [weak self] event in
-            guard let self else { return }
-            if self.isHotkeyEvent(event) {
-                MainActor.assumeIsolated {
-                    self.togglePopover()
-                }
+            guard let self, self.isHotkeyEvent(event) else { return }
+            DispatchQueue.main.async {
+                self.togglePopover()
             }
         }
 
@@ -94,7 +92,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         localMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
             guard let self else { return event }
             if self.isHotkeyEvent(event) {
-                MainActor.assumeIsolated {
+                DispatchQueue.main.async {
                     self.togglePopover()
                 }
                 return nil // Consume the event
@@ -105,9 +103,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
 
     private nonisolated func isHotkeyEvent(_ event: NSEvent) -> Bool {
         // Shift + Command + C (keyCode 8)
-        let requiredFlags: NSEvent.ModifierFlags = [.shift, .command]
         let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
-        return flags == requiredFlags && event.keyCode == 8
+        return event.keyCode == 8
+            && flags.contains([.shift, .command])
+            && !flags.contains(.option)
+            && !flags.contains(.control)
     }
 
     private func togglePopover() {
@@ -116,7 +116,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
                 .compactMap({ $0.value(forKey: "statusItem") as? NSStatusItem })
                 .first?.button
         }
-        statusButton?.performClick(nil)
+        guard let button = statusButton else { return }
+        NSApp.activate(ignoringOtherApps: true)
+        button.performClick(nil)
     }
 
     func removeMonitors() {
