@@ -42,10 +42,10 @@ Plans:
   1. The popover shows a scrollable list of captured items with 64x64 thumbnails (images) or 2-line text snippets, each with a relative timestamp
   2. Hovering over an item row updates the preview pane at the top to show the full-size image or full text
   3. When no items have been captured, a friendly empty state message is displayed instead of a blank screen
-**Plans**: TBD
+**Plans:** 1 plan
 
 Plans:
-- [ ] 02-01: Item list, preview pane, and empty state (UI-01, UI-02, UI-03, UI-04)
+- [ ] 02-01-PLAN.md — Preview pane, item list with 64x64 thumbnails, hover-driven preview, and empty state
 
 ### Phase 3: Paste Actions
 **Goal**: Users can get any captured item back into their workflow -- single click to copy, multi-select for batch paste, or drag directly into target apps
