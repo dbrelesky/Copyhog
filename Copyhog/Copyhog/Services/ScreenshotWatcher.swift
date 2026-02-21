@@ -83,29 +83,13 @@ final class ScreenshotWatcher {
     // MARK: - Private
 
     private func screenshotDirectory() -> URL {
-        // Read macOS screenshot location preference
-        let process = Process()
-        let pipe = Pipe()
-        process.executableURL = URL(fileURLWithPath: "/usr/bin/defaults")
-        process.arguments = ["read", "com.apple.screencapture", "location"]
-        process.standardOutput = pipe
-        process.standardError = FileHandle.nullDevice
-
-        do {
-            try process.run()
-            process.waitUntilExit()
-            if process.terminationStatus == 0 {
-                let data = pipe.fileHandleForReading.readDataToEndOfFile()
-                if let path = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines),
-                   !path.isEmpty {
-                    let url = URL(fileURLWithPath: (path as NSString).expandingTildeInPath)
-                    if FileManager.default.fileExists(atPath: url.path) {
-                        return url
-                    }
-                }
+        // Read macOS screenshot location preference (sandbox-safe, no subprocess)
+        if let location = UserDefaults(suiteName: "com.apple.screencapture")?.string(forKey: "location"),
+           !location.isEmpty {
+            let url = URL(fileURLWithPath: (location as NSString).expandingTildeInPath)
+            if FileManager.default.fileExists(atPath: url.path) {
+                return url
             }
-        } catch {
-            // Fall through to default
         }
 
         // Default: ~/Desktop

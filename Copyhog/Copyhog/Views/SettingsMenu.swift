@@ -2,6 +2,7 @@ import SwiftUI
 
 struct SettingsMenu: View {
     @Binding var showWipeConfirmation: Bool
+    @EnvironmentObject var exclusionManager: ExclusionManager
 
     private var appVersion: String {
         Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
@@ -12,6 +13,10 @@ struct SettingsMenu: View {
             Text("Copyhog v\(appVersion)")
 
             Text("by Darren Brelesky")
+
+            Divider()
+
+            excludedAppsSubmenu
 
             Divider()
 
@@ -30,5 +35,47 @@ struct SettingsMenu: View {
             Image(systemName: "gearshape")
         }
         .menuStyle(.borderlessButton)
+    }
+
+    // MARK: - Excluded Apps Submenu
+
+    private var excludedAppsSubmenu: some View {
+        Menu("Excluded Apps") {
+            Button {
+                excludeCurrentApp()
+            } label: {
+                Label("Exclude Current App", systemImage: "plus.circle")
+            }
+
+            Divider()
+
+            let sorted = exclusionManager.excludedBundleIDs.sorted()
+            if sorted.isEmpty {
+                Text("No excluded apps")
+            } else {
+                ForEach(sorted, id: \.self) { bundleID in
+                    Button {
+                        exclusionManager.removeExclusion(bundleID)
+                    } label: {
+                        Label(displayName(for: bundleID), systemImage: "xmark.circle")
+                    }
+                }
+            }
+        }
+    }
+
+    private func excludeCurrentApp() {
+        guard let bundleID = NSWorkspace.shared.frontmostApplication?.bundleIdentifier else {
+            return
+        }
+        exclusionManager.addExclusion(bundleID)
+    }
+
+    private func displayName(for bundleID: String) -> String {
+        if let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleID) {
+            let name = url.deletingPathExtension().lastPathComponent
+            if !name.isEmpty { return name }
+        }
+        return bundleID
     }
 }

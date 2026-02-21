@@ -9,6 +9,7 @@ final class ClipboardObserver {
     private let pasteboard = NSPasteboard.general
     private var isOwnWrite = false
     private let imageStore: ImageStore
+    var exclusionManager: ExclusionManager?
 
     init(imageStore: ImageStore) {
         self.imageStore = imageStore
@@ -49,6 +50,11 @@ final class ClipboardObserver {
         // If this change was triggered by us (ScreenshotWatcher), skip it
         if isOwnWrite {
             isOwnWrite = false
+            return
+        }
+
+        // Skip capture if the frontmost app is excluded
+        if exclusionManager?.isExcluded() == true {
             return
         }
 

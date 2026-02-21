@@ -10,6 +10,7 @@ struct CopyhogApp: App {
         MenuBarExtra {
             PopoverContent()
                 .environmentObject(appDelegate.store)
+                .environmentObject(appDelegate.exclusionManager)
                 .frame(width: 360, height: 480)
         } label: {
             if let image = NSImage(named: "MenuBarIcon") {
@@ -31,6 +32,7 @@ struct CopyhogApp: App {
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     let store = ClipItemStore()
+    let exclusionManager = ExclusionManager()
     private var clipboardObserver: ClipboardObserver?
     private var screenshotWatcher: ScreenshotWatcher?
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -40,6 +42,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
 
     private func startCaptureServices() {
         let observer = ClipboardObserver(imageStore: store.imageStore)
+        observer.exclusionManager = exclusionManager
         observer.start { [weak store] item in
             store?.add(item)
         }
