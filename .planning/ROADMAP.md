@@ -12,8 +12,8 @@ Copyhog is a native macOS menu bar app that captures clipboard items and screens
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Capture Engine** - Menu bar shell, clipboard observer, screenshot watcher, and persistent item store
-- [ ] **Phase 2: Browse UI** - Split-view popover with preview pane, item list, and hover interaction
+- [x] **Phase 1: Capture Engine** - Menu bar shell, clipboard observer, screenshot watcher, and persistent item store
+- [x] **Phase 2: Browse UI** - Split-view popover with preview pane, item list, and hover interaction
 - [ ] **Phase 3: Paste Actions** - Single-click copy, multi-select batch paste, and drag-out
 
 ## Phase Details
@@ -31,8 +31,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans:** 2 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — Xcode project scaffold, MenuBarExtra with popover, global hotkey, launch-at-login
-- [ ] 01-02-PLAN.md — Clipboard observer, screenshot watcher, image store, persistent item store
+- [x] 01-01-PLAN.md — Xcode project scaffold, MenuBarExtra with popover, global hotkey, launch-at-login
+- [x] 01-02-PLAN.md — Clipboard observer, screenshot watcher, image store, persistent item store
 
 ### Phase 2: Browse UI
 **Goal**: Users can visually browse their capture history and preview any item at full size
@@ -45,7 +45,7 @@ Plans:
 **Plans:** 1 plan
 
 Plans:
-- [ ] 02-01-PLAN.md — Preview pane, item list with 64x64 thumbnails, hover-driven preview, and empty state
+- [x] 02-01-PLAN.md — Preview pane, item list with 64x64 thumbnails, hover-driven preview, and empty state
 
 ### Phase 3: Paste Actions
 **Goal**: Users can get any captured item back into their workflow -- single click to copy, multi-select for batch paste, or drag directly into target apps
@@ -68,6 +68,6 @@ Phases execute in numeric order: 1 -> 2 -> 3
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Capture Engine | 0/2 | Not started | - |
-| 2. Browse UI | 0/1 | Not started | - |
+| 1. Capture Engine | 2/2 | Complete | 2026-02-21 |
+| 2. Browse UI | 1/1 | Complete | 2026-02-21 |
 | 3. Paste Actions | 0/2 | Not started | - |
