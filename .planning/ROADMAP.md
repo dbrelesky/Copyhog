@@ -26,14 +26,14 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Requirements**: SHELL-01, SHELL-02, SHELL-03, SHELL-04, CLIP-01, CLIP-02, CLIP-03, SCRN-01, SCRN-02, SCRN-03, STOR-01, STOR-02, STOR-03
 **Success Criteria** (what must be TRUE):
   1. A hedgehog icon appears in the macOS menu bar and clicking it opens an empty popover window (~360x480px)
-  2. Pressing Shift+Up Arrow toggles the popover open and closed from any app
+  2. Clicking the menu bar icon opens the popover
   3. Copying text or an image anywhere on the system creates a new entry in the item store within 1 second
   4. Taking a screenshot (Cmd+Shift+3/4) results in the file appearing in ~/Documents/Screenies/ and the image being copied to the system clipboard
   5. The store holds exactly 20 items max, purging the oldest when exceeded, and items survive an app restart
 **Plans:** 2/2 complete
 
 Plans:
-- [x] 01-01-PLAN.md — Xcode project scaffold, MenuBarExtra with popover, global hotkey, launch-at-login
+- [x] 01-01-PLAN.md — Xcode project scaffold, MenuBarExtra with popover, launch-at-login
 - [x] 01-02-PLAN.md — Clipboard observer, screenshot watcher, image store, persistent item store
 
 ### Phase 2: Browse UI
@@ -67,25 +67,24 @@ Plans:
 
 ## v1.1 Polish & Control
 
-**Milestone Goal:** Give the user full control over their clipboard history -- fix the broken hotkey, let them delete individual items, and wipe everything clean.
+**Milestone Goal:** Give the user full control over their clipboard history -- let them delete individual items and wipe everything clean.
 
-- [ ] **Phase 4: User Control** - Global hotkey fix, single-item delete, and full history wipe
+- [ ] **Phase 4: User Control** - Single-item delete and full history wipe
 
 ## Phase Details
 
 ### Phase 4: User Control
-**Goal**: Users have full control over the Copyhog popover and their clipboard history -- summoning it from anywhere and removing items at will
+**Goal**: Users have full control over their clipboard history -- removing items at will
 **Depends on**: Phase 3
-**Requirements**: KEY-01, MGMT-01, MGMT-02
+**Requirements**: MGMT-01, MGMT-02
 **Success Criteria** (what must be TRUE):
-  1. User can press Shift+Ctrl+C from any app and the Copyhog popover toggles open or closed reliably
-  2. User can delete a single item from the history list and it disappears immediately from both the UI and the persistent store
-  3. User can trigger "Hog Wipe" and after confirming, all items are removed from the history list and persistent store
-  4. After a Hog Wipe, the popover shows the empty state message
+  1. User can delete a single item from the history list and it disappears immediately from both the UI and the persistent store
+  2. User can trigger "Hog Wipe" and after confirming, all items are removed from the history list and persistent store
+  3. After a Hog Wipe, the popover shows the empty state message
 **Plans:** 1 plan
 
 Plans:
-- [ ] 04-01-PLAN.md — Fix Shift+Ctrl+C hotkey, single-item delete, and Hog Wipe with confirmation
+- [ ] 04-01-PLAN.md — Single-item delete and Hog Wipe with confirmation
 
 ## Progress
 
@@ -99,20 +98,17 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | 3. Paste Actions | v1.0 | 2/2 | Complete | 2026-02-21 |
 | 4. User Control | v1.1 | 0/1 | Not started | - |
 
-### Phase 04.1: Settings menu with hotkey config, version display, attribution, and relocated actions (INSERTED)
+### Phase 04.1: Settings menu with version display, attribution, and relocated actions (INSERTED)
 
-**Goal:** Users can access a settings/gear menu that displays the app version, credits/attribution, allows hotkey configuration, and houses the Quit and Hog Wipe actions (relocated from the main popover toolbar to declutter it)
+**Goal:** Users can access a settings/gear menu that displays the app version, credits/attribution, and houses the Quit and Hog Wipe actions (relocated from the main popover toolbar to declutter it)
 **Depends on:** Phase 4
-**Requirements:** SETTINGS-01, SETTINGS-02, SETTINGS-03, SETTINGS-04, SETTINGS-05
+**Requirements:** SETTINGS-01, SETTINGS-02, SETTINGS-03, SETTINGS-04
 **Success Criteria** (what must be TRUE):
   1. A gear icon in the popover toolbar opens a settings dropdown menu
   2. The settings menu shows the app version and attribution/credits
   3. Hog Wipe and Quit Copyhog actions are accessible from the settings menu (not the main toolbar/popover)
   4. The main popover toolbar is decluttered (only multi-select toggle + gear icon)
-  5. Users can change the global hotkey from a set of presets in the settings menu
-  6. The hotkey preference persists across app restarts
-**Plans:** 2/2 plans complete
+**Plans:** 1/1 plans complete
 
 Plans:
 - [x] 04.1-01-PLAN.md — Settings menu with version, attribution, relocated Hog Wipe and Quit
-- [ ] 04.1-02-PLAN.md — Hotkey configuration with presets in settings menu

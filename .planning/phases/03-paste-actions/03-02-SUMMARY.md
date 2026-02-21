@@ -111,7 +111,7 @@ None - no external service configuration required.
 ## Next Phase Readiness
 - All three paste action types (single-click copy, multi-select batch, drag-out) are complete
 - Phase 3 is the final planned phase -- Copyhog v1 feature set is complete
-- Remaining work: global hotkey fix (deferred), potential v2 features
+- Remaining work: potential v2 features
 
 ## Self-Check: PASSED
 

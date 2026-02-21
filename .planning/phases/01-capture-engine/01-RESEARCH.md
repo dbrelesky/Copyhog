@@ -19,7 +19,7 @@ The development environment has Swift 6.2.3 and Xcode 26.2 available. The projec
 |---------------|---------|---------|--------------|
 | Swift | 6.2.3 | Language | Available on dev machine, latest stable |
 | SwiftUI | macOS 14+ | App shell, MenuBarExtra, popover UI | `MenuBarExtra` with `.window` style is the modern standard for menu bar popovers |
-| AppKit (NSPasteboard, NSEvent, NSImage) | macOS 14+ | Clipboard access, global hotkey, image handling | No SwiftUI equivalent for clipboard polling or global event monitoring |
+| AppKit (NSPasteboard, NSEvent, NSImage) | macOS 14+ | Clipboard access, image handling | No SwiftUI equivalent for clipboard polling |
 | Dispatch (GCD) | System | Timer, DispatchSource for file watching | Built-in, no external dependency needed |
 | ServiceManagement (SMAppService) | macOS 13+ | Launch at login | Modern replacement for deprecated login item APIs |
 | Foundation (FileManager, JSONEncoder/Decoder) | System | File operations, JSON persistence | Standard for file I/O and Codable serialization |
@@ -33,7 +33,6 @@ The development environment has Swift 6.2.3 and Xcode 26.2 available. The projec
 ### Alternatives Considered
 | Instead of | Could Use | Tradeoff |
 |------------|-----------|----------|
-| Timer-based clipboard polling | sindresorhus/KeyboardShortcuts for hotkey | KeyboardShortcuts is for configurable hotkeys, not clipboard — but useful if hotkey needs change later |
 | DispatchSource file watching | FSEvents (CoreServices) | FSEvents monitors entire directory hierarchies; DispatchSource is cheaper for single-directory top-level monitoring — use DispatchSource |
 | JSON file persistence | UserDefaults with Codable | UserDefaults has ~512KB soft limit and is meant for preferences, not structured data with images; JSON file in App Support is more appropriate |
 | JSON file persistence | SwiftData / Core Data | Overkill for 20 items; adds framework complexity without benefit at this scale |
@@ -50,7 +49,7 @@ Copyhog/
 ├── Copyhog/
 │   ├── CopyhogApp.swift           # @main, MenuBarExtra scene
 │   ├── Info.plist                  # LSUIElement = YES
-│   ├── Copyhog.entitlements        # App Sandbox OFF (for global hotkey)
+│   ├── Copyhog.entitlements        # App Sandbox OFF (for NSEvent monitoring)
 │   ├── Assets.xcassets/
 │   │   └── MenuBarIcon.imageset/   # 16px hedgehog silhouette template image
 │   ├── Models/
@@ -175,36 +174,12 @@ class ScreenshotWatcher {
 }
 ```
 
-### Pattern 4: Global Hotkey Registration
-**What:** Monitor keyboard events globally using NSEvent
-**When to use:** App-wide hotkey that works from any application
-**Example:**
-```swift
-// Source: Apple NSEvent docs + developer forums
-func registerGlobalHotkey(onToggle: @escaping () -> Void) {
-    NSEvent.addGlobalMonitorForEvents(matching: .keyDown) { event in
-        // Shift + Up Arrow
-        if event.modifierFlags.contains(.shift) && event.keyCode == 126 {
-            onToggle()
-        }
-    }
-    // Also monitor local events (when our app is frontmost)
-    NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
-        if event.modifierFlags.contains(.shift) && event.keyCode == 126 {
-            onToggle()
-            return nil  // Consume the event
-        }
-        return event
-    }
-}
-```
-
 ### Anti-Patterns to Avoid
 - **Polling the file system for screenshots:** Use DispatchSource, not a timer scanning directory contents
 - **Storing images in UserDefaults:** Binary data bloats the plist; store image files on disk, keep only file paths in the model
 - **Using NSPasteboard notifications:** They don't exist on macOS — you must poll changeCount
 - **Ignoring own clipboard writes:** When the app writes to the clipboard (e.g., copying a screenshot), the changeCount increments — you must track and skip your own writes to avoid infinite capture loops
-- **Sandbox entitlement with global hotkey:** `NSEvent.addGlobalMonitorForEvents` requires App Sandbox to be OFF, or Input Monitoring permission
+- **Sandbox entitlement with NSEvent monitoring:** `NSEvent.addGlobalMonitorForEvents` requires App Sandbox to be OFF, or Input Monitoring permission
 
 ## Don't Hand-Roll
 
@@ -238,19 +213,13 @@ func registerGlobalHotkey(onToggle: @escaping () -> Void) {
 **How to avoid:** Read `defaults read com.apple.screencapture location` at startup. Fall back to `~/Desktop` if the key doesn't exist. Verified on dev machine: key does not exist by default, confirming Desktop is the default location.
 **Warning signs:** App reports "no screenshots detected" while user is actively taking screenshots.
 
-### Pitfall 4: Global Hotkey Requires Accessibility/Input Monitoring Permission
-**What goes wrong:** `NSEvent.addGlobalMonitorForEvents` silently fails — hotkey never fires.
-**Why it happens:** macOS requires Accessibility permission (or Input Monitoring for CGEventTap) for apps that monitor keyboard events from other applications. The App Sandbox must be OFF.
-**How to avoid:** Disable App Sandbox in entitlements. On first launch, call `AXIsProcessTrustedWithOptions` with the prompt option to show the system permission dialog. Check and guide users if permission is denied.
-**Warning signs:** Menu bar icon click works but hotkey does nothing.
-
-### Pitfall 5: MenuBarExtra Window Style Sizing
+### Pitfall 4: MenuBarExtra Window Style Sizing
 **What goes wrong:** The popover window doesn't respect the expected 360x480 size, appearing too small or using default sizing.
 **Why it happens:** `MenuBarExtra` with `.window` style sizes based on content intrinsic size, which may not match `.frame()` if content is empty or uses flexible layouts.
 **How to avoid:** Apply `.frame(width: 360, height: 480)` directly on the root content view inside the MenuBarExtra closure. For Phase 1 (empty popover), use a `Color.clear.frame(width: 360, height: 480)` or `Spacer().frame(width: 360, height: 480)` to enforce size.
 **Warning signs:** Popover appears as a tiny window or collapses to zero size.
 
-### Pitfall 6: File Descriptor Leak in DispatchSource
+### Pitfall 5: File Descriptor Leak in DispatchSource
 **What goes wrong:** ScreenshotWatcher leaks file descriptors, eventually hitting the process limit.
 **Why it happens:** `open()` returns a file descriptor that must be `close()`-ed. If the DispatchSource is cancelled or deallocated without the cancel handler running, the fd leaks.
 **How to avoid:** Always set a `setCancelHandler` that closes the file descriptor. Call `source.cancel()` in `deinit` or a `stop()` method. Never let the source be deallocated without cancellation.
@@ -424,7 +393,7 @@ func screenshotDirectory() -> URL {
 **Deprecated/outdated:**
 - `SMLoginItemSetEnabled`: Replaced by `SMAppService` in macOS 13
 - `NSStatusItem` manual popover management: Still works but `MenuBarExtra` is the SwiftUI-native path
-- App Sandbox for menu bar utilities with global hotkeys: Not feasible — must disable sandbox for `NSEvent.addGlobalMonitorForEvents`
+- App Sandbox for menu bar utilities using NSEvent monitoring: Not feasible — must disable sandbox for `NSEvent.addGlobalMonitorForEvents`
 
 ## Open Questions
 
@@ -438,12 +407,7 @@ func screenshotDirectory() -> URL {
    - What's unclear: Whether to use an existing hedgehog SF Symbol (none exists) or create a custom silhouette asset.
    - Recommendation: Create a simple hedgehog silhouette PNG (16x16 @1x, 32x32 @2x) for the asset catalog. A placeholder SF Symbol (e.g., `circle.fill`) can be used initially.
 
-3. **Global Hotkey: Shift+Up Arrow Conflict**
-   - What we know: Shift+Up Arrow is commonly used for text selection in editors.
-   - What's unclear: Whether `addGlobalMonitorForEvents` receives events consumed by the foreground app, or only unhandled events. If the foreground app handles Shift+Up for text selection, the monitor may still fire (it gets copies, not originals).
-   - Recommendation: Implement and test. The monitor receives copies of events regardless of whether the foreground app handles them, so both text selection AND the popover toggle will happen. This is acceptable per the requirements doc — if it becomes a UX issue, it's a Phase 2 concern.
-
-4. **Screenshot File Readiness Timing**
+3. **Screenshot File Readiness Timing**
    - What we know: DispatchSource fires on directory write, but the file may not be fully written yet.
    - What's unclear: Exact delay needed — varies by screenshot size and system load.
    - Recommendation: Use a 0.5s delay after detection, then verify file size stability (check size, wait 0.2s, check again). If still changing, retry.
@@ -455,8 +419,6 @@ func screenshotDirectory() -> URL {
 - [Apple MenuBarExtra Documentation](https://developer.apple.com/documentation/swiftui/menubarextra) — Scene API, window style
 - [Apple SMAppService Documentation](https://developer.apple.com/documentation/servicemanagement/smappservice) — Launch at login
 - [Apple DispatchSource.makeFileSystemObjectSource Documentation](https://developer.apple.com/documentation/dispatch/dispatchsource/makefilesystemobjectsource(filedescriptor:eventmask:queue:)) — File system monitoring
-- [Apple NSEvent.addGlobalMonitorForEvents Documentation](https://developer.apple.com/documentation/appkit/nsevent/1535472-addglobalmonitorforevents) — Global keyboard monitoring
-
 ### Secondary (MEDIUM confidence)
 - [Maccy Clipboard.swift](https://github.com/p0deje/Maccy/blob/master/Maccy/Clipboard.swift) — Production clipboard polling pattern, verified against Apple docs
 - [nilcoalescing.com — Build a macOS menu bar utility in SwiftUI](https://nilcoalescing.com/blog/BuildAMacOSMenuBarUtilityInSwiftUI/) — MenuBarExtra setup, LSUIElement, window style sizing

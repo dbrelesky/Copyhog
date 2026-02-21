@@ -11,8 +11,7 @@ All v1.0 requirements shipped. See MILESTONES.md for details.
 
 - [x] **SHELL-01**: App runs as a macOS menu bar utility with a hedgehog silhouette template icon
 - [x] **SHELL-02**: Clicking menu bar icon opens a split-view popover (~360x480px) anchored to the icon
-- [x] **SHELL-03**: Global hotkey (Shift+Up Arrow) toggles the popover open/closed
-- [x] **SHELL-04**: App launches at login and runs silently in background
+- [x] **SHELL-03**: App launches at login and runs silently in background
 
 ### Clipboard Capture
 
@@ -50,10 +49,6 @@ All v1.0 requirements shipped. See MILESTONES.md for details.
 
 Requirements for milestone v1.1 (Polish & Control). Each maps to roadmap phases.
 
-### Hotkey
-
-- [x] **KEY-01**: User can press Shift+Ctrl+C from any app to toggle the Copyhog popover open and closed
-
 ### Item Management
 
 - [x] **MGMT-01**: User can delete a single item from the clipboard history list
@@ -85,7 +80,7 @@ Deferred to future release. Tracked but not in current roadmap.
 |---------|--------|
 | Intercepting native screenshot shortcuts | Observer-only approach — non-invasive |
 | Visual distinction between screenshots and copied images | User preference — not needed |
-| Customizable hotkey | Fixed Shift+Ctrl+C is sufficient for v1.1 |
+| Global hotkey | Menu bar click is sufficient for popover access |
 | Undo delete | 20-item list is simple enough; no undo needed |
 | Selective multi-delete | Single delete + full wipe covers all cases |
 | Windows/Linux support | macOS-only, uses native APIs |
@@ -97,7 +92,6 @@ Deferred to future release. Tracked but not in current roadmap.
 | SHELL-01 | Phase 1 | Complete |
 | SHELL-02 | Phase 1 | Complete |
 | SHELL-03 | Phase 1 | Complete |
-| SHELL-04 | Phase 1 | Complete |
 | CLIP-01 | Phase 1 | Complete |
 | CLIP-02 | Phase 1 | Complete |
 | CLIP-03 | Phase 1 | Complete |
@@ -115,14 +109,13 @@ Deferred to future release. Tracked but not in current roadmap.
 | PASTE-02 | Phase 3 | Complete |
 | PASTE-03 | Phase 3 | Complete |
 | PASTE-04 | Phase 3 | Complete |
-| KEY-01 | Phase 4 | Complete |
 | MGMT-01 | Phase 4 | Complete |
 | MGMT-02 | Phase 4 | Complete |
 
 **Coverage:**
-- v1.0 requirements: 21 total (all complete)
-- v1.1 requirements: 3 total
-- Mapped to phases: 3/3
+- v1.0 requirements: 20 total (all complete)
+- v1.1 requirements: 2 total
+- Mapped to phases: 2/2
 - Unmapped: 0
 
 ---

@@ -4,7 +4,7 @@
 
 ### Source
 
-> Right now Mac OS only gives me 5 secs before saving the screenshot to the desktop, and then it takes several steps to find it, it has arbitrary names that don't allow me to identify which one it was, and my workflow is broken. I want an app that is accessible from the top bar, but also can be invoked from a keyboard hotkey. The app should let me see recent screenshots and copied items in general (could be text). It should have a browsable digest to select for rapid copy/paste, as well as a preview of the item.
+> Right now Mac OS only gives me 5 secs before saving the screenshot to the desktop, and then it takes several steps to find it, it has arbitrary names that don't allow me to identify which one it was, and my workflow is broken. I want an app that is accessible from the top bar. The app should let me see recent screenshots and copied items in general (could be text). It should have a browsable digest to select for rapid copy/paste, as well as a preview of the item.
 
 ### Problem
 
@@ -28,7 +28,7 @@
 |----|-------------|--------|
 | R0 | Automatically capture clipboard items (text + images) and screenshots into a persistent history | Core goal |
 | R1 | Run as a macOS menu bar app with split-view popover (~360×480px): preview top, list bottom | Must-have |
-| R2 | Invoke via global hotkey (Shift+Up Arrow), in addition to menu bar click | Must-have |
+| R2 | Accessible via menu bar click | Must-have |
 | R3 | Observer mode — watch system clipboard + screenshot directory, don't replace native shortcuts | Must-have |
 | R3.1 | When a screenshot is detected, automatically copy it to the system clipboard | Must-have |
 | R3.2 | Move/save all detected screenshots to `~/Documents/Screenies/` | Must-have |
@@ -49,7 +49,7 @@
 | **A2** | **Screenshot watcher** — `DispatchSource.makeFileSystemObjectSource` on screenshot directory. Detect new `.png` files | |
 | **A3** | **Screenshot processor** — On new screenshot: (a) move file to `~/Documents/Screenies/`, (b) copy image to system clipboard, (c) create ClipItem | |
 | **A4** | **Local store** — `@Published items: [ClipItem]` capped at 20. Images saved to `~/Library/Application Support/Copyhog/`. Oldest purged when full | |
-| **A5** | **Menu bar + popover** — `MenuBarExtra` with hedgehog silhouette icon. Click or Shift+↑ opens SwiftUI popover (360×480). `NSEvent.addGlobalMonitorForEvents` for hotkey | |
+| **A5** | **Menu bar + popover** — `MenuBarExtra` with hedgehog silhouette icon. Click opens SwiftUI popover (360×480) | |
 | **A6** | **Split-view UI** — Preview pane (top): full-size image or full text of highlighted item. Item list (bottom): scrollable `LazyVStack` of rows with thumbnails/snippets + timestamps | |
 | **A7** | **Single-select paste** — Click item row → `PasteboardWriter` writes item to `NSPasteboard.general` | |
 | **A8** | **Multi-select batch paste** — Toggle multi-select mode (Cmd+Click or toggle button). "Copy N items" button writes selected image file URLs as `[NSPasteboardItem]` to pasteboard | |
@@ -63,7 +63,7 @@
 |-----|-------------|--------|---|
 | R0 | Automatically capture clipboard items (text + images) and screenshots into a persistent history | Core goal | ✅ |
 | R1 | Run as a macOS menu bar app with split-view popover (~360×480px): preview top, list bottom | Must-have | ✅ |
-| R2 | Invoke via global hotkey (Shift+Up Arrow), in addition to menu bar click | Must-have | ✅ |
+| R2 | Accessible via menu bar click | Must-have | ✅ |
 | R3 | Observer mode — watch system clipboard + screenshot directory, don't replace native shortcuts | Must-have | ✅ |
 | R3.1 | When a screenshot is detected, automatically copy it to the system clipboard | Must-have | ✅ |
 | R3.2 | Move/save all detected screenshots to `~/Documents/Screenies/` | Must-have | ✅ |
@@ -113,7 +113,6 @@
 | N4 | P3 | ClipItemStore | `@Published items: [ClipItem]` — append new, purge if >20 | write | → S1 | → U3, → U10 |
 | N5 | — | ClipItem | Model: id, type (.text/.image), content, thumbnailData, filePath, timestamp | — | — | — |
 | N6 | P2 | PasteboardWriter | Write single item to `NSPasteboard.general` (text or image) | call | → S4 | — |
-| N7 | P3 | GlobalHotkeyManager | Register Shift+↑ via `NSEvent.addGlobalMonitorForEvents` | observe | → N9 | — |
 | N8 | P3 | ImageStore | Save copied images to `~/Library/Application Support/Copyhog/` | call | → S2 | — |
 | N9 | P1 | PopoverController | Toggle popover visibility | call | → P2 | — |
 | N10 | P2 | PreviewController | Set highlighted item → update preview pane | call | — | → U2 |
@@ -139,7 +138,6 @@
 flowchart TB
     subgraph P1["P1: Menu Bar"]
         U1["U1: Hedgehog icon"]
-        N7["N7: GlobalHotkeyManager (Shift+↑)"]
         N9["N9: PopoverController"]
     end
 
@@ -189,7 +187,6 @@ flowchart TB
     end
 
     U1 -->|click| N9
-    N7 -->|Shift+↑| N9
     N9 --> P2
 
     N1 -->|changeCount changed| N4
@@ -226,7 +223,7 @@ flowchart TB
     classDef store fill:#e6e6fa,stroke:#9370db,color:#000
 
     class U1,U2,U3,U4,U5,U6,U7,U8,U9,U10 ui
-    class N1,N2,N3,N4,N6,N7,N8,N9,N10,N11,N12,N13,N14 nonui
+    class N1,N2,N3,N4,N6,N8,N9,N10,N11,N12,N13,N14 nonui
     class S1,S2,S3,S4,S5,S6 store
 ```
 

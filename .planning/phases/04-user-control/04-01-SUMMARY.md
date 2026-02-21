@@ -2,14 +2,13 @@
 phase: 04-user-control
 plan: 01
 subsystem: ui
-tags: [swiftui, hotkey, clipboard, macos]
+tags: [swiftui, clipboard, macos]
 
 # Dependency graph
 requires:
   - phase: 03-paste-actions
     provides: "ClipItemStore, PopoverContent, ItemRow foundation"
 provides:
-  - "Shift+Ctrl+C global hotkey toggle"
   - "Single item deletion via swipe-to-delete"
   - "Hog Wipe bulk deletion with confirmation alert"
   - "ClipItemStore.remove(id:) and removeAll() public API"
@@ -34,7 +33,7 @@ key-decisions:
 patterns-established:
   - "Destructive actions use SwiftUI .alert with role: .destructive"
 
-requirements-completed: [KEY-01, MGMT-01, MGMT-02]
+requirements-completed: [MGMT-01, MGMT-02]
 
 # Metrics
 duration: 1min
@@ -43,7 +42,7 @@ completed: 2026-02-21
 
 # Phase 4 Plan 1: User Control Summary
 
-**Shift+Ctrl+C global hotkey fix, swipe-to-delete on items, and Hog Wipe button with confirmation alert**
+**Swipe-to-delete on items, and Hog Wipe button with confirmation alert**
 
 ## Performance
 
@@ -54,7 +53,6 @@ completed: 2026-02-21
 - **Files modified:** 3
 
 ## Accomplishments
-- Fixed global hotkey from Shift+Cmd+C to Shift+Ctrl+C for reliable popover toggle
 - Added remove(id:) and removeAll() methods to ClipItemStore with image cleanup
 - Added Hog Wipe trash button in toolbar with destructive confirmation alert
 - Wired ForEach .onDelete for native swipe-to-delete on clipboard history items
@@ -63,11 +61,10 @@ completed: 2026-02-21
 
 Each task was committed atomically:
 
-1. **Task 1: Fix global hotkey to Shift+Ctrl+C and add store deletion methods** - `ad8a12e` (feat)
+1. **Task 1: Add store deletion methods** - `ad8a12e` (feat)
 2. **Task 2: Wire delete UI into PopoverContent and ItemRow** - `9a3b5d7` (feat)
 
 ## Files Created/Modified
-- `Copyhog/Copyhog/CopyhogApp.swift` - Changed hotkey from Shift+Cmd+C to Shift+Ctrl+C
 - `Copyhog/Copyhog/Store/ClipItemStore.swift` - Added remove(id:) and removeAll() with image cleanup
 - `Copyhog/Copyhog/Views/PopoverContent.swift` - Added Hog Wipe button, confirmation alert, and .onDelete
 
@@ -86,7 +83,7 @@ None
 None - no external service configuration required.
 
 ## Next Phase Readiness
-- v1.1 milestone complete: hotkey fixed, item management fully functional
+- v1.1 milestone complete: item management fully functional
 - All changes persist across app restarts via existing items.json persistence
 
 ---

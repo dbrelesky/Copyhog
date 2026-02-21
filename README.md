@@ -9,7 +9,6 @@ A lightweight macOS menu bar clipboard manager. Copyhog silently captures text a
 - Single-click to re-copy any item
 - Multi-select batch copy
 - Drag-and-drop items into other apps
-- Global hotkey (Shift+Cmd+C) to toggle the popover from any app
 - Launches at login and runs silently in the background
 
 ## Requirements
@@ -51,22 +50,11 @@ A lightweight macOS menu bar clipboard manager. Copyhog silently captures text a
 On first launch, Copyhog will:
 
 1. **Appear in your menu bar** — look for the pig snout icon in the top-right of your screen
-2. **Request Accessibility permissions** — required for the global hotkey to work. Grant access in **System Settings > Privacy & Security > Accessibility**
-3. **Register as a login item** — Copyhog will start automatically when you log in
-
-### Granting Accessibility Access
-
-If the global hotkey (Shift+Cmd+C) doesn't work:
-
-1. Open **System Settings**
-2. Go to **Privacy & Security > Accessibility**
-3. Find **Copyhog** in the list and toggle it **on**
-4. If Copyhog isn't listed, click the **+** button and add it from `/Applications`
+2. **Register as a login item** — Copyhog will start automatically when you log in
 
 ## Usage
 
 - **Click the menu bar icon** to open the clipboard history popover
-- **Shift+Cmd+C** to toggle the popover from any app
 - **Click an item** to copy it back to your clipboard
 - **Hover over an item** to see a full-size preview
 - **Drag an item** out of the popover into any target app

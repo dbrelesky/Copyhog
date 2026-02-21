@@ -2,7 +2,7 @@
 
 ## What This Is
 
-A native macOS menu bar app that automatically captures clipboard items (text and images) and screenshots into a browsable history with instant re-paste. Built with Swift + SwiftUI, it runs silently in the background and is accessible via menu bar icon or global hotkey.
+A native macOS menu bar app that automatically captures clipboard items (text and images) and screenshots into a browsable history with instant re-paste. Built with Swift + SwiftUI, it runs silently in the background and is accessible via the menu bar icon.
 
 ## Core Value
 
@@ -25,7 +25,6 @@ Every screenshot and clipboard copy is captured and instantly accessible — no 
 
 ### Active
 
-- [ ] Fix global hotkey (Shift+Ctrl+C) to toggle popover open/close from any app
 - [ ] Delete individual item from clipboard history
 - [ ] Master wipe ("Hog Wipe") to clear all saved items at once
 
@@ -58,15 +57,13 @@ Every screenshot and clipboard copy is captured and instantly accessible — no 
 - **Platform**: macOS only (menu bar app pattern)
 - **Storage**: Last 20 items, auto-purge oldest. Images stored in ~/Library/Application Support/Copyhog/
 - **Screenshots**: All screenshots moved to ~/Documents/Screenies/ (not left on Desktop)
-- **Hotkey**: Shift+Ctrl+C registered via NSEvent.addGlobalMonitorForEvents
 - **Clipboard**: Observer mode only — poll NSPasteboard.general.changeCount every 0.5s
 
 ## Current Milestone: v1.1 Polish & Control
 
-**Goal:** Give the user full control over their clipboard history — fix the broken hotkey, let them delete individual items, and wipe everything clean.
+**Goal:** Give the user full control over their clipboard history — let them delete individual items and wipe everything clean.
 
 **Target features:**
-- Fix global hotkey toggle (Shift+Ctrl+C)
 - Delete individual clipboard items
 - Master "Hog Wipe" to clear all items
 

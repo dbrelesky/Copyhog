@@ -127,7 +127,6 @@ None — no external service configuration required. All storage is local (~/Lib
 - Full capture engine is operational: text, images, and screenshots all captured automatically
 - Items persist across restarts and display in the popover with thumbnails
 - PopoverContent is wired to ClipItemStore as @EnvironmentObject — ready for Plan 01-03 UI polish (search, keyboard navigation, clip detail view)
-- Known deferred item from 01-01 still pending: global hotkey toggle mechanism needs NSStatusItem-based approach
 
 ## Self-Check
 
