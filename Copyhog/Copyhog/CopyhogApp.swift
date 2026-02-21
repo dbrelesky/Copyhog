@@ -9,6 +9,7 @@ struct CopyhogApp: App {
     var body: some Scene {
         MenuBarExtra {
             PopoverContent()
+                .environmentObject(appDelegate.store)
                 .frame(width: 360, height: 480)
         } label: {
             if let image = NSImage(named: "MenuBarIcon") {
@@ -28,7 +29,10 @@ struct CopyhogApp: App {
 }
 
 @MainActor
-final class AppDelegate: NSObject, NSApplicationDelegate {
+final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
+    let store = ClipItemStore()
+    private var clipboardObserver: ClipboardObserver?
+    private var screenshotWatcher: ScreenshotWatcher?
     private var globalMonitor: Any?
     private var localMonitor: Any?
 
@@ -36,6 +40,25 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         registerLaunchAtLogin()
         requestAccessibilityPermission()
         registerGlobalHotkey()
+        startCaptureServices()
+    }
+
+    private func startCaptureServices() {
+        let observer = ClipboardObserver(imageStore: store.imageStore)
+        observer.start { [weak store] item in
+            store?.add(item)
+        }
+        clipboardObserver = observer
+
+        let watcher = ScreenshotWatcher()
+        watcher.start(
+            clipboardObserver: observer,
+            imageStore: store.imageStore,
+            onNewItem: { [weak store] item in
+                store?.add(item)
+            }
+        )
+        screenshotWatcher = watcher
     }
 
     private func registerLaunchAtLogin() {
@@ -80,12 +103,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func togglePopover() {
-        // MenuBarExtra with .window style uses NSPanel internally.
-        // Toggling is achieved by activating/deactivating the app.
-        if NSApp.isActive {
-            NSApp.hide(nil)
-        } else {
-            NSApp.activate(ignoringOtherApps: true)
+        // MenuBarExtra with .window style creates an NSPanel attached to an NSStatusItem.
+        // Find the status button and simulate a click to toggle the popover.
+        if let button = NSApp.windows
+            .compactMap({ $0.value(forKey: "statusItem") as? NSStatusItem })
+            .first?.button {
+            button.performClick(nil)
         }
     }
 
@@ -102,5 +125,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationWillTerminate(_ notification: Notification) {
         removeMonitors()
+        clipboardObserver?.stop()
+        screenshotWatcher?.stop()
     }
 }
