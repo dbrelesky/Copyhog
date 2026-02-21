@@ -35,15 +35,14 @@ extension ClipItem: Transferable {
             return SentTransferredFile(url)
         }
 
-        // ProxyRepresentation needed for Finder/Slack compatibility
-        // FileRepresentation alone fails on macOS 13-14 (Apple FB13454434)
+        // ProxyRepresentation for text items only — provides Finder/Slack compatibility
+        // Images must NOT use ProxyRepresentation (it would export the file path as text
+        // instead of letting FileRepresentation provide the actual image file)
         ProxyRepresentation { item in
-            if item.type == .text {
-                return item.content ?? ""
-            } else if let filePath = item.filePath {
-                return ImageStore().resolveURL(relativePath: filePath).absoluteString
+            guard item.type == .text, let content = item.content else {
+                throw CocoaError(.fileNoSuchFile)
             }
-            return ""
+            return content
         }
     }
 }
