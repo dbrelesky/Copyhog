@@ -81,33 +81,33 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SHELL-01 | — | Pending |
-| SHELL-02 | — | Pending |
-| SHELL-03 | — | Pending |
-| SHELL-04 | — | Pending |
-| CLIP-01 | — | Pending |
-| CLIP-02 | — | Pending |
-| CLIP-03 | — | Pending |
-| SCRN-01 | — | Pending |
-| SCRN-02 | — | Pending |
-| SCRN-03 | — | Pending |
-| STOR-01 | — | Pending |
-| STOR-02 | — | Pending |
-| STOR-03 | — | Pending |
-| UI-01 | — | Pending |
-| UI-02 | — | Pending |
-| UI-03 | — | Pending |
-| UI-04 | — | Pending |
-| PASTE-01 | — | Pending |
-| PASTE-02 | — | Pending |
-| PASTE-03 | — | Pending |
-| PASTE-04 | — | Pending |
+| SHELL-01 | Phase 1 | Pending |
+| SHELL-02 | Phase 1 | Pending |
+| SHELL-03 | Phase 1 | Pending |
+| SHELL-04 | Phase 1 | Pending |
+| CLIP-01 | Phase 1 | Pending |
+| CLIP-02 | Phase 1 | Pending |
+| CLIP-03 | Phase 1 | Pending |
+| SCRN-01 | Phase 1 | Pending |
+| SCRN-02 | Phase 1 | Pending |
+| SCRN-03 | Phase 1 | Pending |
+| STOR-01 | Phase 1 | Pending |
+| STOR-02 | Phase 1 | Pending |
+| STOR-03 | Phase 1 | Pending |
+| UI-01 | Phase 2 | Pending |
+| UI-02 | Phase 2 | Pending |
+| UI-03 | Phase 2 | Pending |
+| UI-04 | Phase 2 | Pending |
+| PASTE-01 | Phase 3 | Pending |
+| PASTE-02 | Phase 3 | Pending |
+| PASTE-03 | Phase 3 | Pending |
+| PASTE-04 | Phase 3 | Pending |
 
 **Coverage:**
 - v1 requirements: 21 total
-- Mapped to phases: 0
-- Unmapped: 21
+- Mapped to phases: 21
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-02-20*
-*Last updated: 2026-02-20 after initial definition*
+*Last updated: 2026-02-20 after roadmap creation*
