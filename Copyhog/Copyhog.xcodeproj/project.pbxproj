@@ -18,6 +18,7 @@
 		A10009 /* PreviewPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20012 /* PreviewPane.swift */; };
 		A10010 /* ItemRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20013 /* ItemRow.swift */; };
 		A10011 /* PasteboardWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20014 /* PasteboardWriter.swift */; };
+		B10001 /* PopoverContentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20001 /* PopoverContentTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,7 +36,19 @@
 		A20012 /* PreviewPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewPane.swift; sourceTree = "<group>"; };
 		A20013 /* ItemRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemRow.swift; sourceTree = "<group>"; };
 		A20014 /* PasteboardWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteboardWriter.swift; sourceTree = "<group>"; };
+		B20001 /* PopoverContentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverContentTests.swift; sourceTree = "<group>"; };
+		B20002 /* CopyhogTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CopyhogTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXContainerItemProxy section */
+		B40001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A80001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A50001;
+			remoteInfo = Copyhog;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		A30001 /* Frameworks */ = {
@@ -45,13 +58,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B30001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		A40001 /* root */ = {
+		A40001 = {
 			isa = PBXGroup;
 			children = (
 				A40002 /* Copyhog */,
+				B40002 /* CopyhogTests */,
 				A40003 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -69,6 +90,23 @@
 				A20004 /* Copyhog.entitlements */,
 			);
 			path = Copyhog;
+			sourceTree = "<group>";
+		};
+		A40003 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A20005 /* Copyhog.app */,
+				B20002 /* CopyhogTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B40002 /* CopyhogTests */ = {
+			isa = PBXGroup;
+			children = (
+				B20001 /* PopoverContentTests.swift */,
+			);
+			path = CopyhogTests;
 			sourceTree = "<group>";
 		};
 		A40004 /* Views */ = {
@@ -108,14 +146,6 @@
 			path = Store;
 			sourceTree = "<group>";
 		};
-		A40003 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				A20005 /* Copyhog.app */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -135,6 +165,23 @@
 			productName = Copyhog;
 			productReference = A20005 /* Copyhog.app */;
 			productType = "com.apple.product-type.application";
+		};
+		B50001 /* CopyhogTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B70001 /* Build configuration list for PBXNativeTarget "CopyhogTests" */;
+			buildPhases = (
+				B60001 /* Sources */,
+				B30001 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B50002 /* PBXTargetDependency */,
+			);
+			name = CopyhogTests;
+			productName = CopyhogTests;
+			productReference = B20002 /* CopyhogTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -159,12 +206,13 @@
 				en,
 				Base,
 			);
-			mainGroup = A40001 /* root */;
+			mainGroup = A40001;
 			productRefGroup = A40003 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				A50001 /* Copyhog */,
+				B50001 /* CopyhogTests */,
 			);
 		};
 /* End PBXProject section */
@@ -198,7 +246,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B60001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B10001 /* PopoverContentTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B50002 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A50001 /* Copyhog */;
+			targetProxy = B40001 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		A90001 /* Debug */ = {
@@ -318,10 +382,20 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				AUTOMATION_APPLE_EVENTS = YES;
 				CODE_SIGN_ENTITLEMENTS = Copyhog/Copyhog.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7R6927B38A;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
+				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
+				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
+				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
+				ENABLE_RESOURCE_ACCESS_PHOTO_LIBRARY = NO;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Copyhog/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -332,6 +406,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.copyhog.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
+				RUNTIME_EXCEPTION_ALLOW_JIT = NO;
+				RUNTIME_EXCEPTION_ALLOW_UNSIGNED_EXECUTABLE_MEMORY = NO;
+				RUNTIME_EXCEPTION_DEBUGGING_TOOL = NO;
+				RUNTIME_EXCEPTION_DISABLE_EXECUTABLE_PAGE_PROTECTION = NO;
+				RUNTIME_EXCEPTION_DISABLE_LIBRARY_VALIDATION = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 6.0;
 			};
@@ -341,10 +421,20 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				AUTOMATION_APPLE_EVENTS = YES;
 				CODE_SIGN_ENTITLEMENTS = Copyhog/Copyhog.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7R6927B38A;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
+				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
+				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
+				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
+				ENABLE_RESOURCE_ACCESS_PHOTO_LIBRARY = NO;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Copyhog/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -355,8 +445,48 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.copyhog.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
+				RUNTIME_EXCEPTION_ALLOW_JIT = NO;
+				RUNTIME_EXCEPTION_ALLOW_UNSIGNED_EXECUTABLE_MEMORY = NO;
+				RUNTIME_EXCEPTION_DEBUGGING_TOOL = NO;
+				RUNTIME_EXCEPTION_DISABLE_EXECUTABLE_PAGE_PROTECTION = NO;
+				RUNTIME_EXCEPTION_DISABLE_LIBRARY_VALIDATION = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		B90001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7R6927B38A;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.copyhog.app.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 6.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Copyhog.app/Contents/MacOS/Copyhog";
+			};
+			name = Debug;
+		};
+		B90002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7R6927B38A;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.copyhog.app.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 6.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Copyhog.app/Contents/MacOS/Copyhog";
 			};
 			name = Release;
 		};
@@ -381,8 +511,16 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		B70001 /* Build configuration list for PBXNativeTarget "CopyhogTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B90001 /* Debug */,
+				B90002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
-
 	};
 	rootObject = A80001 /* Project object */;
 }
