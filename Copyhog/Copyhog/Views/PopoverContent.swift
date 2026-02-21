@@ -77,6 +77,20 @@ struct PopoverContent: View {
                         )
                     }
                     .listStyle(.plain)
+
+                    Divider()
+
+                    HStack {
+                        Spacer()
+                        Button("Quit Copyhog") {
+                            NSApplication.shared.terminate(nil)
+                        }
+                        .buttonStyle(.borderless)
+                        .foregroundStyle(.secondary)
+                        .controlSize(.small)
+                        Spacer()
+                    }
+                    .padding(.vertical, 6)
                 }
             }
         }
