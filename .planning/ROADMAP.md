@@ -98,3 +98,21 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | 2. Browse UI | v1.0 | 1/1 | Complete | 2026-02-21 |
 | 3. Paste Actions | v1.0 | 2/2 | Complete | 2026-02-21 |
 | 4. User Control | v1.1 | 0/1 | Not started | - |
+
+### Phase 04.1: Settings menu with hotkey config, version display, attribution, and relocated actions (INSERTED)
+
+**Goal:** Users can access a settings/gear menu that displays the app version, credits/attribution, allows hotkey configuration, and houses the Quit and Hog Wipe actions (relocated from the main popover toolbar to declutter it)
+**Depends on:** Phase 4
+**Requirements:** SETTINGS-01, SETTINGS-02, SETTINGS-03, SETTINGS-04, SETTINGS-05
+**Success Criteria** (what must be TRUE):
+  1. A gear icon in the popover toolbar opens a settings dropdown menu
+  2. The settings menu shows the app version and attribution/credits
+  3. Hog Wipe and Quit Copyhog actions are accessible from the settings menu (not the main toolbar/popover)
+  4. The main popover toolbar is decluttered (only multi-select toggle + gear icon)
+  5. Users can change the global hotkey from a set of presets in the settings menu
+  6. The hotkey preference persists across app restarts
+**Plans:** 2 plans
+
+Plans:
+- [ ] 04.1-01-PLAN.md — Settings menu with version, attribution, relocated Hog Wipe and Quit
+- [ ] 04.1-02-PLAN.md — Hotkey configuration with presets in settings menu
