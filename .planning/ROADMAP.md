@@ -114,5 +114,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 **Plans:** 2 plans
 
 Plans:
-- [ ] 04.1-01-PLAN.md — Settings menu with version, attribution, relocated Hog Wipe and Quit
+- [x] 04.1-01-PLAN.md — Settings menu with version, attribution, relocated Hog Wipe and Quit
 - [ ] 04.1-02-PLAN.md — Hotkey configuration with presets in settings menu
