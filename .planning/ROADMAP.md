@@ -99,7 +99,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | 4. User Control | v1.1 | 0/1 | Not started | - |
 | 04.1 Settings Menu | v1.1 | 1/1 | Complete | 2026-02-21 |
 | 04.3 App Store Readiness | v1.1 | 0/? | Not started | - |
-| 04.2 Liquid Glass UI | v1.1 | 0/? | Not started | - |
+| 04.2 Liquid Glass UI | 1/2 | In Progress|  | - |
 
 ### Phase 04.3: Remaining App Store readiness (INSERTED)
 
@@ -122,7 +122,7 @@ Plans:
 
 **Goal:** Transform the popover from a flat UI into a warm, translucent liquid glass aesthetic — translucent materials, elevated preview pane, floating toolbar, glow hover effects, copy confirmation, and hedgehog-themed empty state
 **Depends on:** Phase 4
-**Plans:** 2 plans
+**Plans:** 1/2 plans executed
 
 Plans:
 - [ ] 04.2-01-PLAN.md — Glass popover shell, floating toolbar, elevated preview pane
