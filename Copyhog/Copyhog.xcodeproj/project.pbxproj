@@ -20,6 +20,8 @@
 		A10011 /* PasteboardWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20014 /* PasteboardWriter.swift */; };
 		A10012 /* SettingsMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20015 /* SettingsMenu.swift */; };
 		A10013 /* ExclusionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20016 /* ExclusionManager.swift */; };
+		A10014 /* BookmarkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20017 /* BookmarkManager.swift */; };
+		A10015 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20018 /* OnboardingView.swift */; };
 		B10001 /* PopoverContentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20001 /* PopoverContentTests.swift */; };
 		B10002 /* Phase4UserControlTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20003 /* Phase4UserControlTests.swift */; };
 		B10003 /* Phase1CaptureEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20004 /* Phase1CaptureEngineTests.swift */; };
@@ -44,6 +46,8 @@
 		A20014 /* PasteboardWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteboardWriter.swift; sourceTree = "<group>"; };
 		A20015 /* SettingsMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsMenu.swift; sourceTree = "<group>"; };
 		A20016 /* ExclusionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclusionManager.swift; sourceTree = "<group>"; };
+		A20017 /* BookmarkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkManager.swift; sourceTree = "<group>"; };
+		A20018 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		B20001 /* PopoverContentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverContentTests.swift; sourceTree = "<group>"; };
 		B20003 /* Phase4UserControlTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phase4UserControlTests.swift; sourceTree = "<group>"; };
 		B20002 /* CopyhogTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CopyhogTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -132,6 +136,7 @@
 				A20012 /* PreviewPane.swift */,
 				A20013 /* ItemRow.swift */,
 				A20015 /* SettingsMenu.swift */,
+				A20018 /* OnboardingView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -152,6 +157,7 @@
 				A20011 /* ScreenshotWatcher.swift */,
 				A20014 /* PasteboardWriter.swift */,
 				A20016 /* ExclusionManager.swift */,
+				A20017 /* BookmarkManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -263,6 +269,8 @@
 				A10011 /* PasteboardWriter.swift in Sources */,
 				A10012 /* SettingsMenu.swift in Sources */,
 				A10013 /* ExclusionManager.swift in Sources */,
+				A10014 /* BookmarkManager.swift in Sources */,
+				A10015 /* OnboardingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -406,8 +414,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				AUTOMATION_APPLE_EVENTS = YES;
-				CODE_SIGN_ENTITLEMENTS = Copyhog/Copyhog.entitlements;
+					CODE_SIGN_ENTITLEMENTS = Copyhog/Copyhog.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -445,8 +452,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				AUTOMATION_APPLE_EVENTS = YES;
-				CODE_SIGN_ENTITLEMENTS = Copyhog/Copyhog.entitlements;
+					CODE_SIGN_ENTITLEMENTS = Copyhog/Copyhog.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;

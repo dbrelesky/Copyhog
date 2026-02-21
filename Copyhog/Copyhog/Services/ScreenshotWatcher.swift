@@ -7,13 +7,10 @@ final class ScreenshotWatcher {
     private var source: DispatchSourceFileSystemObject?
     private var fileDescriptor: Int32 = -1
     private var knownFiles: Set<String> = []
-    private let screeniesDirectory: URL
+    private let bookmarkManager: BookmarkManager
 
-    init() {
-        let docs = FileManager.default.homeDirectoryForCurrentUser
-            .appendingPathComponent("Documents", isDirectory: true)
-            .appendingPathComponent("Screenies", isDirectory: true)
-        screeniesDirectory = docs
+    init(bookmarkManager: BookmarkManager) {
+        self.bookmarkManager = bookmarkManager
     }
 
     // MARK: - Public API
@@ -23,11 +20,19 @@ final class ScreenshotWatcher {
         imageStore: ImageStore,
         onNewItem: @escaping (ClipItem) -> Void
     ) {
-        let screenshotDir = screenshotDirectory()
+        guard let screenshotDir = bookmarkManager.startAccessing(key: BookmarkManager.screenshotSourceKey) else {
+            print("[ScreenshotWatcher] No screenshot source bookmark — screenshot capture disabled")
+            return
+        }
+        guard let screeniesDir = bookmarkManager.startAccessing(key: BookmarkManager.screeniesDestKey) else {
+            print("[ScreenshotWatcher] No screenies dest bookmark — screenshot capture disabled")
+            bookmarkManager.stopAccessing(key: BookmarkManager.screenshotSourceKey)
+            return
+        }
 
-        // Ensure ~/Documents/Screenies/ exists
+        // Ensure Screenies directory exists
         try? FileManager.default.createDirectory(
-            at: screeniesDirectory,
+            at: screeniesDir,
             withIntermediateDirectories: true
         )
 
@@ -56,6 +61,7 @@ final class ScreenshotWatcher {
                     MainActor.assumeIsolated {
                         self?.handleDirectoryChange(
                             screenshotDir: screenshotDir,
+                            screeniesDir: screeniesDir,
                             clipboardObserver: clipboardObserver,
                             imageStore: imageStore,
                             onNewItem: onNewItem
@@ -78,27 +84,15 @@ final class ScreenshotWatcher {
     func stop() {
         source?.cancel()
         source = nil
+        bookmarkManager.stopAccessing(key: BookmarkManager.screenshotSourceKey)
+        bookmarkManager.stopAccessing(key: BookmarkManager.screeniesDestKey)
     }
 
     // MARK: - Private
 
-    private func screenshotDirectory() -> URL {
-        // Read macOS screenshot location preference (sandbox-safe, no subprocess)
-        if let location = UserDefaults(suiteName: "com.apple.screencapture")?.string(forKey: "location"),
-           !location.isEmpty {
-            let url = URL(fileURLWithPath: (location as NSString).expandingTildeInPath)
-            if FileManager.default.fileExists(atPath: url.path) {
-                return url
-            }
-        }
-
-        // Default: ~/Desktop
-        return FileManager.default.homeDirectoryForCurrentUser
-            .appendingPathComponent("Desktop", isDirectory: true)
-    }
-
     private func handleDirectoryChange(
         screenshotDir: URL,
+        screeniesDir: URL,
         clipboardObserver: ClipboardObserver,
         imageStore: ImageStore,
         onNewItem: @escaping (ClipItem) -> Void
@@ -125,10 +119,10 @@ final class ScreenshotWatcher {
                 continue
             }
 
-            let destURL = screeniesDirectory.appendingPathComponent(fileName)
+            let destURL = screeniesDir.appendingPathComponent(fileName)
 
             do {
-                // Move to ~/Documents/Screenies/
+                // Move to Screenies folder
                 try FileManager.default.moveItem(at: sourceURL, to: destURL)
 
                 // Read image data from new location
