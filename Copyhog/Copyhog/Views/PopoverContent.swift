@@ -68,6 +68,30 @@ struct PopoverContent: View {
                     .padding(.horizontal, 8)
                     .padding(.vertical, 4)
 
+                    if showWipeConfirmation {
+                        HStack {
+                            Text("Remove all items?")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                            Spacer()
+                            Button("Cancel") {
+                                showWipeConfirmation = false
+                            }
+                            .controlSize(.small)
+                            Button("Wipe All") {
+                                store.removeAll()
+                                selectedItems.removeAll()
+                                isMultiSelectActive = false
+                                showWipeConfirmation = false
+                            }
+                            .controlSize(.small)
+                            .buttonStyle(.borderedProminent)
+                            .tint(.red)
+                        }
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                    }
+
                     Divider()
 
                     List {
@@ -94,16 +118,6 @@ struct PopoverContent: View {
             }
         }
         .frame(width: 360, height: 480)
-        .alert("Hog Wipe", isPresented: $showWipeConfirmation) {
-            Button("Wipe All", role: .destructive) {
-                store.removeAll()
-                selectedItems.removeAll()
-                isMultiSelectActive = false
-            }
-            Button("Cancel", role: .cancel) { }
-        } message: {
-            Text("Remove all clipboard items? This cannot be undone.")
-        }
     }
 }
 
