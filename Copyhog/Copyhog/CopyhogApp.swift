@@ -35,12 +35,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     private var screenshotWatcher: ScreenshotWatcher?
     private var globalMonitor: Any?
     private var localMonitor: Any?
+    private var statusButton: NSStatusBarButton?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         registerLaunchAtLogin()
         requestAccessibilityPermission()
         registerGlobalHotkey()
         startCaptureServices()
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            self?.statusButton = NSApp.windows
+                .compactMap({ $0.value(forKey: "statusItem") as? NSStatusItem })
+                .first?.button
+        }
     }
 
     private func startCaptureServices() {
@@ -97,20 +104,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     }
 
     private nonisolated func isHotkeyEvent(_ event: NSEvent) -> Bool {
-        // Shift + Up Arrow (keyCode 126)
-        // Check that ONLY shift is pressed (not shift+cmd, shift+opt, etc.)
-        let shiftOnly = event.modifierFlags.intersection(.deviceIndependentFlagsMask) == .shift
-        return shiftOnly && event.keyCode == 126
+        // Shift + Command + C (keyCode 8)
+        let requiredFlags: NSEvent.ModifierFlags = [.shift, .command]
+        let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
+        return flags == requiredFlags && event.keyCode == 8
     }
 
     private func togglePopover() {
-        // MenuBarExtra with .window style creates an NSPanel attached to an NSStatusItem.
-        // Find the status button and simulate a click to toggle the popover.
-        if let button = NSApp.windows
-            .compactMap({ $0.value(forKey: "statusItem") as? NSStatusItem })
-            .first?.button {
-            button.performClick(nil)
+        if statusButton == nil {
+            statusButton = NSApp.windows
+                .compactMap({ $0.value(forKey: "statusItem") as? NSStatusItem })
+                .first?.button
         }
+        statusButton?.performClick(nil)
     }
 
     func removeMonitors() {
