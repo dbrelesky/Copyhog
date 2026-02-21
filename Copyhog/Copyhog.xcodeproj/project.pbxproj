@@ -19,6 +19,7 @@
 		A10010 /* ItemRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20013 /* ItemRow.swift */; };
 		A10011 /* PasteboardWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20014 /* PasteboardWriter.swift */; };
 		B10001 /* PopoverContentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20001 /* PopoverContentTests.swift */; };
+		B10002 /* Phase4UserControlTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20003 /* Phase4UserControlTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +38,7 @@
 		A20013 /* ItemRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemRow.swift; sourceTree = "<group>"; };
 		A20014 /* PasteboardWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteboardWriter.swift; sourceTree = "<group>"; };
 		B20001 /* PopoverContentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverContentTests.swift; sourceTree = "<group>"; };
+		B20003 /* Phase4UserControlTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phase4UserControlTests.swift; sourceTree = "<group>"; };
 		B20002 /* CopyhogTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CopyhogTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -105,6 +107,7 @@
 			isa = PBXGroup;
 			children = (
 				B20001 /* PopoverContentTests.swift */,
+				B20003 /* Phase4UserControlTests.swift */,
 			);
 			path = CopyhogTests;
 			sourceTree = "<group>";
@@ -251,6 +254,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B10001 /* PopoverContentTests.swift in Sources */,
+				B10002 /* Phase4UserControlTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
