@@ -91,19 +91,19 @@ struct PopoverContent: View {
                     }
                     .listStyle(.plain)
                 }
-                .alert("Hog Wipe", isPresented: $showWipeConfirmation) {
-                    Button("Wipe All", role: .destructive) {
-                        store.removeAll()
-                        selectedItems.removeAll()
-                        isMultiSelectActive = false
-                    }
-                    Button("Cancel", role: .cancel) { }
-                } message: {
-                    Text("Remove all clipboard items? This cannot be undone.")
-                }
             }
         }
         .frame(width: 360, height: 480)
+        .alert("Hog Wipe", isPresented: $showWipeConfirmation) {
+            Button("Wipe All", role: .destructive) {
+                store.removeAll()
+                selectedItems.removeAll()
+                isMultiSelectActive = false
+            }
+            Button("Cancel", role: .cancel) { }
+        } message: {
+            Text("Remove all clipboard items? This cannot be undone.")
+        }
     }
 }
 
