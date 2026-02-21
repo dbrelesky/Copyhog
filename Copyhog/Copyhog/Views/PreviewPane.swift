@@ -14,6 +14,7 @@ struct PreviewPane: View {
                         Image(nsImage: nsImage)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                     } else {
                         Image(systemName: "photo")
@@ -25,15 +26,21 @@ struct PreviewPane: View {
                     ScrollView {
                         Text(item.content ?? "")
                             .font(.body)
+                            .foregroundStyle(.primary)
                             .padding(12)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
                 }
             } else {
-                Color.clear
+                Image(systemName: "clipboard")
+                    .font(.largeTitle)
+                    .foregroundStyle(.tertiary)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(nsColor: .controlBackgroundColor))
+        .background(.regularMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .shadow(color: .black.opacity(0.1), radius: 8, y: 2)
     }
 }
