@@ -17,6 +17,7 @@
 		A10008 /* ScreenshotWatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20011 /* ScreenshotWatcher.swift */; };
 		A10009 /* PreviewPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20012 /* PreviewPane.swift */; };
 		A10010 /* ItemRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20013 /* ItemRow.swift */; };
+		A10011 /* PasteboardWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20014 /* PasteboardWriter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +34,7 @@
 		A20011 /* ScreenshotWatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotWatcher.swift; sourceTree = "<group>"; };
 		A20012 /* PreviewPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewPane.swift; sourceTree = "<group>"; };
 		A20013 /* ItemRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemRow.swift; sourceTree = "<group>"; };
+		A20014 /* PasteboardWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteboardWriter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +95,7 @@
 				A20008 /* ImageStore.swift */,
 				A20010 /* ClipboardObserver.swift */,
 				A20011 /* ScreenshotWatcher.swift */,
+				A20014 /* PasteboardWriter.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -191,6 +194,7 @@
 				A10008 /* ScreenshotWatcher.swift in Sources */,
 				A10009 /* PreviewPane.swift in Sources */,
 				A10010 /* ItemRow.swift in Sources */,
+				A10011 /* PasteboardWriter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

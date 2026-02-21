@@ -51,6 +51,11 @@ final class ImageStore: @unchecked Sendable {
         return NSImage(contentsOf: url)
     }
 
+    /// Resolves a relative path to a full URL under App Support/Copyhog/.
+    func resolveURL(relativePath: String) -> URL {
+        baseDirectory.appendingPathComponent(relativePath)
+    }
+
     /// Deletes an image file at the given relative path.
     func deleteImage(relativePath: String) {
         let url = baseDirectory.appendingPathComponent(relativePath)
