@@ -4,6 +4,19 @@ import Foundation
 @MainActor
 final class ExclusionManager: ObservableObject {
 
+    struct KnownApp: Identifiable {
+        let id: String // bundleID
+        let name: String
+    }
+
+    static let knownApps: [KnownApp] = [
+        KnownApp(id: "com.1password.1password", name: "1Password"),
+        KnownApp(id: "com.apple.keychainaccess", name: "Keychain Access"),
+        KnownApp(id: "com.apple.Terminal", name: "Terminal"),
+        KnownApp(id: "com.googlecode.iterm2", name: "iTerm2"),
+        KnownApp(id: "com.dashlane.Dashlane", name: "Dashlane"),
+    ]
+
     @Published var excludedBundleIDs: Set<String> {
         didSet { persist() }
     }
@@ -13,6 +26,7 @@ final class ExclusionManager: ObservableObject {
         "com.apple.keychainaccess",
         "com.apple.Terminal",
         "com.googlecode.iterm2",
+        "com.dashlane.Dashlane",
     ]
 
     private static let userDefaultsKey = "excludedBundleIDs"

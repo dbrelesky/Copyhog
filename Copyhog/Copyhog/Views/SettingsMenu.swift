@@ -41,25 +41,45 @@ struct SettingsMenu: View {
 
     private var excludedAppsSubmenu: some View {
         Menu("Excluded Apps") {
-            Button {
-                excludeCurrentApp()
-            } label: {
-                Label("Exclude Current App", systemImage: "plus.circle")
+            ForEach(ExclusionManager.knownApps) { app in
+                let isExcluded = exclusionManager.excludedBundleIDs.contains(app.id)
+                Button {
+                    if isExcluded {
+                        exclusionManager.removeExclusion(app.id)
+                    } else {
+                        exclusionManager.addExclusion(app.id)
+                    }
+                } label: {
+                    HStack {
+                        Text(app.name)
+                        if isExcluded {
+                            Image(systemName: "checkmark")
+                        }
+                    }
+                }
             }
 
             Divider()
 
-            let sorted = exclusionManager.excludedBundleIDs.sorted()
-            if sorted.isEmpty {
-                Text("No excluded apps")
-            } else {
-                ForEach(sorted, id: \.self) { bundleID in
+            let customExclusions = exclusionManager.excludedBundleIDs
+                .filter { bundleID in !ExclusionManager.knownApps.contains(where: { $0.id == bundleID }) }
+                .sorted()
+            if !customExclusions.isEmpty {
+                ForEach(customExclusions, id: \.self) { bundleID in
                     Button {
                         exclusionManager.removeExclusion(bundleID)
                     } label: {
                         Label(displayName(for: bundleID), systemImage: "xmark.circle")
                     }
                 }
+
+                Divider()
+            }
+
+            Button {
+                excludeCurrentApp()
+            } label: {
+                Label("Exclude Current App", systemImage: "plus.circle")
             }
         }
     }
