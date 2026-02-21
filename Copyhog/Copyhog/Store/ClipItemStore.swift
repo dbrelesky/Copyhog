@@ -42,6 +42,21 @@ final class ClipItemStore: ObservableObject {
         save()
     }
 
+    func remove(id: UUID) {
+        guard let index = items.firstIndex(where: { $0.id == id }) else { return }
+        let removed = items.remove(at: index)
+        cleanupImages(for: removed)
+        save()
+    }
+
+    func removeAll() {
+        for item in items {
+            cleanupImages(for: item)
+        }
+        items = []
+        save()
+    }
+
     // MARK: - Persistence
 
     private func save() {

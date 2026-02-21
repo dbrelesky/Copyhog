@@ -102,12 +102,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     }
 
     private nonisolated func isHotkeyEvent(_ event: NSEvent) -> Bool {
-        // Shift + Command + C (keyCode 8)
+        // Shift + Ctrl + C (keyCode 8)
         let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
         return event.keyCode == 8
-            && flags.contains([.shift, .command])
+            && flags.contains([.shift, .control])
             && !flags.contains(.option)
-            && !flags.contains(.control)
+            && !flags.contains(.command)
     }
 
     private func togglePopover() {
