@@ -2,46 +2,38 @@ import SwiftUI
 
 struct PopoverContent: View {
     @EnvironmentObject var store: ClipItemStore
+    @State private var hoveredItemID: UUID?
+
+    private var previewItem: ClipItem? {
+        if let hoveredID = hoveredItemID {
+            return store.items.first { $0.id == hoveredID }
+        }
+        return store.items.first
+    }
 
     var body: some View {
-        VStack {
+        Group {
             if store.items.isEmpty {
-                Spacer()
-                Text("Copyhog")
-                    .font(.title2)
-                    .foregroundStyle(.secondary)
-                Text("No items yet")
-                    .font(.caption)
-                    .foregroundStyle(.tertiary)
-                Spacer()
+                ContentUnavailableView(
+                    "No Clips Yet",
+                    systemImage: "clipboard",
+                    description: Text("Copy text or take a screenshot to get started")
+                )
             } else {
-                List(store.items) { item in
-                    HStack(spacing: 8) {
-                        if item.type == .text {
-                            Image(systemName: "doc.text")
-                                .frame(width: 40, height: 40)
-                                .foregroundStyle(.secondary)
-                            Text(item.content ?? "")
-                                .lineLimit(2)
-                                .font(.caption)
-                        } else if let thumbPath = item.thumbnailPath,
-                                  let nsImage = store.imageStore.loadImage(relativePath: thumbPath) {
-                            Image(nsImage: nsImage)
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: 120, height: 120)
-                                .clipShape(RoundedRectangle(cornerRadius: 6))
-                        } else {
-                            Image(systemName: "photo")
-                                .frame(width: 40, height: 40)
-                                .foregroundStyle(.secondary)
-                        }
-                        Spacer()
-                        Text(item.timestamp, style: .relative)
-                            .font(.caption2)
-                            .foregroundStyle(.tertiary)
+                VStack(spacing: 0) {
+                    PreviewPane(item: previewItem, imageStore: store.imageStore)
+                        .frame(height: 200)
+
+                    Divider()
+
+                    List(store.items) { item in
+                        ItemRow(
+                            item: item,
+                            imageStore: store.imageStore,
+                            hoveredItemID: $hoveredItemID
+                        )
                     }
-                    .padding(.vertical, 2)
+                    .listStyle(.plain)
                 }
             }
         }
