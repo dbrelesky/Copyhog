@@ -25,7 +25,7 @@ Every screenshot and clipboard copy is captured and instantly accessible — no 
 
 ### Active
 
-- [ ] Fix global hotkey (Shift+Up Arrow) to toggle popover open/close from any app
+- [ ] Fix global hotkey (Shift+Ctrl+C) to toggle popover open/close from any app
 - [ ] Delete individual item from clipboard history
 - [ ] Master wipe ("Hog Wipe") to clear all saved items at once
 
@@ -58,7 +58,7 @@ Every screenshot and clipboard copy is captured and instantly accessible — no 
 - **Platform**: macOS only (menu bar app pattern)
 - **Storage**: Last 20 items, auto-purge oldest. Images stored in ~/Library/Application Support/Copyhog/
 - **Screenshots**: All screenshots moved to ~/Documents/Screenies/ (not left on Desktop)
-- **Hotkey**: Shift+Up Arrow registered via NSEvent.addGlobalMonitorForEvents
+- **Hotkey**: Shift+Ctrl+C registered via NSEvent.addGlobalMonitorForEvents
 - **Clipboard**: Observer mode only — poll NSPasteboard.general.changeCount every 0.5s
 
 ## Current Milestone: v1.1 Polish & Control
@@ -66,7 +66,7 @@ Every screenshot and clipboard copy is captured and instantly accessible — no 
 **Goal:** Give the user full control over their clipboard history — fix the broken hotkey, let them delete individual items, and wipe everything clean.
 
 **Target features:**
-- Fix global hotkey toggle (Shift+Up Arrow)
+- Fix global hotkey toggle (Shift+Ctrl+C)
 - Delete individual clipboard items
 - Master "Hog Wipe" to clear all items
 
