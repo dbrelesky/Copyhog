@@ -33,6 +33,7 @@ struct SettingsMenu: View {
             }
         } label: {
             Image(systemName: "gearshape")
+                .fontWeight(.medium)
         }
         .menuStyle(.borderlessButton)
     }

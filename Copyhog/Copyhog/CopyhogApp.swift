@@ -11,7 +11,7 @@ struct CopyhogApp: App {
             PopoverContent()
                 .environmentObject(appDelegate.store)
                 .environmentObject(appDelegate.exclusionManager)
-                .frame(width: 360, height: 480)
+                .frame(width: 400, height: 520)
         } label: {
             if let image = NSImage(named: "MenuBarIcon") {
                 let ratio = image.size.height / image.size.width

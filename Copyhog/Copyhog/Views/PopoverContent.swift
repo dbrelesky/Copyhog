@@ -26,8 +26,8 @@ struct PopoverContent: View {
                 VStack(spacing: 0) {
                     PreviewPane(item: previewItem, imageStore: store.imageStore)
                         .frame(height: 200)
-
-                    Divider()
+                        .padding(.horizontal, 8)
+                        .padding(.top, 8)
 
                     // Toolbar: multi-select toggle and batch copy
                     HStack {
@@ -65,8 +65,8 @@ struct PopoverContent: View {
                         SettingsMenu(showWipeConfirmation: $showWipeConfirmation)
                             .buttonStyle(.borderless)
                     }
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
 
                     if showWipeConfirmation {
                         HStack {
@@ -90,9 +90,10 @@ struct PopoverContent: View {
                         }
                         .padding(.horizontal, 8)
                         .padding(.vertical, 4)
+                        .background(.regularMaterial)
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .padding(.horizontal, 8)
                     }
-
-                    Divider()
 
                     List {
                         ForEach(store.items) { item in
@@ -115,9 +116,12 @@ struct PopoverContent: View {
                     }
                     .listStyle(.plain)
                 }
+                .background(Color.orange.opacity(0.03))
             }
         }
-        .frame(width: 360, height: 480)
+        .frame(width: 400, height: 520)
+        .background(.ultraThinMaterial)
+        .tint(.accentColor)
     }
 }
 
