@@ -4,9 +4,19 @@ struct ItemRow: View {
     let item: ClipItem
     let imageStore: ImageStore
     @Binding var hoveredItemID: UUID?
+    let isMultiSelectActive: Bool
+    @Binding var selectedItems: Set<UUID>
+    let clipboardObserver: ClipboardObserver?
 
     var body: some View {
         HStack(spacing: 8) {
+            // Multi-select checkbox
+            if isMultiSelectActive {
+                Image(systemName: selectedItems.contains(item.id) ? "checkmark.circle.fill" : "circle")
+                    .foregroundStyle(selectedItems.contains(item.id) ? .blue : .secondary)
+                    .font(.title3)
+            }
+
             // Thumbnail area
             if item.type == .image {
                 if let thumbPath = item.thumbnailPath,
@@ -58,6 +68,18 @@ struct ItemRow: View {
                 : Color.clear
         )
         .clipShape(RoundedRectangle(cornerRadius: 6))
+        .contentShape(Rectangle())
+        .onTapGesture {
+            if isMultiSelectActive {
+                if selectedItems.contains(item.id) {
+                    selectedItems.remove(item.id)
+                } else {
+                    selectedItems.insert(item.id)
+                }
+            } else if let observer = clipboardObserver {
+                PasteboardWriter.write(item, imageStore: imageStore, clipboardObserver: observer)
+            }
+        }
         .onHover { hovering in
             hoveredItemID = hovering ? item.id : nil
         }

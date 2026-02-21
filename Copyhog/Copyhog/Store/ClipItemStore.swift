@@ -8,6 +8,7 @@ final class ClipItemStore: ObservableObject {
     private let maxItems = 20
     private let storeURL: URL
     let imageStore: ImageStore
+    var clipboardObserver: ClipboardObserver?
 
     init() {
         let appSupport = FileManager.default.urls(

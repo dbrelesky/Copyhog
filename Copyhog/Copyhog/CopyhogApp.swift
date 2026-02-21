@@ -49,6 +49,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             store?.add(item)
         }
         clipboardObserver = observer
+        store.clipboardObserver = observer
 
         let watcher = ScreenshotWatcher()
         watcher.start(
