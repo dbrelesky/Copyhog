@@ -82,10 +82,10 @@ Plans:
   2. User can delete a single item from the history list and it disappears immediately from both the UI and the persistent store
   3. User can trigger "Hog Wipe" and after confirming, all items are removed from the history list and persistent store
   4. After a Hog Wipe, the popover shows the empty state message
-**Plans**: TBD
+**Plans:** 1 plan
 
 Plans:
-- [ ] (to be planned)
+- [ ] 04-01-PLAN.md — Fix Shift+Ctrl+C hotkey, single-item delete, and Hog Wipe with confirmation
 
 ## Progress
 
@@ -97,4 +97,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | 1. Capture Engine | v1.0 | 2/2 | Complete | 2026-02-21 |
 | 2. Browse UI | v1.0 | 1/1 | Complete | 2026-02-21 |
 | 3. Paste Actions | v1.0 | 2/2 | Complete | 2026-02-21 |
-| 4. User Control | v1.1 | 0/? | Not started | - |
+| 4. User Control | v1.1 | 0/1 | Not started | - |
