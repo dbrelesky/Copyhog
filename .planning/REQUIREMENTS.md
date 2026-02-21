@@ -52,12 +52,12 @@ Requirements for milestone v1.1 (Polish & Control). Each maps to roadmap phases.
 
 ### Hotkey
 
-- [ ] **KEY-01**: User can press Shift+Ctrl+C from any app to toggle the Copyhog popover open and closed
+- [x] **KEY-01**: User can press Shift+Ctrl+C from any app to toggle the Copyhog popover open and closed
 
 ### Item Management
 
-- [ ] **MGMT-01**: User can delete a single item from the clipboard history list
-- [ ] **MGMT-02**: User can wipe all items from clipboard history via a "Hog Wipe" action with confirmation
+- [x] **MGMT-01**: User can delete a single item from the clipboard history list
+- [x] **MGMT-02**: User can wipe all items from clipboard history via a "Hog Wipe" action with confirmation
 
 ## Future Requirements
 
@@ -115,9 +115,9 @@ Deferred to future release. Tracked but not in current roadmap.
 | PASTE-02 | Phase 3 | Complete |
 | PASTE-03 | Phase 3 | Complete |
 | PASTE-04 | Phase 3 | Complete |
-| KEY-01 | Phase 4 | Pending |
-| MGMT-01 | Phase 4 | Pending |
-| MGMT-02 | Phase 4 | Pending |
+| KEY-01 | Phase 4 | Complete |
+| MGMT-01 | Phase 4 | Complete |
+| MGMT-02 | Phase 4 | Complete |
 
 **Coverage:**
 - v1.0 requirements: 21 total (all complete)

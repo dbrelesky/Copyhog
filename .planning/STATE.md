@@ -10,17 +10,17 @@ See: .planning/PROJECT.md (updated 2026-02-21)
 ## Current Position
 
 Phase: 4 of 4 (User Control)
-Plan: 0 of ? in current phase
-Status: Ready to plan
-Last activity: 2026-02-21 — Roadmap created for v1.1
+Plan: 1 of 1 in current phase
+Status: Phase complete
+Last activity: 2026-02-21 — Completed 04-01 User Control
 
-Progress: [##########] v1.0 complete | [░░░░░░░░░░] v1.1 0%
+Progress: [##########] v1.0 complete | [##########] v1.1 100%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 5
-- Average duration: 19 min
+- Total plans completed: 6
+- Average duration: 16 min
 - Total execution time: 1.5 hours
 
 **By Phase:**
@@ -30,6 +30,7 @@ Progress: [##########] v1.0 complete | [░░░░░░░░░░] v1.1 0%
 | 01-capture-engine | 2/2 | 70 min | 35 min |
 | 02-browse-ui | 1/1 | 15 min | 15 min |
 | 03-paste-actions | 2/2 | 10 min | 5 min |
+| 04-user-control | 1/1 | 1 min | 1 min |
 
 **Recent Trend:**
 - Last 5 plans: 25 min, 45 min, 15 min, 2 min, 8 min
@@ -47,6 +48,8 @@ Recent decisions affecting current work:
 - Global hotkey (Shift+Up Arrow) was registered in v1.0 but not functional -- needs NSStatusItem-based toggle approach
 - v1.1 changes hotkey to Shift+Ctrl+C
 - App Sandbox disabled in entitlements -- required for NSEvent.addGlobalMonitorForEvents
+- Used .onDelete on ForEach for native macOS swipe-to-delete behavior
+- Hog Wipe uses destructive alert confirmation to prevent accidental data loss
 
 ### Pending Todos
 
@@ -59,5 +62,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-21
-Stopped at: Roadmap created for v1.1 milestone -- ready to plan Phase 4
+Stopped at: Completed 04-01-PLAN.md -- v1.1 milestone complete
 Resume file: None
