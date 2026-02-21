@@ -10,6 +10,9 @@
 		A10001 /* CopyhogApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20001 /* CopyhogApp.swift */; };
 		A10002 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A20002 /* Assets.xcassets */; };
 		A10003 /* PopoverContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20006 /* PopoverContent.swift */; };
+		A10004 /* ClipItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20007 /* ClipItem.swift */; };
+		A10005 /* ImageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20008 /* ImageStore.swift */; };
+		A10006 /* ClipItemStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20009 /* ClipItemStore.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +22,9 @@
 		A20004 /* Copyhog.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Copyhog.entitlements; sourceTree = "<group>"; };
 		A20005 /* Copyhog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Copyhog.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A20006 /* PopoverContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverContent.swift; sourceTree = "<group>"; };
+		A20007 /* ClipItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipItem.swift; sourceTree = "<group>"; };
+		A20008 /* ImageStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStore.swift; sourceTree = "<group>"; };
+		A20009 /* ClipItemStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipItemStore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,6 +51,9 @@
 			children = (
 				A20001 /* CopyhogApp.swift */,
 				A40004 /* Views */,
+				A40005 /* Models */,
+				A40006 /* Services */,
+				A40007 /* Store */,
 				A20002 /* Assets.xcassets */,
 				A20003 /* Info.plist */,
 				A20004 /* Copyhog.entitlements */,
@@ -58,6 +67,30 @@
 				A20006 /* PopoverContent.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		A40005 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A20007 /* ClipItem.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A40006 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				A20008 /* ImageStore.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		A40007 /* Store */ = {
+			isa = PBXGroup;
+			children = (
+				A20009 /* ClipItemStore.swift */,
+			);
+			path = Store;
 			sourceTree = "<group>";
 		};
 		A40003 /* Products */ = {
@@ -139,6 +172,9 @@
 			files = (
 				A10001 /* CopyhogApp.swift in Sources */,
 				A10003 /* PopoverContent.swift in Sources */,
+				A10004 /* ClipItem.swift in Sources */,
+				A10005 /* ImageStore.swift in Sources */,
+				A10006 /* ClipItemStore.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
