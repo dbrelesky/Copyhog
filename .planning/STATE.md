@@ -5,22 +5,22 @@
 See: .planning/PROJECT.md (updated 2026-02-20)
 
 **Core value:** Every screenshot and clipboard copy is captured and instantly accessible -- no hunting, no lost items, no broken workflow.
-**Current focus:** Phase 2: Browse UI
+**Current focus:** Phase 3: Paste Actions
 
 ## Current Position
 
-Phase: 2 of 3 (Browse UI)
-Plan: 1 of 1 in current phase (phase complete)
+Phase: 3 of 3 (Paste Actions)
+Plan: 1 of 2 in current phase
 Status: In progress
-Last activity: 2026-02-21 -- Completed 02-01 browse UI
+Last activity: 2026-02-21 -- Completed 03-01 paste actions plan
 
-Progress: [████░░░░░░] 40%
+Progress: [████████░░] 80%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 3
-- Average duration: 28 min
+- Total plans completed: 4
+- Average duration: 22 min
 - Total execution time: 1.4 hours
 
 **By Phase:**
@@ -29,9 +29,10 @@ Progress: [████░░░░░░] 40%
 |-------|-------|-------|----------|
 | 01-capture-engine | 2/2 | 70 min | 35 min |
 | 02-browse-ui | 1/1 | 15 min | 15 min |
+| 03-paste-actions | 1/2 | 2 min | 2 min |
 
 **Recent Trend:**
-- Last 5 plans: 25 min, 45 min, 15 min
+- Last 5 plans: 25 min, 45 min, 15 min, 2 min
 - Trend: improving
 
 *Updated after each plan completion*
@@ -54,6 +55,8 @@ Recent decisions affecting current work:
 - Used @State hoveredItemID with onHover last-writer-wins pattern for macOS hover bug workaround
 - PreviewPane height fixed at 200pt with aspect-fit images, scrollable text
 - ContentUnavailableView for empty state — native macOS 14 component
+- ClipboardObserver stored as optional var on ClipItemStore for view access — minimal change vs restructuring init chain
+- Batch paste uses NSString and NSURL as NSPasteboardWriting objects for cross-app compatibility
 
 ### Pending Todos
 
@@ -66,5 +69,5 @@ Recent decisions affecting current work:
 ## Session Continuity
 
 Last session: 2026-02-21
-Stopped at: Completed 02-01-PLAN.md — browse UI verified (split-view popover with hover preview)
+Stopped at: Completed 03-01-PLAN.md (paste actions)
 Resume file: None

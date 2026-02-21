@@ -41,9 +41,9 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Paste Actions
 
-- [ ] **PASTE-01**: Single-clicking an item row copies it to the system clipboard
-- [ ] **PASTE-02**: Multi-select mode toggleable via button, enables checkboxes on rows
-- [ ] **PASTE-03**: "Copy N items" button writes selected image file URLs as NSPasteboardItem array to pasteboard
+- [x] **PASTE-01**: Single-clicking an item row copies it to the system clipboard
+- [x] **PASTE-02**: Multi-select mode toggleable via button, enables checkboxes on rows
+- [x] **PASTE-03**: "Copy N items" button writes selected image file URLs as NSPasteboardItem array to pasteboard
 - [ ] **PASTE-04**: Items are draggable out of the popover into target apps via Transferable/NSItemProvider
 
 ## v2 Requirements
@@ -98,9 +98,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | UI-02 | Phase 2 | Pending |
 | UI-03 | Phase 2 | Pending |
 | UI-04 | Phase 2 | Pending |
-| PASTE-01 | Phase 3 | Pending |
-| PASTE-02 | Phase 3 | Pending |
-| PASTE-03 | Phase 3 | Pending |
+| PASTE-01 | Phase 3 | Complete |
+| PASTE-02 | Phase 3 | Complete |
+| PASTE-03 | Phase 3 | Complete |
 | PASTE-04 | Phase 3 | Pending |
 
 **Coverage:**
