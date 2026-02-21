@@ -42,7 +42,7 @@ Plans:
   1. The popover shows a scrollable list of captured items with 64x64 thumbnails (images) or 2-line text snippets, each with a relative timestamp
   2. Hovering over an item row updates the preview pane at the top to show the full-size image or full text
   3. When no items have been captured, a friendly empty state message is displayed instead of a blank screen
-**Plans:** 1 plan
+**Plans:** 1/1 plans complete
 
 Plans:
 - [x] 02-01-PLAN.md — Preview pane, item list with 64x64 thumbnails, hover-driven preview, and empty state
@@ -55,11 +55,11 @@ Plans:
   1. Clicking an item row copies it to the system clipboard, ready to paste into any app
   2. Toggling multi-select mode shows checkboxes on rows, and the "Copy N items" button writes selected image file URLs to the pasteboard for batch paste into apps like Slack or Figma
   3. Items can be dragged out of the popover directly into target apps (text or image)
-**Plans**: TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] 03-01: Single-click paste and multi-select batch paste (PASTE-01, PASTE-02, PASTE-03)
-- [ ] 03-02: Drag-out support (PASTE-04)
+- [ ] 03-01-PLAN.md — Single-click copy-to-clipboard and multi-select batch paste
+- [ ] 03-02-PLAN.md — Drag-out support via Transferable and .draggable
 
 ## Progress
 
@@ -69,5 +69,5 @@ Phases execute in numeric order: 1 -> 2 -> 3
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Capture Engine | 2/2 | Complete | 2026-02-21 |
-| 2. Browse UI | 1/1 | Complete | 2026-02-21 |
+| 2. Browse UI | 1/1 | Complete    | 2026-02-21 |
 | 3. Paste Actions | 0/2 | Not started | - |
