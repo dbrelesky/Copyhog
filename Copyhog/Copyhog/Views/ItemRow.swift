@@ -10,13 +10,50 @@ struct ItemRow: View {
 
     var body: some View {
         HStack(spacing: 8) {
-            // Multi-select checkbox
+            // Multi-select checkbox (outside draggable area)
             if isMultiSelectActive {
                 Image(systemName: selectedItems.contains(item.id) ? "checkmark.circle.fill" : "circle")
                     .foregroundStyle(selectedItems.contains(item.id) ? .blue : .secondary)
                     .font(.title3)
             }
 
+            // Inner content with draggable
+            rowContent
+                .draggable(item) {
+                    Label(
+                        item.type == .text ? "Text" : "Image",
+                        systemImage: item.type == .text ? "doc.text" : "photo"
+                    )
+                }
+        }
+        .padding(.vertical, 4)
+        .padding(.horizontal, 4)
+        .background(
+            hoveredItemID == item.id
+                ? Color.secondary.opacity(0.1)
+                : Color.clear
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 6))
+        .contentShape(Rectangle())
+        .simultaneousGesture(TapGesture().onEnded {
+            if isMultiSelectActive {
+                if selectedItems.contains(item.id) {
+                    selectedItems.remove(item.id)
+                } else {
+                    selectedItems.insert(item.id)
+                }
+            } else if let observer = clipboardObserver {
+                PasteboardWriter.write(item, imageStore: imageStore, clipboardObserver: observer)
+            }
+        })
+        .onHover { hovering in
+            hoveredItemID = hovering ? item.id : nil
+        }
+    }
+
+    @ViewBuilder
+    private var rowContent: some View {
+        HStack(spacing: 8) {
             // Thumbnail area
             if item.type == .image {
                 if let thumbPath = item.thumbnailPath,
@@ -59,29 +96,6 @@ struct ItemRow: View {
             Text(item.timestamp, style: .relative)
                 .font(.caption2)
                 .foregroundStyle(.tertiary)
-        }
-        .padding(.vertical, 4)
-        .padding(.horizontal, 4)
-        .background(
-            hoveredItemID == item.id
-                ? Color.secondary.opacity(0.1)
-                : Color.clear
-        )
-        .clipShape(RoundedRectangle(cornerRadius: 6))
-        .contentShape(Rectangle())
-        .onTapGesture {
-            if isMultiSelectActive {
-                if selectedItems.contains(item.id) {
-                    selectedItems.remove(item.id)
-                } else {
-                    selectedItems.insert(item.id)
-                }
-            } else if let observer = clipboardObserver {
-                PasteboardWriter.write(item, imageStore: imageStore, clipboardObserver: observer)
-            }
-        }
-        .onHover { hovering in
-            hoveredItemID = hovering ? item.id : nil
         }
     }
 }
