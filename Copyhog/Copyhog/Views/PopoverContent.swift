@@ -62,13 +62,8 @@ struct PopoverContent: View {
                             .controlSize(.small)
                         }
 
-                        Button {
-                            showWipeConfirmation = true
-                        } label: {
-                            Image(systemName: "trash")
-                        }
-                        .buttonStyle(.borderless)
-                        .help("Hog Wipe — clear all")
+                        SettingsMenu(showWipeConfirmation: $showWipeConfirmation)
+                            .buttonStyle(.borderless)
                     }
                     .padding(.horizontal, 8)
                     .padding(.vertical, 4)
@@ -95,20 +90,6 @@ struct PopoverContent: View {
                         }
                     }
                     .listStyle(.plain)
-
-                    Divider()
-
-                    HStack {
-                        Spacer()
-                        Button("Quit Copyhog") {
-                            NSApplication.shared.terminate(nil)
-                        }
-                        .buttonStyle(.borderless)
-                        .foregroundStyle(.secondary)
-                        .controlSize(.small)
-                        Spacer()
-                    }
-                    .padding(.vertical, 6)
                 }
                 .alert("Hog Wipe", isPresented: $showWipeConfirmation) {
                     Button("Wipe All", role: .destructive) {
@@ -118,7 +99,7 @@ struct PopoverContent: View {
                     }
                     Button("Cancel", role: .cancel) { }
                 } message: {
-                    Text("This will permanently delete all clipboard history items.")
+                    Text("Remove all clipboard items? This cannot be undone.")
                 }
             }
         }
