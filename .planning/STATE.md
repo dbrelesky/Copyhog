@@ -10,9 +10,9 @@ See: .planning/PROJECT.md (updated 2026-02-21)
 ## Current Position
 
 Phase: 04.1 (Settings Menu with Hotkey Config, Version Display, Attribution, and Relocated Actions)
-Plan: 1 of 1 in current phase
-Status: Phase complete
-Last activity: 2026-02-21 — Completed 04.1-01 Settings Menu
+Plan: 2 of 2 in current phase
+Status: Phase execution complete, pending verification
+Last activity: 2026-02-21 — Completed 04.1-02 Hotkey Configuration
 
 Progress: [##########] v1.0 complete | [##########] v1.1 100% | [##########] 04.1 100%
 
@@ -31,7 +31,7 @@ Progress: [##########] v1.0 complete | [##########] v1.1 100% | [##########] 04.
 | 02-browse-ui | 1/1 | 15 min | 15 min |
 | 03-paste-actions | 2/2 | 10 min | 5 min |
 | 04-user-control | 1/1 | 1 min | 1 min |
-| 04.1-settings-menu | 1/1 | 2 min | 2 min |
+| 04.1-settings-menu | 2/2 | 7 min | 3.5 min |
 
 **Recent Trend:**
 - Last 5 plans: 25 min, 45 min, 15 min, 2 min, 8 min
@@ -53,6 +53,8 @@ Recent decisions affecting current work:
 - Hog Wipe uses destructive alert confirmation to prevent accidental data loss
 - Settings menu uses SwiftUI Menu with Binding<Bool> for parent-child alert communication
 - Hog Wipe and Quit relocated from main popover to gear icon dropdown menu
+- Hotkey config uses preset selection (not key recorder) with UserDefaults persistence
+- NotificationCenter propagates hotkey config changes to AppDelegate for re-registration
 
 ### Pending Todos
 
@@ -69,5 +71,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-21
-Stopped at: Completed 04.1-01-PLAN.md -- Settings menu with gear icon
+Stopped at: Completed 04.1-02-PLAN.md -- Hotkey configuration with presets
 Resume file: None

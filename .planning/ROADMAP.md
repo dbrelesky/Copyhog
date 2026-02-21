@@ -111,7 +111,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
   4. The main popover toolbar is decluttered (only multi-select toggle + gear icon)
   5. Users can change the global hotkey from a set of presets in the settings menu
   6. The hotkey preference persists across app restarts
-**Plans:** 2 plans
+**Plans:** 2/2 plans complete
 
 Plans:
 - [x] 04.1-01-PLAN.md — Settings menu with version, attribution, relocated Hog Wipe and Quit
