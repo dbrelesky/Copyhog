@@ -5,6 +5,7 @@ struct PopoverContent: View {
     @State private var hoveredItemID: UUID?
     @State private var isMultiSelectActive = false
     @State private var selectedItems: Set<UUID> = []
+    @State private var showWipeConfirmation = false
 
     private var previewItem: ClipItem? {
         if let hoveredID = hoveredItemID {
@@ -60,21 +61,38 @@ struct PopoverContent: View {
                             .buttonStyle(.borderedProminent)
                             .controlSize(.small)
                         }
+
+                        Button {
+                            showWipeConfirmation = true
+                        } label: {
+                            Image(systemName: "trash")
+                        }
+                        .buttonStyle(.borderless)
+                        .help("Hog Wipe — clear all")
                     }
                     .padding(.horizontal, 8)
                     .padding(.vertical, 4)
 
                     Divider()
 
-                    List(store.items) { item in
-                        ItemRow(
-                            item: item,
-                            imageStore: store.imageStore,
-                            hoveredItemID: $hoveredItemID,
-                            isMultiSelectActive: isMultiSelectActive,
-                            selectedItems: $selectedItems,
-                            clipboardObserver: store.clipboardObserver
-                        )
+                    List {
+                        ForEach(store.items) { item in
+                            ItemRow(
+                                item: item,
+                                imageStore: store.imageStore,
+                                hoveredItemID: $hoveredItemID,
+                                isMultiSelectActive: isMultiSelectActive,
+                                selectedItems: $selectedItems,
+                                clipboardObserver: store.clipboardObserver
+                            )
+                        }
+                        .onDelete { indexSet in
+                            for index in indexSet {
+                                let item = store.items[index]
+                                selectedItems.remove(item.id)
+                                store.remove(id: item.id)
+                            }
+                        }
                     }
                     .listStyle(.plain)
 
@@ -91,6 +109,16 @@ struct PopoverContent: View {
                         Spacer()
                     }
                     .padding(.vertical, 6)
+                }
+                .alert("Hog Wipe", isPresented: $showWipeConfirmation) {
+                    Button("Wipe All", role: .destructive) {
+                        store.removeAll()
+                        selectedItems.removeAll()
+                        isMultiSelectActive = false
+                    }
+                    Button("Cancel", role: .cancel) { }
+                } message: {
+                    Text("This will permanently delete all clipboard history items.")
                 }
             }
         }
