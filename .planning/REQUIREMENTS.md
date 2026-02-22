@@ -93,9 +93,9 @@ Requirements for milestone v1.2 (Power User Essentials). Each maps to roadmap ph
 
 ### Screenshot Auto-Detection
 
-- [ ] **SCRN-04**: App auto-detects the macOS screenshot save location from system defaults on first launch
-- [ ] **SCRN-05**: Onboarding pre-fills the detected screenshot folder, allowing user to confirm or change
-- [ ] **SCRN-06**: If no custom screenshot location is set, app defaults to ~/Desktop
+- [x] **SCRN-04**: App auto-detects the macOS screenshot save location from system defaults on first launch
+- [x] **SCRN-05**: Onboarding pre-fills the detected screenshot folder, allowing user to confirm or change
+- [x] **SCRN-06**: If no custom screenshot location is set, app defaults to ~/Desktop
 
 ## Future Requirements
 
@@ -173,9 +173,9 @@ Deferred to future release. Tracked but not in current roadmap.
 | HIST-01 | Phase 7 | Pending |
 | HIST-02 | Phase 7 | Pending |
 | HIST-03 | Phase 7 | Pending |
-| SCRN-04 | Phase 6 | Pending |
-| SCRN-05 | Phase 6 | Pending |
-| SCRN-06 | Phase 6 | Pending |
+| SCRN-04 | Phase 6 | Complete |
+| SCRN-05 | Phase 6 | Complete |
+| SCRN-06 | Phase 6 | Complete |
 
 **Coverage:**
 - v1.0 requirements: 20 total (all complete)

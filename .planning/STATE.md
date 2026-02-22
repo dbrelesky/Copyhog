@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-21)
 ## Current Position
 
 Phase: 6 of 9 (Screenshot Auto-Detection)
-Plan: 0 of ? in current phase
-Status: Ready to plan
-Last activity: 2026-02-21 -- v1.2 roadmap created (Phases 6-9)
+Plan: 1 of 1 in current phase (COMPLETE)
+Status: Phase 6 complete
+Last activity: 2026-02-22 -- Screenshot auto-detection implemented
 
-Progress: [########--] 80% (v1.0-v1.1 phases largely complete, v1.2 beginning)
+Progress: [########=-] 85% (Phase 6 complete, Phases 7-9 remaining)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 9
-- Average duration: 11 min
-- Total execution time: 1.6 hours
+- Total plans completed: 10
+- Average duration: 10 min
+- Total execution time: 1.63 hours
 
 **By Phase:**
 
@@ -34,9 +34,10 @@ Progress: [########--] 80% (v1.0-v1.1 phases largely complete, v1.2 beginning)
 | 04.1-settings-menu | 1/1 | 2 min | 2 min |
 | 04.2-liquid-glass | 1/2 | 1 min | 1 min |
 | 05-privacy | 1/1 | 3 min | 3 min |
+| 06-screenshot-auto-detection | 1/1 | 2 min | 2 min |
 
 **Recent Trend:**
-- Last 5 plans: 15 min, 2 min, 8 min, 1 min, 3 min
+- Last 5 plans: 2 min, 8 min, 1 min, 3 min, 2 min
 - Trend: improving
 
 *Updated after each plan completion*
@@ -53,6 +54,8 @@ Recent decisions affecting current work:
 - History size configurable 10-50 via @AppStorage("historyLimit"), default 20
 - [v1.2 Roadmap]: 4 phases (6-9) from 21 requirements -- screenshot detection, data model, search+kbd nav, global hotkey
 - [v1.2 Research]: soffes/HotKey + orchetect/MenuBarExtraAccess for global hotkey; debounced JSON for 500 items; NSEvent local monitor for keyboard nav
+- [Phase 6]: Used shared-preference read-only temporary exception for sandbox-safe screencapture defaults reading
+- [Phase 6]: Extracted ScreenshotLocationDetector utility for reuse; detect-and-confirm UX pattern established
 
 ### Pending Todos
 
@@ -60,7 +63,7 @@ None.
 
 ### Blockers/Concerns
 
-- [Phase 6]: Verify sandbox entitlements before choosing screenshot location detection method
+- [Phase 6]: RESOLVED -- shared-preference temporary exception entitlement works for sandbox screencapture reads
 - [Phase 9]: MenuBarExtraAccess uses private API introspection -- pin to tested version
 - [Phase 9]: CGEvent paste timing needs runtime calibration
 
@@ -74,6 +77,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-21
-Stopped at: v1.2 roadmap created, ready to plan Phase 6
+Last session: 2026-02-22
+Stopped at: Completed 06-01-PLAN.md (Phase 6 complete)
 Resume file: None
