@@ -108,32 +108,94 @@ struct PopoverContent: View {
                     }
 
                     ScrollView {
-                        LazyVGrid(
-                            columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 3),
-                            spacing: 8
-                        ) {
-                            ForEach(store.items) { item in
-                                ItemRow(
-                                    item: item,
-                                    imageStore: store.imageStore,
-                                    hoveredItemID: $hoveredItemID,
-                                    isMultiSelectActive: isMultiSelectActive,
-                                    selectedItems: $selectedItems,
-                                    clipboardObserver: store.clipboardObserver,
-                                    onDelete: {
-                                        selectedItems.remove(item.id)
-                                        store.remove(id: item.id)
-                                    },
-                                    onMarkSensitive: {
-                                        store.markSensitive(id: item.id)
-                                    },
-                                    onUnmarkSensitive: {
-                                        store.unmarkSensitive(id: item.id)
+                        let columns = Array(repeating: GridItem(.flexible(), spacing: 8), count: 3)
+                        let pinnedItems = store.items.filter { $0.isPinned }
+                        let unpinnedItems = store.items.filter { !$0.isPinned }
+
+                        LazyVStack(spacing: 0) {
+                            // Pinned section
+                            if !pinnedItems.isEmpty {
+                                HStack {
+                                    Label("Pinned", systemImage: "pin.fill")
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                    Spacer()
+                                }
+                                .padding(.horizontal, 12)
+                                .padding(.top, 8)
+
+                                LazyVGrid(columns: columns, spacing: 8) {
+                                    ForEach(pinnedItems) { item in
+                                        ItemRow(
+                                            item: item,
+                                            imageStore: store.imageStore,
+                                            hoveredItemID: $hoveredItemID,
+                                            isMultiSelectActive: isMultiSelectActive,
+                                            selectedItems: $selectedItems,
+                                            clipboardObserver: store.clipboardObserver,
+                                            onTogglePin: {
+                                                withAnimation {
+                                                    store.togglePin(id: item.id)
+                                                }
+                                            },
+                                            onDelete: {
+                                                selectedItems.remove(item.id)
+                                                store.remove(id: item.id)
+                                            },
+                                            onMarkSensitive: {
+                                                store.markSensitive(id: item.id)
+                                            },
+                                            onUnmarkSensitive: {
+                                                store.unmarkSensitive(id: item.id)
+                                            }
+                                        )
                                     }
-                                )
+                                }
+                                .padding(.horizontal, 8)
+                            }
+
+                            // History section
+                            if !unpinnedItems.isEmpty {
+                                HStack {
+                                    Label("History", systemImage: "clock")
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                    Spacer()
+                                }
+                                .padding(.horizontal, 12)
+                                .padding(.top, 8)
+
+                                LazyVGrid(columns: columns, spacing: 8) {
+                                    ForEach(unpinnedItems) { item in
+                                        ItemRow(
+                                            item: item,
+                                            imageStore: store.imageStore,
+                                            hoveredItemID: $hoveredItemID,
+                                            isMultiSelectActive: isMultiSelectActive,
+                                            selectedItems: $selectedItems,
+                                            clipboardObserver: store.clipboardObserver,
+                                            onTogglePin: {
+                                                withAnimation {
+                                                    store.togglePin(id: item.id)
+                                                }
+                                            },
+                                            onDelete: {
+                                                selectedItems.remove(item.id)
+                                                store.remove(id: item.id)
+                                            },
+                                            onMarkSensitive: {
+                                                store.markSensitive(id: item.id)
+                                            },
+                                            onUnmarkSensitive: {
+                                                store.unmarkSensitive(id: item.id)
+                                            }
+                                        )
+                                    }
+                                }
+                                .padding(.horizontal, 8)
                             }
                         }
-                        .padding(8)
+                        .padding(.bottom, 8)
                     }
                 }
                 .background(Color(red: 0.45, green: 0.2, blue: 0.55).opacity(0.06))
