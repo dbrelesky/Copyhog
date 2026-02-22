@@ -7,13 +7,14 @@ struct ItemRow: View {
     let isMultiSelectActive: Bool
     @Binding var selectedItems: Set<UUID>
     let clipboardObserver: ClipboardObserver?
+    @State private var showCopyConfirmation = false
 
     var body: some View {
         HStack(spacing: 8) {
             // Multi-select checkbox (outside draggable area)
             if isMultiSelectActive {
                 Image(systemName: selectedItems.contains(item.id) ? "checkmark.circle.fill" : "circle")
-                    .foregroundStyle(selectedItems.contains(item.id) ? .blue : .secondary)
+                    .foregroundStyle(selectedItems.contains(item.id) ? Color.accentColor : .secondary)
                     .font(.title3)
             }
 
@@ -26,14 +27,27 @@ struct ItemRow: View {
                     )
                 }
         }
-        .padding(.vertical, 4)
-        .padding(.horizontal, 4)
+        .padding(.vertical, 6)
+        .padding(.horizontal, 6)
         .background(
-            hoveredItemID == item.id
-                ? Color.secondary.opacity(0.1)
-                : Color.clear
+            RoundedRectangle(cornerRadius: 8)
+                .fill(.white.opacity(hoveredItemID == item.id ? 0.12 : 0))
         )
-        .clipShape(RoundedRectangle(cornerRadius: 6))
+        .animation(.easeInOut(duration: 0.15), value: hoveredItemID)
+        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .overlay {
+            if showCopyConfirmation {
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(.green.opacity(0.15))
+                    .overlay {
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.title2)
+                            .foregroundStyle(.green)
+                    }
+                    .transition(.opacity)
+            }
+        }
+        .animation(.easeInOut(duration: 0.2), value: showCopyConfirmation)
         .contentShape(Rectangle())
         .simultaneousGesture(TapGesture().onEnded {
             if isMultiSelectActive {
@@ -44,6 +58,10 @@ struct ItemRow: View {
                 }
             } else if let observer = clipboardObserver {
                 PasteboardWriter.write(item, imageStore: imageStore, clipboardObserver: observer)
+                showCopyConfirmation = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                    showCopyConfirmation = false
+                }
             }
         })
         .onHover { hovering in
@@ -62,22 +80,28 @@ struct ItemRow: View {
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                         .frame(width: 64, height: 64)
-                        .clipShape(RoundedRectangle(cornerRadius: 6))
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(.white.opacity(0.1), lineWidth: 0.5)
+                        )
                 } else {
                     Image(systemName: "photo")
                         .font(.title2)
+                        .fontWeight(.medium)
                         .foregroundStyle(.secondary)
                         .frame(width: 64, height: 64)
-                        .background(Color.secondary.opacity(0.1))
-                        .clipShape(RoundedRectangle(cornerRadius: 6))
+                        .background(.ultraThinMaterial)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
                 }
             } else {
                 Image(systemName: "doc.text")
                     .font(.title2)
+                    .fontWeight(.medium)
                     .foregroundStyle(.secondary)
                     .frame(width: 64, height: 64)
-                    .background(Color.secondary.opacity(0.1))
-                    .clipShape(RoundedRectangle(cornerRadius: 6))
+                    .background(.ultraThinMaterial)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
             }
 
             // Content area
