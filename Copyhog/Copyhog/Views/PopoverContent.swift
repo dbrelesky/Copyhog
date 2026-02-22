@@ -17,17 +17,16 @@ struct PopoverContent: View {
     var body: some View {
         Group {
             if store.items.isEmpty {
-                VStack(spacing: 12) {
-                    Image("MenuBarIcon")
+                VStack(spacing: 16) {
+                    Image(nsImage: NSApp.applicationIconImage)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(width: 48, height: 48)
-                        .opacity(0.4)
+                        .frame(width: 128, height: 128)
                     Text("No Clips Yet")
                         .font(.title2)
                         .fontWeight(.semibold)
                         .foregroundStyle(.secondary)
-                    Text("Nothing saved to your clipboard, start hoggin' and I'll keep it all here.")
+                    Text("Nothing in your clipboard yet, start screenshotting and copying text and I'll hog it all here.")
                         .font(.subheadline)
                         .foregroundStyle(.tertiary)
                         .multilineTextAlignment(.center)
