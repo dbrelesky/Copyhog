@@ -7,6 +7,7 @@ struct ItemRow: View {
     let isMultiSelectActive: Bool
     @Binding var selectedItems: Set<UUID>
     let clipboardObserver: ClipboardObserver?
+    var onTogglePin: (() -> Void)?
     var onDelete: (() -> Void)?
     var onMarkSensitive: (() -> Void)?
     var onUnmarkSensitive: (() -> Void)?
@@ -59,6 +60,15 @@ struct ItemRow: View {
                 hoveredItemID = hovering ? item.id : nil
             }
             .contextMenu {
+                Button {
+                    onTogglePin?()
+                } label: {
+                    Label(
+                        item.isPinned ? "Unpin" : "Pin",
+                        systemImage: item.isPinned ? "pin.slash" : "pin"
+                    )
+                }
+
                 if item.isSensitive {
                     Button {
                         onUnmarkSensitive?()
@@ -118,6 +128,22 @@ struct ItemRow: View {
                                     .fill(.ultraThinMaterial)
                                     .frame(width: 20, height: 20)
                             )
+                        Spacer()
+                    }
+                    Spacer()
+                }
+                .padding(5)
+            }
+
+            // Pin icon overlay — top-left (when not in multi-select)
+            if !isMultiSelectActive && item.isPinned {
+                VStack {
+                    HStack {
+                        Image(systemName: "pin.fill")
+                            .font(.system(size: 10))
+                            .foregroundStyle(Color(red: 0.7, green: 0.4, blue: 0.85))
+                            .padding(3)
+                            .background(.ultraThinMaterial, in: Circle())
                         Spacer()
                     }
                     Spacer()
