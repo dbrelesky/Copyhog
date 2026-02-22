@@ -41,7 +41,7 @@ final class ImageStore: @unchecked Sendable {
         }
 
         // Generate and save thumbnail
-        if let thumbnail = generateThumbnail(from: imageData, size: NSSize(width: 64, height: 64)) {
+        if let thumbnail = generateThumbnail(from: imageData, size: NSSize(width: 200, height: 200)) {
             try? thumbnail.write(to: thumbURL)
         }
 
@@ -96,12 +96,24 @@ final class ImageStore: @unchecked Sendable {
     private func generateThumbnail(from imageData: Data, size: NSSize) -> Data? {
         guard let image = NSImage(data: imageData) else { return nil }
 
+        let imageSize = image.size
+        // Calculate aspect-fill crop rect (center crop)
+        let scaleX = size.width / imageSize.width
+        let scaleY = size.height / imageSize.height
+        let scale = max(scaleX, scaleY)
+
+        let cropWidth = size.width / scale
+        let cropHeight = size.height / scale
+        let cropX = (imageSize.width - cropWidth) / 2
+        let cropY = (imageSize.height - cropHeight) / 2
+        let sourceRect = NSRect(x: cropX, y: cropY, width: cropWidth, height: cropHeight)
+
         let thumbImage = NSImage(size: size)
         thumbImage.lockFocus()
         NSGraphicsContext.current?.imageInterpolation = .high
         image.draw(
             in: NSRect(origin: .zero, size: size),
-            from: NSRect(origin: .zero, size: image.size),
+            from: sourceRect,
             operation: .copy,
             fraction: 1.0
         )

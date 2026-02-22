@@ -14,29 +14,32 @@ struct ItemRow: View {
     var onMarkSensitive: (() -> Void)?
     var onUnmarkSensitive: (() -> Void)?
     @State private var showCopyConfirmation = false
+    @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
         cardContent
             .frame(maxWidth: .infinity)
             .aspectRatio(1, contentMode: .fit)
             .background(
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(Color(red: 0.4, green: 0.2, blue: 0.5).opacity(item.isSensitive ? 0.18 : 0.12))
+                RoundedRectangle(cornerRadius: 14)
+                    .fill(item.isSensitive
+                        ? Color.primary.opacity(0.06)
+                        : Theme.cardBackground(scheme: colorScheme))
             )
-            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .clipShape(RoundedRectangle(cornerRadius: 14))
             .overlay(
-                RoundedRectangle(cornerRadius: 12)
+                RoundedRectangle(cornerRadius: 14)
                     .stroke(
                         isSelected
-                            ? Color(red: 0.7, green: 0.4, blue: 0.85).opacity(0.8)
+                            ? Theme.accent.opacity(0.6)
                             : item.isSensitive
-                                ? Color(red: 0.7, green: 0.4, blue: 0.85).opacity(0.4)
-                                : Color(red: 0.6, green: 0.35, blue: 0.75).opacity(hoveredItemID == item.id ? 0.4 : 0.1),
+                                ? Color.primary.opacity(0.12)
+                                : Color.primary.opacity(hoveredItemID == item.id ? 0.15 : 0.08),
                         lineWidth: isSelected ? 2 : (item.isSensitive ? 1.5 : 1)
                     )
             )
-            .shadow(color: Color(red: 0.5, green: 0.2, blue: 0.7).opacity((hoveredItemID == item.id || isSelected) ? 0.3 : 0), radius: 8, y: 2)
-            .animation(.easeInOut(duration: 0.15), value: hoveredItemID)
+            .shadow(color: Color.black.opacity((hoveredItemID == item.id || isSelected) ? 0.08 : 0), radius: 8, y: 2)
+            .animation(.spring(response: 0.3, dampingFraction: 0.8), value: hoveredItemID)
             .animation(.easeInOut(duration: 0.2), value: showCopyConfirmation)
             .contentShape(Rectangle())
             .draggable(item) {
@@ -125,7 +128,7 @@ struct ItemRow: View {
                 VStack {
                     HStack {
                         Image(systemName: selectedItems.contains(item.id) ? "checkmark.circle.fill" : "circle")
-                            .foregroundStyle(selectedItems.contains(item.id) ? Color(red: 0.7, green: 0.4, blue: 0.85) : .secondary)
+                            .foregroundStyle(selectedItems.contains(item.id) ? Theme.accent : .secondary)
                             .font(.body)
                             .background(
                                 Circle()
@@ -145,7 +148,7 @@ struct ItemRow: View {
                     HStack {
                         Image(systemName: "pin.fill")
                             .font(.system(size: 10))
-                            .foregroundStyle(Color(red: 0.7, green: 0.4, blue: 0.85))
+                            .foregroundStyle(.secondary)
                             .padding(3)
                             .background(.ultraThinMaterial, in: Circle())
                         Spacer()
@@ -160,13 +163,13 @@ struct ItemRow: View {
                 Image(systemName: "checkmark.circle.fill")
                     .font(.largeTitle)
                     .symbolRenderingMode(.palette)
-                    .foregroundStyle(.white, Color(red: 0.6, green: 0.35, blue: 0.75).opacity(0.85))
+                    .foregroundStyle(.white, .green.opacity(0.85))
                     .background(
                         Circle()
                             .fill(.ultraThinMaterial)
                             .frame(width: 36, height: 36)
                     )
-                    .shadow(color: Color(red: 0.5, green: 0.2, blue: 0.7).opacity(0.4), radius: 4, y: 1)
+                    .shadow(color: Color.black.opacity(0.15), radius: 4, y: 1)
                     .transition(.scale.combined(with: .opacity))
             }
         }
@@ -175,8 +178,7 @@ struct ItemRow: View {
     @ViewBuilder
     private var sensitiveCardContent: some View {
         ZStack {
-            // Striped background pattern to visually signal redaction
-            Color(red: 0.35, green: 0.15, blue: 0.45).opacity(0.15)
+            Color.primary.opacity(0.06)
 
             VStack(spacing: 4) {
                 ZStack {
@@ -189,7 +191,7 @@ struct ItemRow: View {
                     } else {
                         Image(systemName: "lock.shield.fill")
                             .font(.title2)
-                            .foregroundStyle(Color(red: 0.7, green: 0.4, blue: 0.85))
+                            .foregroundStyle(.secondary)
                     }
 
                     // Lock badge on app icon
@@ -201,7 +203,7 @@ struct ItemRow: View {
                                 .font(.system(size: 10, weight: .bold))
                                 .foregroundStyle(.white)
                                 .padding(3)
-                                .background(Color(red: 0.7, green: 0.4, blue: 0.85), in: Circle())
+                                .background(Color.secondary, in: Circle())
                         }
                     }
                     .frame(width: 36, height: 36)
@@ -217,12 +219,12 @@ struct ItemRow: View {
                 Text("HIDDEN")
                     .font(.system(size: 7, weight: .heavy))
                     .tracking(1.5)
-                    .foregroundStyle(Color(red: 0.7, green: 0.4, blue: 0.85))
+                    .foregroundStyle(.secondary)
                     .padding(.horizontal, 6)
                     .padding(.vertical, 2)
                     .background(
                         Capsule()
-                            .fill(Color(red: 0.7, green: 0.4, blue: 0.85).opacity(0.15))
+                            .fill(Color.secondary.opacity(0.12))
                     )
             }
         }
@@ -235,11 +237,13 @@ struct ItemRow: View {
             sensitiveCardContent
         } else if let thumbPath = item.thumbnailPath,
            let nsImage = imageStore.loadImage(relativePath: thumbPath) {
-            Image(nsImage: nsImage)
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .clipped()
+            GeometryReader { geo in
+                Image(nsImage: nsImage)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: geo.size.width, height: geo.size.height)
+                    .clipped()
+            }
         } else {
             Image(systemName: "photo")
                 .font(.title)
@@ -288,7 +292,7 @@ struct ItemRow: View {
             // Convert String.Index range to AttributedString.Index range
             if let attrStart = AttributedString.Index(range.lowerBound, within: attributed),
                let attrEnd = AttributedString.Index(range.upperBound, within: attributed) {
-                attributed[attrStart..<attrEnd].foregroundColor = Color(red: 0.7, green: 0.4, blue: 0.85)
+                attributed[attrStart..<attrEnd].foregroundColor = Theme.accent
                 attributed[attrStart..<attrEnd].font = .system(size: 10, weight: .bold)
             }
             searchStart = range.upperBound
