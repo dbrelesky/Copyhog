@@ -30,9 +30,6 @@ final class ScreenshotWatcher {
             return
         }
 
-        print("[ScreenshotWatcher] Screenshot dir: \(screenshotDir.path)")
-        print("[ScreenshotWatcher] Screenies dir: \(screeniesDir.path)")
-
         // Ensure Screenies directory exists
         try? FileManager.default.createDirectory(
             at: screeniesDir,
@@ -42,15 +39,12 @@ final class ScreenshotWatcher {
         // Snapshot existing files so we only react to NEW screenshots
         if let files = try? FileManager.default.contentsOfDirectory(atPath: screenshotDir.path) {
             knownFiles = Set(files.filter { $0.hasSuffix(".png") || $0.hasSuffix(".jpg") || $0.hasSuffix(".jpeg") })
-            print("[ScreenshotWatcher] Known files: \(knownFiles.count)")
-        } else {
-            print("[ScreenshotWatcher] WARNING: Could not list screenshot directory contents")
         }
 
         // Open directory for monitoring
         fileDescriptor = open(screenshotDir.path, O_EVTONLY)
         guard fileDescriptor >= 0 else {
-            print("[ScreenshotWatcher] Failed to open screenshot directory: \(screenshotDir.path) (errno: \(errno))")
+            print("[ScreenshotWatcher] Failed to open screenshot directory")
             return
         }
 
@@ -85,7 +79,6 @@ final class ScreenshotWatcher {
         }
 
         source?.resume()
-        print("[ScreenshotWatcher] Watching for new screenshots")
     }
 
     func stop() {
@@ -105,16 +98,13 @@ final class ScreenshotWatcher {
         onNewItem: @escaping (ClipItem) -> Void
     ) {
         guard let allFiles = try? FileManager.default.contentsOfDirectory(atPath: screenshotDir.path) else {
-            print("[ScreenshotWatcher] Failed to list directory contents during change event")
             return
         }
 
         let imageFiles = allFiles.filter { $0.hasSuffix(".png") || $0.hasSuffix(".jpg") || $0.hasSuffix(".jpeg") }
         let newFiles = imageFiles.filter { !knownFiles.contains($0) }
-        print("[ScreenshotWatcher] Directory change: \(imageFiles.count) images, \(newFiles.count) new")
 
         for fileName in newFiles {
-            print("[ScreenshotWatcher] Checking new file: \(fileName)")
             // Verify it looks like a macOS screenshot
             guard isScreenshot(fileName: fileName) else {
                 knownFiles.insert(fileName)

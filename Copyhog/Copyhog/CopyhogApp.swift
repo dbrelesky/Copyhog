@@ -73,7 +73,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     // MARK: - Screenshot Capture (requires bookmarks)
 
     private func startScreenshotCaptureIfReady() {
-        print("[AppDelegate] hasCompletedSetup: \(bookmarkManager.hasCompletedSetup)")
         if bookmarkManager.hasCompletedSetup {
             launchScreenshotWatcher()
         } else {
@@ -82,11 +81,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     }
 
     func launchScreenshotWatcher() {
-        guard let observer = clipboardObserver else {
-            print("[AppDelegate] launchScreenshotWatcher failed — no clipboardObserver")
-            return
-        }
-        print("[AppDelegate] Launching ScreenshotWatcher...")
+        guard let observer = clipboardObserver else { return }
         let watcher = ScreenshotWatcher(bookmarkManager: bookmarkManager)
         watcher.start(
             clipboardObserver: observer,
