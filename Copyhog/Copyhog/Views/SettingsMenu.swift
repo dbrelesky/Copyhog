@@ -6,6 +6,7 @@ struct SettingsMenu: View {
     @EnvironmentObject var exclusionManager: ExclusionManager
     @AppStorage("launchAtLogin") private var launchAtLogin = false
     @AppStorage("historyLimit") private var historyLimit = 20
+    @AppStorage("plainPasteEnabled") private var plainPasteEnabled = true
 
     private var appVersion: String {
         Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
@@ -23,6 +24,8 @@ struct SettingsMenu: View {
                 }
 
             historySizePicker
+
+            Toggle("Plain Paste (⇧⌘V)", isOn: $plainPasteEnabled)
 
             Divider()
 

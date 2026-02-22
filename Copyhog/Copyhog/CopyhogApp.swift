@@ -40,6 +40,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     let bookmarkManager = BookmarkManager()
     private var clipboardObserver: ClipboardObserver?
     private var screenshotWatcher: ScreenshotWatcher?
+    private var plainPasteService: PlainPasteService?
     private var onboardingWindow: NSWindow?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -68,6 +69,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         }
         clipboardObserver = observer
         store.clipboardObserver = observer
+        plainPasteService = PlainPasteService(clipboardObserver: observer)
     }
 
     // MARK: - Screenshot Capture (requires bookmarks)
