@@ -9,6 +9,7 @@ struct ItemRow: View {
     let clipboardObserver: ClipboardObserver?
     var isSelected: Bool = false
     var searchQuery: String = ""
+    var copiedItemID: UUID? = nil
     var onDelete: (() -> Void)?
     var onMarkSensitive: (() -> Void)?
     var onUnmarkSensitive: (() -> Void)?
@@ -64,6 +65,14 @@ struct ItemRow: View {
             })
             .onHover { hovering in
                 hoveredItemID = hovering ? item.id : nil
+            }
+            .onChange(of: copiedItemID) { _, newValue in
+                if newValue == item.id {
+                    showCopyConfirmation = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                        showCopyConfirmation = false
+                    }
+                }
             }
             .contextMenu {
                 if item.isSensitive {

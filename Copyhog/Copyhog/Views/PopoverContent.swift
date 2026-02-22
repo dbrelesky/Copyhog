@@ -11,7 +11,9 @@ struct PopoverContent: View {
     @State private var searchTask: Task<Void, Never>?
     @State private var selectedIndex: Int? = nil
     @State private var isSearchFocused: Bool = false
+    @State private var isSearchExpanded: Bool = false
     @State private var eventMonitor: Any? = nil
+    @State private var copiedItemID: UUID? = nil
 
     private enum ArrowDirection {
         case up, down, left, right
@@ -38,7 +40,15 @@ struct PopoverContent: View {
                     store.searchQuery = ""
                     return nil
                 }
-                dismissPopover()
+                // Collapse search pill
+                withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
+                    isSearchExpanded = false
+                }
+                isSearchFocused = false
+                NSApp.keyWindow?.makeFirstResponder(nil)
+                if selectedIndex == nil && !store.displayItems.isEmpty {
+                    selectedIndex = 0
+                }
                 return nil
             case 125: // Down arrow
                 isSearchFocused = false
@@ -79,6 +89,12 @@ struct PopoverContent: View {
             case 36: // Enter/Return
                 copySelectedItem()
                 return nil
+            case 8: // C key (Cmd+C)
+                if event.modifierFlags.contains(.command) {
+                    copySelectedItem()
+                    return nil
+                }
+                return event
             case 53: // Escape
                 if !searchText.isEmpty {
                     searchText = ""
@@ -86,9 +102,18 @@ struct PopoverContent: View {
                     selectedIndex = store.displayItems.isEmpty ? nil : 0
                     return nil
                 }
+                if isSearchExpanded {
+                    withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
+                        isSearchExpanded = false
+                    }
+                    return nil
+                }
                 dismissPopover()
                 return nil
             case 48: // Tab
+                withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
+                    isSearchExpanded = true
+                }
                 isSearchFocused = true
                 return nil
             default:
@@ -128,6 +153,10 @@ struct PopoverContent: View {
         let item = store.displayItems[index]
         guard let observer = store.clipboardObserver else { return }
         PasteboardWriter.write(item, imageStore: store.imageStore, clipboardObserver: observer)
+        copiedItemID = item.id
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+            copiedItemID = nil
+        }
     }
 
     private func dismissPopover() {
@@ -162,66 +191,114 @@ struct PopoverContent: View {
                         .padding(.horizontal, 8)
                         .padding(.top, 8)
 
-                    // Search bar
+                    // Toolbar: search pill, multi-select pill, batch copy, settings
                     HStack(spacing: 6) {
-                        Image(systemName: "magnifyingglass")
-                            .foregroundStyle(.secondary)
-                            .font(.system(size: 12))
-
-                        TextField("Search history...", text: $searchText, onEditingChanged: { editing in
-                            isSearchFocused = editing
-                        })
-                            .textFieldStyle(.plain)
-                            .font(.system(size: 13))
-                            .onSubmit { }
-
-                        if !searchText.isEmpty {
-                            Button {
-                                searchText = ""
-                                store.searchQuery = ""
-                            } label: {
-                                Image(systemName: "xmark.circle.fill")
+                        // Search pill — expands to input on tap
+                        if isSearchExpanded {
+                            HStack(spacing: 6) {
+                                Image(systemName: "magnifyingglass")
                                     .foregroundStyle(.secondary)
-                            }
-                            .buttonStyle(.borderless)
-                        }
-                    }
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 6)
-                    .background(Color.primary.opacity(0.06))
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                    .padding(.horizontal, 8)
-                    .padding(.top, 4)
-                    .onChange(of: searchText) { _, newValue in
-                        searchTask?.cancel()
-                        searchTask = Task {
-                            try? await Task.sleep(nanoseconds: 150_000_000)
-                            guard !Task.isCancelled else { return }
-                            store.searchQuery = newValue
-                        }
-                    }
+                                    .font(.system(size: 11, weight: .medium))
 
-                    // Toolbar: multi-select toggle and batch copy
-                    HStack {
+                                TextField("Search", text: $searchText, onEditingChanged: { editing in
+                                    isSearchFocused = editing
+                                })
+                                    .textFieldStyle(.plain)
+                                    .font(.system(size: 12))
+                                    .onSubmit { }
+
+                                Button {
+                                    searchText = ""
+                                    store.searchQuery = ""
+                                    withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
+                                        isSearchExpanded = false
+                                    }
+                                    isSearchFocused = false
+                                    NSApp.keyWindow?.makeFirstResponder(nil)
+                                } label: {
+                                    Image(systemName: "xmark.circle.fill")
+                                        .foregroundStyle(.secondary)
+                                        .font(.system(size: 11))
+                                }
+                                .buttonStyle(.borderless)
+                            }
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 5)
+                            .background(.ultraThinMaterial)
+                            .clipShape(Capsule())
+                            .overlay(
+                                Capsule()
+                                    .strokeBorder(Color.primary.opacity(0.1), lineWidth: 0.5)
+                            )
+                            .transition(.asymmetric(
+                                insertion: .opacity.combined(with: .scale(scale: 0.8, anchor: .leading)),
+                                removal: .opacity.combined(with: .scale(scale: 0.8, anchor: .leading))
+                            ))
+                        } else {
+                            Button {
+                                withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
+                                    isSearchExpanded = true
+                                }
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                    isSearchFocused = true
+                                }
+                            } label: {
+                                Image(systemName: "magnifyingglass")
+                                    .font(.system(size: 11, weight: .medium))
+                                    .foregroundStyle(.secondary)
+                                    .padding(.horizontal, 10)
+                                    .padding(.vertical, 5)
+                                    .background(.ultraThinMaterial)
+                                    .clipShape(Capsule())
+                                    .overlay(
+                                        Capsule()
+                                            .strokeBorder(Color.primary.opacity(0.1), lineWidth: 0.5)
+                                    )
+                            }
+                            .buttonStyle(.plain)
+                            .help("Search")
+                            .transition(.asymmetric(
+                                insertion: .opacity.combined(with: .scale(scale: 0.8, anchor: .leading)),
+                                removal: .opacity.combined(with: .scale(scale: 0.8, anchor: .leading))
+                            ))
+                        }
+
+                        // Multi-select pill
                         Button {
                             isMultiSelectActive.toggle()
                             if !isMultiSelectActive {
                                 selectedItems.removeAll()
                             }
                         } label: {
-                            Label("Multi-Select", systemImage: isMultiSelectActive
-                                  ? "checklist.checked"
-                                  : "checklist.unchecked")
-                            .font(.caption)
+                            HStack(spacing: 4) {
+                                Image(systemName: isMultiSelectActive
+                                      ? "checklist.checked"
+                                      : "checklist.unchecked")
+                                    .font(.system(size: 11, weight: .medium))
+                                    .foregroundStyle(isMultiSelectActive ? Theme.accent : .secondary)
+                            }
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 5)
+                            .background(.ultraThinMaterial)
+                            .clipShape(Capsule())
+                            .overlay(
+                                Capsule()
+                                    .strokeBorder(
+                                        isMultiSelectActive
+                                            ? Theme.accent.opacity(0.4)
+                                            : Color.primary.opacity(0.1),
+                                        lineWidth: 0.5
+                                    )
+                            )
                         }
-                        .buttonStyle(.borderless)
+                        .buttonStyle(.plain)
                         .help(isMultiSelectActive ? "Exit multi-select" : "Multi-select")
 
                         Spacer()
 
                         if isMultiSelectActive && !selectedItems.isEmpty,
                            let observer = store.clipboardObserver {
-                            Button("Copy \(selectedItems.count) items") {
+                            Button("Copy \(selectedItems.count)") {
                                 let itemsToCopy = store.items.filter { selectedItems.contains($0.id) }
                                 PasteboardWriter.writeMultiple(
                                     itemsToCopy,
@@ -238,8 +315,16 @@ struct PopoverContent: View {
                         SettingsMenu(showWipeConfirmation: $showWipeConfirmation)
                             .buttonStyle(.borderless)
                     }
-                    .padding(.horizontal, 12)
+                    .padding(.horizontal, 10)
                     .padding(.vertical, 6)
+                    .onChange(of: searchText) { _, newValue in
+                        searchTask?.cancel()
+                        searchTask = Task {
+                            try? await Task.sleep(nanoseconds: 150_000_000)
+                            guard !Task.isCancelled else { return }
+                            store.searchQuery = newValue
+                        }
+                    }
 
                     if showWipeConfirmation {
                         HStack {
@@ -309,6 +394,7 @@ struct PopoverContent: View {
                                                 clipboardObserver: store.clipboardObserver,
                                                 isSelected: selectedIndex.flatMap { idx in idx < store.displayItems.count ? store.displayItems[idx].id : nil } == item.id,
                                                 searchQuery: store.searchQuery,
+                                                copiedItemID: copiedItemID,
                                                 onDelete: {
                                                     selectedItems.remove(item.id)
                                                     store.remove(id: item.id)
@@ -370,6 +456,7 @@ struct PopoverContent: View {
             isVisible = false
             searchText = ""
             store.searchQuery = ""
+            isSearchExpanded = false
             searchTask?.cancel()
             // Remove keyboard event monitor
             if let monitor = eventMonitor {
