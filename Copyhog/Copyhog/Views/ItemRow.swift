@@ -35,18 +35,6 @@ struct ItemRow: View {
         )
         .animation(.easeInOut(duration: 0.15), value: hoveredItemID)
         .clipShape(RoundedRectangle(cornerRadius: 8))
-        .overlay {
-            if showCopyConfirmation {
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(.green.opacity(0.15))
-                    .overlay {
-                        Image(systemName: "checkmark.circle.fill")
-                            .font(.title2)
-                            .foregroundStyle(.green)
-                    }
-                    .transition(.opacity)
-            }
-        }
         .animation(.easeInOut(duration: 0.2), value: showCopyConfirmation)
         .contentShape(Rectangle())
         .simultaneousGesture(TapGesture().onEnded {
@@ -73,38 +61,20 @@ struct ItemRow: View {
     private var rowContent: some View {
         HStack(spacing: 8) {
             // Thumbnail area
-            if item.type == .image {
-                if let thumbPath = item.thumbnailPath,
-                   let nsImage = imageStore.loadImage(relativePath: thumbPath) {
-                    Image(nsImage: nsImage)
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: 64, height: 64)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(.white.opacity(0.1), lineWidth: 0.5)
-                        )
-                } else {
-                    Image(systemName: "photo")
-                        .font(.title2)
-                        .fontWeight(.medium)
-                        .foregroundStyle(.secondary)
-                        .frame(width: 64, height: 64)
-                        .background(.ultraThinMaterial)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
+            thumbnailView
+                .overlay(alignment: .topLeading) {
+                    if showCopyConfirmation {
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.caption)
+                            .foregroundStyle(.white)
+                            .background(Circle().fill(Color.accentColor).padding(-1))
+                            .offset(x: -4, y: -4)
+                            .transition(.scale.combined(with: .opacity))
+                    }
                 }
-            } else {
-                Image(systemName: "doc.text")
-                    .font(.title2)
-                    .fontWeight(.medium)
-                    .foregroundStyle(.secondary)
-                    .frame(width: 64, height: 64)
-                    .background(.ultraThinMaterial)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
-            }
 
             // Content area
+
             if item.type == .text {
                 VStack(alignment: .leading) {
                     Text(item.content ?? "")
@@ -120,6 +90,40 @@ struct ItemRow: View {
             Text(item.timestamp, style: .relative)
                 .font(.caption2)
                 .foregroundStyle(.tertiary)
+        }
+    }
+
+    @ViewBuilder
+    private var thumbnailView: some View {
+        if item.type == .image {
+            if let thumbPath = item.thumbnailPath,
+               let nsImage = imageStore.loadImage(relativePath: thumbPath) {
+                Image(nsImage: nsImage)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 64, height: 64)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(.white.opacity(0.1), lineWidth: 0.5)
+                    )
+            } else {
+                Image(systemName: "photo")
+                    .font(.title2)
+                    .fontWeight(.medium)
+                    .foregroundStyle(.secondary)
+                    .frame(width: 64, height: 64)
+                    .background(.ultraThinMaterial)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+            }
+        } else {
+            Image(systemName: "doc.text")
+                .font(.title2)
+                .fontWeight(.medium)
+                .foregroundStyle(.secondary)
+                .frame(width: 64, height: 64)
+                .background(.ultraThinMaterial)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
         }
     }
 }
