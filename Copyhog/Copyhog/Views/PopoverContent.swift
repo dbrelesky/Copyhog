@@ -17,12 +17,23 @@ struct PopoverContent: View {
     var body: some View {
         Group {
             if store.items.isEmpty {
-                ContentUnavailableView(
-                    "No Clips Yet",
-                    systemImage: "nose.fill",
-                    description: Text("Nothing saved to your clipboard, start hoggin' and I'll keep it all here.")
-                )
-                .foregroundStyle(.secondary)
+                VStack(spacing: 12) {
+                    Image("MenuBarIcon")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 48, height: 48)
+                        .opacity(0.4)
+                    Text("No Clips Yet")
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.secondary)
+                    Text("Nothing saved to your clipboard, start hoggin' and I'll keep it all here.")
+                        .font(.subheadline)
+                        .foregroundStyle(.tertiary)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 40)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
                 VStack(spacing: 0) {
                     PreviewPane(item: previewItem, imageStore: store.imageStore)
