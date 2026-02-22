@@ -54,6 +54,49 @@ Requirements for milestone v1.1 (Polish & Control). Each maps to roadmap phases.
 - [x] **MGMT-01**: User can delete a single item from the clipboard history list
 - [x] **MGMT-02**: User can wipe all items from clipboard history via a "Hog Wipe" action with confirmation
 
+## v1.2 Requirements
+
+Requirements for milestone v1.2 (Power User Essentials). Each maps to roadmap phases.
+
+### Global Access
+
+- [ ] **ACCESS-01**: User can press a global keyboard shortcut (default Cmd+Shift+V) to summon the clipboard history popover from any app
+- [ ] **ACCESS-02**: User can customize the global hotkey via a shortcut recorder in settings
+- [ ] **ACCESS-03**: When user selects an item and presses Enter, the item is pasted directly into the previously active app (paste-on-select)
+- [ ] **ACCESS-04**: If Accessibility permission is not granted, paste-on-select falls back to copy-only mode with a prompt to enable permissions
+
+### Search
+
+- [ ] **SRCH-01**: User can type in a search field at the top of the popover to filter clipboard history by text content
+- [ ] **SRCH-02**: Search results update in real-time as the user types (debounced)
+- [ ] **SRCH-03**: When search field is cleared, the full history list is restored
+
+### Keyboard Navigation
+
+- [ ] **KBNAV-01**: User can press arrow keys to move selection through items in the popover
+- [ ] **KBNAV-02**: User can press Enter on a selected item to copy it (or paste-on-select if enabled)
+- [ ] **KBNAV-03**: User can press Escape to dismiss the popover
+- [ ] **KBNAV-04**: When popover opens via hotkey, the search field is focused and ready for typing
+
+### Favorites
+
+- [ ] **FAV-01**: User can pin/favorite a clipboard item via context menu or keyboard shortcut
+- [ ] **FAV-02**: Pinned items are displayed in a dedicated section at the top of the history list
+- [ ] **FAV-03**: Pinned items are never auto-purged regardless of history limit
+- [ ] **FAV-04**: User can unpin an item to return it to normal history behavior
+
+### History Scale
+
+- [ ] **HIST-01**: History limit is raised to support up to 500 items
+- [ ] **HIST-02**: Persistence is performant at 500 items (debounced saves, no UI stutter)
+- [ ] **HIST-03**: Thumbnail images are cached in memory (NSCache) for smooth scrolling at scale
+
+### Screenshot Auto-Detection
+
+- [ ] **SCRN-04**: App auto-detects the macOS screenshot save location from system defaults on first launch
+- [ ] **SCRN-05**: Onboarding pre-fills the detected screenshot folder, allowing user to confirm or change
+- [ ] **SCRN-06**: If no custom screenshot location is set, app defaults to ~/Desktop
+
 ## Future Requirements
 
 Deferred to future release. Tracked but not in current roadmap.
@@ -66,9 +109,9 @@ Deferred to future release. Tracked but not in current roadmap.
 
 ### Organization
 
-- **ORG-01**: Search/filter within clipboard history
-- **ORG-02**: Pin/favorite items to prevent auto-purge
-- **ORG-03**: Configurable item retention limit (beyond 20)
+- **ORG-01**: Fuzzy search / approximate matching in clipboard history
+- **ORG-02**: Pin categories/folders for organizing favorites
+- **ORG-03**: Search across image OCR text
 
 ### Sync
 
@@ -80,9 +123,10 @@ Deferred to future release. Tracked but not in current roadmap.
 |---------|--------|
 | Intercepting native screenshot shortcuts | Observer-only approach — non-invasive |
 | Visual distinction between screenshots and copied images | User preference — not needed |
-| Global hotkey | Menu bar click is sufficient for popover access |
-| Undo delete | 20-item list is simple enough; no undo needed |
-| Selective multi-delete | Single delete + full wipe covers all cases |
+| Fuzzy search | Text search is sufficient for v1.2; exact match covers 90% of use cases |
+| Pin categories/folders | Simple pin/unpin is sufficient; organization adds complexity |
+| Snippet/template system | Beyond clipboard history scope |
+| iCloud sync | Local-only for now |
 | Windows/Linux support | macOS-only, uses native APIs |
 
 ## Traceability
@@ -112,12 +156,35 @@ Deferred to future release. Tracked but not in current roadmap.
 | MGMT-01 | Phase 4 | Complete |
 | MGMT-02 | Phase 4 | Complete |
 
+| ACCESS-01 | TBD | Pending |
+| ACCESS-02 | TBD | Pending |
+| ACCESS-03 | TBD | Pending |
+| ACCESS-04 | TBD | Pending |
+| SRCH-01 | TBD | Pending |
+| SRCH-02 | TBD | Pending |
+| SRCH-03 | TBD | Pending |
+| KBNAV-01 | TBD | Pending |
+| KBNAV-02 | TBD | Pending |
+| KBNAV-03 | TBD | Pending |
+| KBNAV-04 | TBD | Pending |
+| FAV-01 | TBD | Pending |
+| FAV-02 | TBD | Pending |
+| FAV-03 | TBD | Pending |
+| FAV-04 | TBD | Pending |
+| HIST-01 | TBD | Pending |
+| HIST-02 | TBD | Pending |
+| HIST-03 | TBD | Pending |
+| SCRN-04 | TBD | Pending |
+| SCRN-05 | TBD | Pending |
+| SCRN-06 | TBD | Pending |
+
 **Coverage:**
 - v1.0 requirements: 20 total (all complete)
-- v1.1 requirements: 2 total
-- Mapped to phases: 2/2
-- Unmapped: 0
+- v1.1 requirements: 2 total (all complete)
+- v1.2 requirements: 21 total
+- Mapped to phases: 0/21 (awaiting roadmap)
+- Unmapped: 21
 
 ---
 *Requirements defined: 2026-02-20*
-*Last updated: 2026-02-21 after v1.1 roadmap creation*
+*Last updated: 2026-02-21 after v1.2 requirements definition*
