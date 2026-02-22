@@ -163,10 +163,10 @@ Plans:
   2. If the user has a custom screenshot location (e.g., ~/Pictures/Screenshots), that location is detected and shown -- not ~/Desktop
   3. If no custom screenshot location is configured in macOS, the app defaults to ~/Desktop as the watch directory
   4. User can still override the detected location during onboarding if desired
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] TBD (run /gsd:plan-phase 6 to break down)
+- [ ] 06-01-PLAN.md — Screenshot location detector, sandbox entitlement, and onboarding pre-fill UX
 
 ### Phase 7: Favorites + History Scale
 **Goal**: Users can pin important clipboard items that never expire, and the history holds up to 500 items without performance degradation
