@@ -1,7 +1,7 @@
 # Requirements: Copyhog
 
 **Defined:** 2026-02-20
-**Core Value:** Every screenshot and clipboard copy is captured and instantly accessible — no hunting, no lost items, no broken workflow.
+**Core Value:** Every screenshot and clipboard copy is captured and instantly accessible -- no hunting, no lost items, no broken workflow.
 
 ## v1.0 Requirements (Complete)
 
@@ -121,8 +121,8 @@ Deferred to future release. Tracked but not in current roadmap.
 
 | Feature | Reason |
 |---------|--------|
-| Intercepting native screenshot shortcuts | Observer-only approach — non-invasive |
-| Visual distinction between screenshots and copied images | User preference — not needed |
+| Intercepting native screenshot shortcuts | Observer-only approach -- non-invasive |
+| Visual distinction between screenshots and copied images | User preference -- not needed |
 | Fuzzy search | Text search is sufficient for v1.2; exact match covers 90% of use cases |
 | Pin categories/folders | Simple pin/unpin is sufficient; organization adds complexity |
 | Snippet/template system | Beyond clipboard history scope |
@@ -155,36 +155,35 @@ Deferred to future release. Tracked but not in current roadmap.
 | PASTE-04 | Phase 3 | Complete |
 | MGMT-01 | Phase 4 | Complete |
 | MGMT-02 | Phase 4 | Complete |
-
-| ACCESS-01 | TBD | Pending |
-| ACCESS-02 | TBD | Pending |
-| ACCESS-03 | TBD | Pending |
-| ACCESS-04 | TBD | Pending |
-| SRCH-01 | TBD | Pending |
-| SRCH-02 | TBD | Pending |
-| SRCH-03 | TBD | Pending |
-| KBNAV-01 | TBD | Pending |
-| KBNAV-02 | TBD | Pending |
-| KBNAV-03 | TBD | Pending |
-| KBNAV-04 | TBD | Pending |
-| FAV-01 | TBD | Pending |
-| FAV-02 | TBD | Pending |
-| FAV-03 | TBD | Pending |
-| FAV-04 | TBD | Pending |
-| HIST-01 | TBD | Pending |
-| HIST-02 | TBD | Pending |
-| HIST-03 | TBD | Pending |
-| SCRN-04 | TBD | Pending |
-| SCRN-05 | TBD | Pending |
-| SCRN-06 | TBD | Pending |
+| ACCESS-01 | Phase 9 | Pending |
+| ACCESS-02 | Phase 9 | Pending |
+| ACCESS-03 | Phase 9 | Pending |
+| ACCESS-04 | Phase 9 | Pending |
+| SRCH-01 | Phase 8 | Pending |
+| SRCH-02 | Phase 8 | Pending |
+| SRCH-03 | Phase 8 | Pending |
+| KBNAV-01 | Phase 8 | Pending |
+| KBNAV-02 | Phase 8 | Pending |
+| KBNAV-03 | Phase 8 | Pending |
+| KBNAV-04 | Phase 8 | Pending |
+| FAV-01 | Phase 7 | Pending |
+| FAV-02 | Phase 7 | Pending |
+| FAV-03 | Phase 7 | Pending |
+| FAV-04 | Phase 7 | Pending |
+| HIST-01 | Phase 7 | Pending |
+| HIST-02 | Phase 7 | Pending |
+| HIST-03 | Phase 7 | Pending |
+| SCRN-04 | Phase 6 | Pending |
+| SCRN-05 | Phase 6 | Pending |
+| SCRN-06 | Phase 6 | Pending |
 
 **Coverage:**
 - v1.0 requirements: 20 total (all complete)
 - v1.1 requirements: 2 total (all complete)
 - v1.2 requirements: 21 total
-- Mapped to phases: 0/21 (awaiting roadmap)
-- Unmapped: 21
+- Mapped to phases: 21/21
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-02-20*
-*Last updated: 2026-02-21 after v1.2 requirements definition*
+*Last updated: 2026-02-21 after v1.2 roadmap creation*

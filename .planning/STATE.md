@@ -5,14 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-21)
 
 **Core value:** Every screenshot and clipboard copy is captured and instantly accessible -- no hunting, no lost items, no broken workflow.
-**Current focus:** Milestone v1.2 — Power User Essentials
+**Current focus:** v1.2 Power User Essentials (Phase 6: Screenshot Auto-Detection)
 
 ## Current Position
 
-Phase: Not started (defining requirements)
-Plan: —
-Status: Defining requirements
-Last activity: 2026-02-21 — Milestone v1.2 started
+Phase: 6 of 9 (Screenshot Auto-Detection)
+Plan: 0 of ? in current phase
+Status: Ready to plan
+Last activity: 2026-02-21 -- v1.2 roadmap created (Phases 6-9)
+
+Progress: [########--] 80% (v1.0-v1.1 phases largely complete, v1.2 beginning)
 
 ## Performance Metrics
 
@@ -47,14 +49,10 @@ Decisions are logged in PROJECT.md Key Decisions table.
 Recent decisions affecting current work:
 
 - App Sandbox disabled in entitlements -- required for NSEvent.addGlobalMonitorForEvents
-- Used .onDelete on ForEach for native macOS swipe-to-delete behavior
-- Hog Wipe uses destructive alert confirmation to prevent accidental data loss
-- Settings menu uses SwiftUI Menu with Binding<Bool> for parent-child alert communication
-- Hog Wipe and Quit relocated from main popover to gear icon dropdown menu
-- ultraThinMaterial for popover background, regularMaterial for elevated cards — visual hierarchy through material density
-- No Divider() lines — material differences and spacing create visual separation
-- Launch at Login default: OFF (was unconditionally ON) — user controls via settings toggle
+- ultraThinMaterial for popover background, regularMaterial for elevated cards
 - History size configurable 10-50 via @AppStorage("historyLimit"), default 20
+- [v1.2 Roadmap]: 4 phases (6-9) from 21 requirements -- screenshot detection, data model, search+kbd nav, global hotkey
+- [v1.2 Research]: soffes/HotKey + orchetect/MenuBarExtraAccess for global hotkey; debounced JSON for 500 items; NSEvent local monitor for keyboard nav
 
 ### Pending Todos
 
@@ -62,17 +60,20 @@ None.
 
 ### Blockers/Concerns
 
-None.
+- [Phase 6]: Verify sandbox entitlements before choosing screenshot location detection method
+- [Phase 9]: MenuBarExtraAccess uses private API introspection -- pin to tested version
+- [Phase 9]: CGEvent paste timing needs runtime calibration
 
 ### Roadmap Evolution
 
-- Phase 04.1 inserted after Phase 4: Settings menu with version display, attribution, and relocated actions (URGENT)
-- Phase 04.2 inserted after Phase 4: Liquid glass UI redesign (URGENT)
-- Phase 04.3 inserted after Phase 04.1: Remaining App Store readiness (security-scoped bookmarks, metadata, entitlement cleanup)
-- Phase 5 added: Privacy manifest, pasteboard usage description, launch-at-login toggle, configurable history size
+- Phase 04.1 inserted: Settings menu (URGENT)
+- Phase 04.2 inserted: Liquid glass UI redesign (URGENT)
+- Phase 04.3 inserted: App Store readiness
+- Phase 5 added: Privacy manifest + configurable history
+- Phases 6-9 added: v1.2 Power User Essentials milestone
 
 ## Session Continuity
 
 Last session: 2026-02-21
-Stopped at: Starting milestone v1.2 — Power User Essentials
+Stopped at: v1.2 roadmap created, ready to plan Phase 6
 Resume file: None
