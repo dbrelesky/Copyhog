@@ -22,17 +22,29 @@
 		A10013 /* ExclusionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20016 /* ExclusionManager.swift */; };
 		A10014 /* BookmarkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20017 /* BookmarkManager.swift */; };
 		A10015 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20018 /* OnboardingView.swift */; };
+		A10016 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = A20019 /* PrivacyInfo.xcprivacy */; };
+		A10017 /* PasswordDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20020 /* PasswordDetector.swift */; };
+		A10018 /* ScreenshotLocationDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20021 /* ScreenshotLocationDetector.swift */; };
+		A10019 /* PlainPasteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20022 /* PlainPasteService.swift */; };
 		B10001 /* PopoverContentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20001 /* PopoverContentTests.swift */; };
 		B10002 /* Phase4UserControlTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20003 /* Phase4UserControlTests.swift */; };
 		B10003 /* Phase1CaptureEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20004 /* Phase1CaptureEngineTests.swift */; };
 		B10004 /* Phase2BrowseUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20005 /* Phase2BrowseUITests.swift */; };
 		B10005 /* Phase3PasteActionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20006 /* Phase3PasteActionsTests.swift */; };
-		A10016 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = A20019 /* PrivacyInfo.xcprivacy */; };
-		A10017 /* PasswordDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20020 /* PasswordDetector.swift */; };
 		B10006 /* PasswordDetectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20007 /* PasswordDetectorTests.swift */; };
-		A10018 /* ScreenshotLocationDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20021 /* ScreenshotLocationDetector.swift */; };
-		A10019 /* PlainPasteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20022 /* PlainPasteService.swift */; };
+		B10007 /* Phase6ScreenshotDetectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20008 /* Phase6ScreenshotDetectorTests.swift */; };
+		B10008 /* Phase7FavoritesHistoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20009 /* Phase7FavoritesHistoryTests.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		B40001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A80001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A50001;
+			remoteInfo = Copyhog;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		A20001 /* CopyhogApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyhogApp.swift; sourceTree = "<group>"; };
@@ -54,27 +66,19 @@
 		A20017 /* BookmarkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkManager.swift; sourceTree = "<group>"; };
 		A20018 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		A20019 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		A20020 /* PasswordDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordDetector.swift; sourceTree = "<group>"; };
+		A20021 /* ScreenshotLocationDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotLocationDetector.swift; sourceTree = "<group>"; };
+		A20022 /* PlainPasteService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainPasteService.swift; sourceTree = "<group>"; };
 		B20001 /* PopoverContentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverContentTests.swift; sourceTree = "<group>"; };
-		B20003 /* Phase4UserControlTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phase4UserControlTests.swift; sourceTree = "<group>"; };
 		B20002 /* CopyhogTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CopyhogTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B20003 /* Phase4UserControlTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phase4UserControlTests.swift; sourceTree = "<group>"; };
 		B20004 /* Phase1CaptureEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phase1CaptureEngineTests.swift; sourceTree = "<group>"; };
 		B20005 /* Phase2BrowseUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phase2BrowseUITests.swift; sourceTree = "<group>"; };
 		B20006 /* Phase3PasteActionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phase3PasteActionsTests.swift; sourceTree = "<group>"; };
-		A20020 /* PasswordDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordDetector.swift; sourceTree = "<group>"; };
 		B20007 /* PasswordDetectorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordDetectorTests.swift; sourceTree = "<group>"; };
-		A20021 /* ScreenshotLocationDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotLocationDetector.swift; sourceTree = "<group>"; };
-		A20022 /* PlainPasteService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainPasteService.swift; sourceTree = "<group>"; };
+		B20008 /* Phase6ScreenshotDetectorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phase6ScreenshotDetectorTests.swift; sourceTree = "<group>"; };
+		B20009 /* Phase7FavoritesHistoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phase7FavoritesHistoryTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXContainerItemProxy section */
-		B40001 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A80001 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = A50001;
-			remoteInfo = Copyhog;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		A30001 /* Frameworks */ = {
@@ -128,19 +132,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		B40002 /* CopyhogTests */ = {
-			isa = PBXGroup;
-			children = (
-				B20001 /* PopoverContentTests.swift */,
-				B20003 /* Phase4UserControlTests.swift */,
-				B20004 /* Phase1CaptureEngineTests.swift */,
-				B20005 /* Phase2BrowseUITests.swift */,
-				B20006 /* Phase3PasteActionsTests.swift */,
-				B20007 /* PasswordDetectorTests.swift */,
-			);
-			path = CopyhogTests;
-			sourceTree = "<group>";
-		};
 		A40004 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -183,6 +174,21 @@
 				A20009 /* ClipItemStore.swift */,
 			);
 			path = Store;
+			sourceTree = "<group>";
+		};
+		B40002 /* CopyhogTests */ = {
+			isa = PBXGroup;
+			children = (
+				B20001 /* PopoverContentTests.swift */,
+				B20003 /* Phase4UserControlTests.swift */,
+				B20004 /* Phase1CaptureEngineTests.swift */,
+				B20005 /* Phase2BrowseUITests.swift */,
+				B20006 /* Phase3PasteActionsTests.swift */,
+				B20007 /* PasswordDetectorTests.swift */,
+				B20008 /* Phase6ScreenshotDetectorTests.swift */,
+				B20009 /* Phase7FavoritesHistoryTests.swift */,
+			);
+			path = CopyhogTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -303,6 +309,8 @@
 				B10004 /* Phase2BrowseUITests.swift in Sources */,
 				B10005 /* Phase3PasteActionsTests.swift in Sources */,
 				B10006 /* PasswordDetectorTests.swift in Sources */,
+				B10007 /* Phase6ScreenshotDetectorTests.swift in Sources */,
+				B10008 /* Phase7FavoritesHistoryTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -434,7 +442,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-					CODE_SIGN_ENTITLEMENTS = Copyhog/Copyhog.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Copyhog/Copyhog.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -472,7 +480,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-					CODE_SIGN_ENTITLEMENTS = Copyhog/Copyhog.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Copyhog/Copyhog.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;

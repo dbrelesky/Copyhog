@@ -4,11 +4,14 @@ A lightweight macOS menu bar clipboard manager. Copyhog silently captures text a
 
 ## Features
 
-- Clipboard history for text and images (up to 20 items)
+- Clipboard history for text and images (up to 500 items)
+- Pin/favorite important items so they never get purged
 - Automatic screenshot detection and organization
+- Privacy shielding for sensitive app content (passwords, banking)
 - Single-click to re-copy any item
 - Multi-select batch copy
 - Drag-and-drop items into other apps
+- Global plain-paste hotkey (Shift+Cmd+V) to strip formatting
 - Launches at login and runs silently in the background
 
 ## Requirements
@@ -58,7 +61,10 @@ On first launch, Copyhog will:
 - **Click an item** to copy it back to your clipboard
 - **Hover over an item** to see a full-size preview
 - **Drag an item** out of the popover into any target app
+- **Pin an item** — right-click and select "Pin" to keep it at the top; pinned items are never auto-purged
 - **Multi-select mode** — click the select button to enable checkboxes, then batch copy multiple items
+- **Plain paste** — press Shift+Cmd+V anywhere to paste without formatting
+- **Privacy** — apps like 1Password and banking apps are auto-shielded; content is captured but redacted until you choose to reveal it
 
 ## Uninstall
 
