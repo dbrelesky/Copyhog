@@ -17,12 +17,17 @@ struct ItemRow: View {
             .aspectRatio(1, contentMode: .fit)
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(Color(red: 0.4, green: 0.2, blue: 0.5).opacity(0.12))
+                    .fill(Color(red: 0.4, green: 0.2, blue: 0.5).opacity(item.isSensitive ? 0.18 : 0.12))
             )
             .clipShape(RoundedRectangle(cornerRadius: 12))
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
-                    .stroke(Color(red: 0.6, green: 0.35, blue: 0.75).opacity(hoveredItemID == item.id ? 0.4 : 0.1), lineWidth: 1)
+                    .stroke(
+                        item.isSensitive
+                            ? Color(red: 0.7, green: 0.4, blue: 0.85).opacity(0.4)
+                            : Color(red: 0.6, green: 0.35, blue: 0.75).opacity(hoveredItemID == item.id ? 0.4 : 0.1),
+                        lineWidth: item.isSensitive ? 1.5 : 1
+                    )
             )
             .shadow(color: Color(red: 0.5, green: 0.2, blue: 0.7).opacity(hoveredItemID == item.id ? 0.3 : 0), radius: 8, y: 2)
             .animation(.easeInOut(duration: 0.15), value: hoveredItemID)
@@ -131,17 +136,66 @@ struct ItemRow: View {
     }
 
     @ViewBuilder
+    private var sensitiveCardContent: some View {
+        ZStack {
+            // Striped background pattern to visually signal redaction
+            Color(red: 0.35, green: 0.15, blue: 0.45).opacity(0.15)
+
+            VStack(spacing: 4) {
+                ZStack {
+                    if let bundleID = item.sourceAppBundleID,
+                       let appURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleID) {
+                        Image(nsImage: NSWorkspace.shared.icon(forFile: appURL.path))
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 32, height: 32)
+                    } else {
+                        Image(systemName: "lock.shield.fill")
+                            .font(.title2)
+                            .foregroundStyle(Color(red: 0.7, green: 0.4, blue: 0.85))
+                    }
+
+                    // Lock badge on app icon
+                    VStack {
+                        Spacer()
+                        HStack {
+                            Spacer()
+                            Image(systemName: "lock.fill")
+                                .font(.system(size: 10, weight: .bold))
+                                .foregroundStyle(.white)
+                                .padding(3)
+                                .background(Color(red: 0.7, green: 0.4, blue: 0.85), in: Circle())
+                        }
+                    }
+                    .frame(width: 36, height: 36)
+                }
+
+                if let appName = item.sourceAppName {
+                    Text(appName)
+                        .font(.system(size: 9, weight: .semibold))
+                        .foregroundStyle(.primary)
+                        .lineLimit(1)
+                }
+
+                Text("HIDDEN")
+                    .font(.system(size: 7, weight: .heavy))
+                    .tracking(1.5)
+                    .foregroundStyle(Color(red: 0.7, green: 0.4, blue: 0.85))
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 2)
+                    .background(
+                        Capsule()
+                            .fill(Color(red: 0.7, green: 0.4, blue: 0.85).opacity(0.15))
+                    )
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+
+    @ViewBuilder
     private var imageCardContent: some View {
         if item.isSensitive {
-            VStack(spacing: 6) {
-                Image(systemName: "lock.shield.fill")
-                    .font(.title2)
-                    .foregroundStyle(Color(red: 0.7, green: 0.4, blue: 0.85))
-                Text("Sensitive")
-                    .font(.system(size: 9, weight: .medium))
-                    .foregroundStyle(.secondary)
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            sensitiveCardContent
         } else if let thumbPath = item.thumbnailPath,
            let nsImage = imageStore.loadImage(relativePath: thumbPath) {
             Image(nsImage: nsImage)
@@ -161,15 +215,7 @@ struct ItemRow: View {
     private var textCardContent: some View {
         VStack(spacing: 0) {
             if item.isSensitive {
-                VStack(spacing: 6) {
-                    Image(systemName: "lock.shield.fill")
-                        .font(.title2)
-                        .foregroundStyle(Color(red: 0.7, green: 0.4, blue: 0.85))
-                    Text("Sensitive")
-                        .font(.system(size: 9, weight: .medium))
-                        .foregroundStyle(.secondary)
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                sensitiveCardContent
             } else {
                 Text(item.content ?? "")
                     .font(.system(size: 10))

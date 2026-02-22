@@ -122,6 +122,11 @@ final class ClipboardObserver {
         // Check sensitivity BEFORE reading any content
         var sensitive = isSensitiveCapture
 
+        // Capture source app info
+        let frontmostApp = NSWorkspace.shared.frontmostApplication
+        let sourceBundleID = frontmostApp?.bundleIdentifier
+        let sourceName = frontmostApp?.localizedName
+
         // Check for text first
         if let string = pasteboard.string(forType: .string), !string.isEmpty {
             // Layer 5: Content-based password detection (catches what app detection misses)
@@ -136,7 +141,9 @@ final class ClipboardObserver {
                 thumbnailPath: nil,
                 filePath: nil,
                 timestamp: Date(),
-                isSensitive: sensitive
+                isSensitive: sensitive,
+                sourceAppBundleID: sourceBundleID,
+                sourceAppName: sourceName
             )
             onNewItem(item)
             return
@@ -153,7 +160,9 @@ final class ClipboardObserver {
                     thumbnailPath: nil,
                     filePath: nil,
                     timestamp: Date(),
-                    isSensitive: true
+                    isSensitive: true,
+                    sourceAppBundleID: sourceBundleID,
+                    sourceAppName: sourceName
                 )
                 onNewItem(item)
                 return
@@ -168,7 +177,9 @@ final class ClipboardObserver {
                     thumbnailPath: paths.thumbnailPath,
                     filePath: paths.filePath,
                     timestamp: Date(),
-                    isSensitive: false
+                    isSensitive: false,
+                    sourceAppBundleID: sourceBundleID,
+                    sourceAppName: sourceName
                 )
                 onNewItem(item)
             }

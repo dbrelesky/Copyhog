@@ -8,18 +8,59 @@ struct PreviewPane: View {
         Group {
             if let item {
                 if item.isSensitive {
-                    VStack(spacing: 8) {
-                        Image(systemName: "lock.shield.fill")
-                            .font(.system(size: 36))
+                    VStack(spacing: 10) {
+                        ZStack {
+                            if let bundleID = item.sourceAppBundleID,
+                               let appURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleID) {
+                                Image(nsImage: NSWorkspace.shared.icon(forFile: appURL.path))
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 48, height: 48)
+                            } else {
+                                Image(systemName: "lock.shield.fill")
+                                    .font(.system(size: 36))
+                                    .foregroundStyle(Color(red: 0.7, green: 0.4, blue: 0.85))
+                            }
+
+                            // Lock badge
+                            VStack {
+                                Spacer()
+                                HStack {
+                                    Spacer()
+                                    Image(systemName: "lock.fill")
+                                        .font(.system(size: 12, weight: .bold))
+                                        .foregroundStyle(.white)
+                                        .padding(4)
+                                        .background(Color(red: 0.7, green: 0.4, blue: 0.85), in: Circle())
+                                }
+                            }
+                            .frame(width: 52, height: 52)
+                        }
+
+                        if let appName = item.sourceAppName {
+                            Text("Copied from \(appName)")
+                                .font(.headline)
+                                .foregroundStyle(.primary)
+                        } else {
+                            Text("Sensitive Content")
+                                .font(.headline)
+                                .foregroundStyle(.primary)
+                        }
+
+                        Text("HIDDEN")
+                            .font(.system(size: 10, weight: .heavy))
+                            .tracking(2)
                             .foregroundStyle(Color(red: 0.7, green: 0.4, blue: 0.85))
-                        Text("Sensitive Content")
-                            .font(.headline)
-                            .foregroundStyle(.secondary)
-                        Text("This item was copied from an excluded app and has been redacted.")
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 4)
+                            .background(
+                                Capsule()
+                                    .fill(Color(red: 0.7, green: 0.4, blue: 0.85).opacity(0.15))
+                            )
+
+                        Text("Content is protected — click card to copy")
                             .font(.caption)
                             .foregroundStyle(.tertiary)
-                            .multilineTextAlignment(.center)
-                            .padding(.horizontal, 24)
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else {

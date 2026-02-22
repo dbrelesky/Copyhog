@@ -70,10 +70,10 @@ struct SettingsMenu: View {
         }
     }
 
-    // MARK: - Excluded Apps Submenu
+    // MARK: - Shielded Apps Submenu
 
     private var excludedAppsSubmenu: some View {
-        Menu("Excluded Apps") {
+        Menu {
             ForEach(ExclusionManager.knownApps) { app in
                 let isExcluded = exclusionManager.excludedBundleIDs.contains(app.id)
                 Button {
@@ -112,8 +112,10 @@ struct SettingsMenu: View {
             Button {
                 excludeCurrentApp()
             } label: {
-                Label("Exclude Current App", systemImage: "plus.circle")
+                Label("Shield Current App", systemImage: "plus.circle")
             }
+        } label: {
+            Label("Shielded Apps", systemImage: "shield.lefthalf.filled")
         }
     }
 

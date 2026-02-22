@@ -53,7 +53,9 @@ final class ClipItemStore: ObservableObject {
             thumbnailPath: old.thumbnailPath,
             filePath: old.filePath,
             timestamp: old.timestamp,
-            isSensitive: true
+            isSensitive: true,
+            sourceAppBundleID: old.sourceAppBundleID,
+            sourceAppName: old.sourceAppName
         )
         save()
     }
