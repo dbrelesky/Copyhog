@@ -88,7 +88,11 @@ struct PopoverContent: View {
                 handleArrowKey(.left)
                 return nil
             case 36: // Enter/Return
-                copySelectedItem()
+                if isMultiSelectActive && !selectedItems.isEmpty {
+                    copyMultiSelectedItems()
+                } else {
+                    copySelectedItem()
+                }
                 return nil
             case 8: // C key
                 let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
@@ -97,7 +101,11 @@ struct PopoverContent: View {
                     return nil
                 }
                 if flags.contains(.command) && !flags.contains(.control) {
-                    copySelectedItem()
+                    if isMultiSelectActive && !selectedItems.isEmpty {
+                        copyMultiSelectedItems()
+                    } else {
+                        copySelectedItem()
+                    }
                     return nil
                 }
                 return event
@@ -164,6 +172,19 @@ struct PopoverContent: View {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
             copiedItemID = nil
         }
+    }
+
+    private func copyMultiSelectedItems() {
+        guard let observer = store.clipboardObserver else { return }
+        let itemsToCopy = store.items.filter { selectedItems.contains($0.id) }
+        PasteboardWriter.writeMultiple(
+            itemsToCopy,
+            imageStore: store.imageStore,
+            clipboardObserver: observer
+        )
+        copyCount = selectedItems.count
+        selectedItems.removeAll()
+        isMultiSelectActive = false
     }
 
     private func dismissPopover() {
@@ -304,26 +325,19 @@ struct PopoverContent: View {
                         Spacer()
 
                         if isMultiSelectActive && !selectedItems.isEmpty,
-                           let observer = store.clipboardObserver {
+                           store.clipboardObserver != nil {
                             Button {
-                                let itemsToCopy = store.items.filter { selectedItems.contains($0.id) }
-                                PasteboardWriter.writeMultiple(
-                                    itemsToCopy,
-                                    imageStore: store.imageStore,
-                                    clipboardObserver: observer
-                                )
-                                copyCount = selectedItems.count
-                                selectedItems.removeAll()
-                                isMultiSelectActive = false
+                                copyMultiSelectedItems()
                             } label: {
-                                Text("\(selectedItems.count) Copied")
+                                Text("Copy \(selectedItems.count)")
                                     .font(.system(size: 11, weight: .medium))
                                     .foregroundStyle(.white)
                                     .padding(.horizontal, 10)
                                     .padding(.vertical, 5)
+                                    .background(Theme.accent)
+                                    .clipShape(Capsule())
                             }
-                            .buttonStyle(.borderedProminent)
-                            .controlSize(.small)
+                            .buttonStyle(.plain)
                         } else if copyCount > 0 {
                             Text("\(copyCount) Copied")
                                 .font(.system(size: 11, weight: .medium))

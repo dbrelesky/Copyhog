@@ -1,6 +1,7 @@
 import SwiftUI
 import AppKit
 import ServiceManagement
+import Carbon
 
 @main
 struct CopyhogApp: App {
@@ -60,8 +61,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     private var screenshotWatcher: ScreenshotWatcher?
     private var plainPasteService: PlainPasteService?
     private var onboardingWindow: NSWindow?
+    private var hotkeyRef: EventHotKeyRef?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        registerGlobalHotkey()
         syncLaunchAtLogin()
         startClipboardCapture()
         startScreenshotCaptureIfReady()
@@ -159,6 +162,75 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         NSApp.activate(ignoringOtherApps: true)
     }
 
+    // MARK: - Global Hotkey (Ctrl+Cmd+C) via Carbon API
+
+    private func registerGlobalHotkey() {
+        var eventType = EventTypeSpec(eventClass: OSType(kEventClassKeyboard),
+                                      eventKind: UInt32(kEventHotKeyPressed))
+        InstallEventHandler(
+            GetApplicationEventTarget(),
+            { _, event, _ -> OSStatus in
+                MainActor.assumeIsolated {
+                    NotificationCenter.default.post(name: .togglePopoverHotkey, object: nil)
+                }
+                return noErr
+            },
+            1,
+            &eventType,
+            nil,
+            nil
+        )
+
+        let modifiers = UInt32(cmdKey | controlKey)
+        var hotkeyID = EventHotKeyID(signature: OSType(0x434F5059), // "COPY"
+                                      id: 1)
+        RegisterEventHotKey(UInt32(kVK_ANSI_C),
+                            modifiers,
+                            hotkeyID,
+                            GetApplicationEventTarget(),
+                            0,
+                            &hotkeyRef)
+
+        NotificationCenter.default.addObserver(
+            forName: .togglePopoverHotkey,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            MainActor.assumeIsolated {
+                self?.togglePopover()
+            }
+        }
+    }
+
+    private func togglePopover() {
+        // If the popover panel is visible, close it
+        if let panel = NSApp.windows.first(where: { $0 is NSPanel && $0.isVisible }) {
+            panel.close()
+            return
+        }
+        // Open: find the status bar button in NSStatusBarWindow and click it
+        NSApp.activate(ignoringOtherApps: true)
+        DispatchQueue.main.async { [self] in
+            for window in NSApp.windows {
+                let className = String(describing: type(of: window))
+                guard className.contains("StatusBar") else { continue }
+                if let button = self.findButton(in: window.contentView) {
+                    button.performClick(nil)
+                    return
+                }
+            }
+        }
+    }
+
+    private func findButton(in view: NSView?) -> NSButton? {
+        guard let view = view else { return nil }
+        if let button = view as? NSButton { return button }
+        for subview in view.subviews {
+            if let found = findButton(in: subview) { return found }
+        }
+        return nil
+    }
+
     private func syncLaunchAtLogin() {
         if UserDefaults.standard.bool(forKey: "launchAtLogin") {
             try? SMAppService.mainApp.register()
@@ -168,9 +240,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     }
 
     func applicationWillTerminate(_ notification: Notification) {
+        if let ref = hotkeyRef {
+            UnregisterEventHotKey(ref)
+            hotkeyRef = nil
+        }
         store.flushSave()
         clipboardObserver?.stop()
         screenshotWatcher?.stop()
         bookmarkManager.stopAccessingAll()
     }
+}
+
+extension Notification.Name {
+    static let togglePopoverHotkey = Notification.Name("togglePopoverHotkey")
 }
