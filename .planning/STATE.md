@@ -9,19 +9,19 @@ See: .planning/PROJECT.md (updated 2026-02-22)
 
 ## Current Position
 
-Phase: 7 of 9 (Favorites + History Scale) -- COMPLETE
-Plan: 2 of 2 in current phase
-Status: v1.1 archived, Phase 8 next
-Last activity: 2026-02-22 - Archived v1.1 milestone
+Phase: 8 of 9 (Search + Keyboard Navigation)
+Plan: 1 of 2 in current phase
+Status: Plan 08-01 complete, Plan 08-02 next
+Last activity: 2026-02-22 - Completed search filtering plan
 
-Progress: [#########-] 90% (Phase 7 complete, Phases 8-9 remaining)
+Progress: [##########] 93% (Phase 8 plan 1/2 complete, Phase 9 remaining)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 12
+- Total plans completed: 13
 - Average duration: 8 min
-- Total execution time: 1.68 hours
+- Total execution time: 1.71 hours
 
 **By Phase:**
 
@@ -36,9 +36,10 @@ Progress: [#########-] 90% (Phase 7 complete, Phases 8-9 remaining)
 | 05-privacy | 1/1 | 3 min | 3 min |
 | 06-screenshot-auto-detection | 1/1 | 2 min | 2 min |
 | 07-favorites-history-scale | 2/2 | 3 min | 1.5 min |
+| 08-search-keyboard-navigation | 1/2 | 2 min | 2 min |
 
 **Recent Trend:**
-- Last 5 plans: 1 min, 3 min, 2 min, 2 min, 1 min
+- Last 5 plans: 3 min, 2 min, 2 min, 1 min, 2 min
 - Trend: improving
 
 *Updated after each plan completion*
@@ -54,6 +55,7 @@ Recent decisions affecting current work:
 - [Phase 6]: Used shared-preference read-only temporary exception for sandbox-safe screencapture defaults reading
 - [Phase 7]: 500ms debounced save with Task.sleep; NSCache countLimit 200 for thumbnails; pinned-first stable sort
 - [Phase 7]: Sectioned Pinned/History layout in PopoverContent; pin icon uses ultraThinMaterial circle overlay
+- [Phase 8]: 150ms Task.sleep debounce for search; displayItems computed property; flat grid during search, sectioned when cleared; AttributedString highlighting
 
 ### Pending Todos
 
@@ -81,5 +83,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-22
-Stopped at: Archived v1.1 milestone
+Stopped at: Completed 08-01-PLAN.md
 Resume file: None

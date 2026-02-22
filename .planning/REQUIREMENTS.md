@@ -28,9 +28,9 @@ Requirements for milestone v1.2 (Power User Essentials). Each maps to roadmap ph
 
 ### Search
 
-- [ ] **SRCH-01**: User can type in a search field at the top of the popover to filter clipboard history by text content
-- [ ] **SRCH-02**: Search results update in real-time as the user types (debounced)
-- [ ] **SRCH-03**: When search field is cleared, the full history list is restored
+- [x] **SRCH-01**: User can type in a search field at the top of the popover to filter clipboard history by text content
+- [x] **SRCH-02**: Search results update in real-time as the user types (debounced)
+- [x] **SRCH-03**: When search field is cleared, the full history list is restored
 
 ### Keyboard Navigation
 
@@ -92,9 +92,9 @@ Deferred to future release. Tracked but not in current roadmap.
 | HIST-01 | Phase 7 | Complete |
 | HIST-02 | Phase 7 | Complete |
 | HIST-03 | Phase 7 | Complete |
-| SRCH-01 | Phase 8 | Pending |
-| SRCH-02 | Phase 8 | Pending |
-| SRCH-03 | Phase 8 | Pending |
+| SRCH-01 | Phase 8 | Complete |
+| SRCH-02 | Phase 8 | Complete |
+| SRCH-03 | Phase 8 | Complete |
 | KBNAV-01 | Phase 8 | Pending |
 | KBNAV-02 | Phase 8 | Pending |
 | KBNAV-03 | Phase 8 | Pending |
