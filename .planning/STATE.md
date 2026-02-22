@@ -9,19 +9,19 @@ See: .planning/PROJECT.md (updated 2026-02-21)
 
 ## Current Position
 
-Phase: 6 of 9 (Screenshot Auto-Detection)
-Plan: 1 of 1 in current phase (COMPLETE)
-Status: Phase 6 complete
-Last activity: 2026-02-22 - Completed quick task 1: we need an option to make an individual object unhidden
+Phase: 7 of 9 (Favorites + History Scale)
+Plan: 1 of 2 in current phase
+Status: Plan 07-01 complete, Plan 07-02 remaining
+Last activity: 2026-02-22 - Completed 07-01 (data layer: isPinned, debounced save, NSCache, 500-item settings)
 
-Progress: [########=-] 85% (Phase 6 complete, Phases 7-9 remaining)
+Progress: [########=-] 87% (Phase 7 plan 1/2 complete, Phases 8-9 remaining)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 10
-- Average duration: 10 min
-- Total execution time: 1.63 hours
+- Total plans completed: 11
+- Average duration: 9 min
+- Total execution time: 1.66 hours
 
 **By Phase:**
 
@@ -35,9 +35,10 @@ Progress: [########=-] 85% (Phase 6 complete, Phases 7-9 remaining)
 | 04.2-liquid-glass | 1/2 | 1 min | 1 min |
 | 05-privacy | 1/1 | 3 min | 3 min |
 | 06-screenshot-auto-detection | 1/1 | 2 min | 2 min |
+| 07-favorites-history-scale | 1/2 | 2 min | 2 min |
 
 **Recent Trend:**
-- Last 5 plans: 2 min, 8 min, 1 min, 3 min, 2 min
+- Last 5 plans: 8 min, 1 min, 3 min, 2 min, 2 min
 - Trend: improving
 
 *Updated after each plan completion*
@@ -56,6 +57,7 @@ Recent decisions affecting current work:
 - [v1.2 Research]: soffes/HotKey + orchetect/MenuBarExtraAccess for global hotkey; debounced JSON for 500 items; NSEvent local monitor for keyboard nav
 - [Phase 6]: Used shared-preference read-only temporary exception for sandbox-safe screencapture defaults reading
 - [Phase 6]: Extracted ScreenshotLocationDetector utility for reuse; detect-and-confirm UX pattern established
+- [Phase 7]: 500ms debounced save with Task.sleep; NSCache countLimit 200 for thumbnails; pinned-first stable sort
 
 ### Pending Todos
 
@@ -84,5 +86,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-22
-Stopped at: Completed quick-1-PLAN.md (Unhide sensitive items)
+Stopped at: Completed 07-01-PLAN.md (Favorites + History Scale data foundation)
 Resume file: None

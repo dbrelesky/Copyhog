@@ -80,16 +80,16 @@ Requirements for milestone v1.2 (Power User Essentials). Each maps to roadmap ph
 
 ### Favorites
 
-- [ ] **FAV-01**: User can pin/favorite a clipboard item via context menu or keyboard shortcut
+- [x] **FAV-01**: User can pin/favorite a clipboard item via context menu or keyboard shortcut
 - [ ] **FAV-02**: Pinned items are displayed in a dedicated section at the top of the history list
-- [ ] **FAV-03**: Pinned items are never auto-purged regardless of history limit
-- [ ] **FAV-04**: User can unpin an item to return it to normal history behavior
+- [x] **FAV-03**: Pinned items are never auto-purged regardless of history limit
+- [x] **FAV-04**: User can unpin an item to return it to normal history behavior
 
 ### History Scale
 
-- [ ] **HIST-01**: History limit is raised to support up to 500 items
-- [ ] **HIST-02**: Persistence is performant at 500 items (debounced saves, no UI stutter)
-- [ ] **HIST-03**: Thumbnail images are cached in memory (NSCache) for smooth scrolling at scale
+- [x] **HIST-01**: History limit is raised to support up to 500 items
+- [x] **HIST-02**: Persistence is performant at 500 items (debounced saves, no UI stutter)
+- [x] **HIST-03**: Thumbnail images are cached in memory (NSCache) for smooth scrolling at scale
 
 ### Screenshot Auto-Detection
 
@@ -166,13 +166,13 @@ Deferred to future release. Tracked but not in current roadmap.
 | KBNAV-02 | Phase 8 | Pending |
 | KBNAV-03 | Phase 8 | Pending |
 | KBNAV-04 | Phase 8 | Pending |
-| FAV-01 | Phase 7 | Pending |
+| FAV-01 | Phase 7 | Complete |
 | FAV-02 | Phase 7 | Pending |
-| FAV-03 | Phase 7 | Pending |
-| FAV-04 | Phase 7 | Pending |
-| HIST-01 | Phase 7 | Pending |
-| HIST-02 | Phase 7 | Pending |
-| HIST-03 | Phase 7 | Pending |
+| FAV-03 | Phase 7 | Complete |
+| FAV-04 | Phase 7 | Complete |
+| HIST-01 | Phase 7 | Complete |
+| HIST-02 | Phase 7 | Complete |
+| HIST-03 | Phase 7 | Complete |
 | SCRN-04 | Phase 6 | Complete |
 | SCRN-05 | Phase 6 | Complete |
 | SCRN-06 | Phase 6 | Complete |
