@@ -9,8 +9,16 @@ struct OnboardingView: View {
     @State private var screenshotGranted = false
     @State private var screeniesGranted = false
 
+    private let accentPurple = Color(red: 0.7, green: 0.4, blue: 0.85)
+
     var body: some View {
         VStack(spacing: 20) {
+            Image("MenuBarIcon")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 36, height: 36)
+                .opacity(0.6)
+
             Text("Welcome to Copyhog")
                 .font(.title.bold())
 
@@ -59,6 +67,11 @@ struct OnboardingView: View {
         }
         .padding(24)
         .frame(width: 400, height: 320)
+        .background {
+            Color(red: 0.35, green: 0.15, blue: 0.45).opacity(0.12)
+        }
+        .background(.ultraThinMaterial)
+        .tint(accentPurple)
     }
 
     // MARK: - Folder Row
@@ -75,14 +88,15 @@ struct OnboardingView: View {
         HStack(spacing: 12) {
             if granted {
                 Image(systemName: "checkmark.circle.fill")
-                    .foregroundStyle(.green)
+                    .foregroundStyle(accentPurple)
                     .font(.title2)
                     .frame(width: 28)
             } else {
                 Text("\(step)")
                     .font(.headline)
+                    .foregroundStyle(.white)
                     .frame(width: 28, height: 28)
-                    .background(Circle().fill(.quaternary))
+                    .background(Circle().fill(accentPurple.opacity(0.4)))
             }
 
             VStack(alignment: .leading, spacing: 2) {
@@ -96,7 +110,12 @@ struct OnboardingView: View {
                 .disabled(disabled)
         }
         .padding(10)
-        .background(RoundedRectangle(cornerRadius: 8).fill(.quaternary.opacity(0.5)))
+        .background {
+            RoundedRectangle(cornerRadius: 10)
+                .fill(Color(red: 0.4, green: 0.2, blue: 0.5).opacity(0.1))
+        }
+        .background(.regularMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: 10))
     }
 
     // MARK: - Folder Pickers
