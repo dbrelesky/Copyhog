@@ -10,6 +10,7 @@ final class ClipItemStore: ObservableObject {
     private let storeURL: URL
     let imageStore: ImageStore
     var clipboardObserver: ClipboardObserver?
+    private var saveTask: Task<Void, Never>?
 
     init() {
         let appSupport = FileManager.default.urls(
@@ -27,6 +28,9 @@ final class ClipItemStore: ObservableObject {
         imageStore = ImageStore()
 
         load()
+
+        // Sort so pinned items appear first on launch
+        sortItems()
     }
 
     // MARK: - Public API
@@ -34,13 +38,26 @@ final class ClipItemStore: ObservableObject {
     func add(_ item: ClipItem) {
         items.insert(item, at: 0)
 
-        // Purge oldest items beyond the cap
+        // Re-sort to maintain pinned-first ordering
+        sortItems()
+
+        // Purge oldest unpinned items beyond the cap
         while items.count > maxItems {
-            let removed = items.removeLast()
+            guard let lastUnpinnedIndex = items.lastIndex(where: { !$0.isPinned }) else {
+                break // All items are pinned, cannot purge
+            }
+            let removed = items.remove(at: lastUnpinnedIndex)
             cleanupImages(for: removed)
         }
 
-        save()
+        scheduleSave()
+    }
+
+    func togglePin(id: UUID) {
+        guard let index = items.firstIndex(where: { $0.id == id }) else { return }
+        items[index].isPinned.toggle()
+        sortItems()
+        scheduleSave()
     }
 
     func markSensitive(id: UUID) {
@@ -54,10 +71,11 @@ final class ClipItemStore: ObservableObject {
             filePath: old.filePath,
             timestamp: old.timestamp,
             isSensitive: true,
+            isPinned: old.isPinned,
             sourceAppBundleID: old.sourceAppBundleID,
             sourceAppName: old.sourceAppName
         )
-        save()
+        scheduleSave()
     }
 
     func unmarkSensitive(id: UUID) {
@@ -71,17 +89,18 @@ final class ClipItemStore: ObservableObject {
             filePath: old.filePath,
             timestamp: old.timestamp,
             isSensitive: false,
+            isPinned: old.isPinned,
             sourceAppBundleID: old.sourceAppBundleID,
             sourceAppName: old.sourceAppName
         )
-        save()
+        scheduleSave()
     }
 
     func remove(id: UUID) {
         guard let index = items.firstIndex(where: { $0.id == id }) else { return }
         let removed = items.remove(at: index)
         cleanupImages(for: removed)
-        save()
+        scheduleSave()
     }
 
     func removeAll() {
@@ -89,19 +108,50 @@ final class ClipItemStore: ObservableObject {
             cleanupImages(for: item)
         }
         items = []
-        save()
+        scheduleSave()
+    }
+
+    // MARK: - Sorting
+
+    private func sortItems() {
+        items.sort { a, b in
+            if a.isPinned != b.isPinned {
+                return a.isPinned // pinned first
+            }
+            return a.timestamp > b.timestamp // newest first within each group
+        }
     }
 
     // MARK: - Persistence
 
-    private func save() {
-        let encoder = JSONEncoder()
-        encoder.dateEncodingStrategy = .iso8601
-        do {
-            let data = try encoder.encode(items)
-            try data.write(to: storeURL, options: .atomic)
-        } catch {
-            print("[ClipItemStore] Save failed: \(error)")
+    private func scheduleSave() {
+        saveTask?.cancel()
+        saveTask = Task { [weak self] in
+            try? await Task.sleep(nanoseconds: 500_000_000) // 500ms debounce
+            guard !Task.isCancelled else { return }
+            await self?.performSave()
+        }
+    }
+
+    /// Flushes any pending debounced save immediately. Call before app termination.
+    func flushSave() {
+        saveTask?.cancel()
+        saveTask = nil
+        performSave()
+    }
+
+    private func performSave() {
+        let snapshot = items
+        let url = storeURL
+        Task.detached {
+            let encoder = JSONEncoder()
+            encoder.dateEncodingStrategy = .iso8601
+            do {
+                let data = try encoder.encode(snapshot)
+                try data.write(to: url, options: .atomic)
+            } catch {
+                print("[ClipItemStore] Save failed: \(error)")
+            }
         }
     }
 

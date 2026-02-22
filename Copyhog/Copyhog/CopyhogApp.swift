@@ -150,6 +150,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     }
 
     func applicationWillTerminate(_ notification: Notification) {
+        store.flushSave()
         clipboardObserver?.stop()
         screenshotWatcher?.stop()
         bookmarkManager.stopAccessingAll()

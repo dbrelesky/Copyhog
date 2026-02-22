@@ -10,6 +10,7 @@ struct ClipItem: Codable, Identifiable {
     let filePath: String?       // Relative path to full image in App Support
     let timestamp: Date
     let isSensitive: Bool       // True if captured from an excluded app — content is redacted
+    var isPinned: Bool              // True if user has pinned/favorited this item
     let sourceAppBundleID: String?  // Bundle ID of the app the content was copied from
     let sourceAppName: String?      // Display name of the source app
 
@@ -19,11 +20,11 @@ struct ClipItem: Codable, Identifiable {
     }
 
     enum CodingKeys: String, CodingKey {
-        case id, type, content, thumbnailPath, filePath, timestamp, isSensitive
+        case id, type, content, thumbnailPath, filePath, timestamp, isSensitive, isPinned
         case sourceAppBundleID, sourceAppName
     }
 
-    init(id: UUID, type: ItemType, content: String?, thumbnailPath: String?, filePath: String?, timestamp: Date, isSensitive: Bool = false, sourceAppBundleID: String? = nil, sourceAppName: String? = nil) {
+    init(id: UUID, type: ItemType, content: String?, thumbnailPath: String?, filePath: String?, timestamp: Date, isSensitive: Bool = false, isPinned: Bool = false, sourceAppBundleID: String? = nil, sourceAppName: String? = nil) {
         self.id = id
         self.type = type
         self.content = content
@@ -31,6 +32,7 @@ struct ClipItem: Codable, Identifiable {
         self.filePath = filePath
         self.timestamp = timestamp
         self.isSensitive = isSensitive
+        self.isPinned = isPinned
         self.sourceAppBundleID = sourceAppBundleID
         self.sourceAppName = sourceAppName
     }
@@ -44,6 +46,7 @@ struct ClipItem: Codable, Identifiable {
         filePath = try container.decodeIfPresent(String.self, forKey: .filePath)
         timestamp = try container.decode(Date.self, forKey: .timestamp)
         isSensitive = try container.decodeIfPresent(Bool.self, forKey: .isSensitive) ?? false
+        isPinned = try container.decodeIfPresent(Bool.self, forKey: .isPinned) ?? false
         sourceAppBundleID = try container.decodeIfPresent(String.self, forKey: .sourceAppBundleID)
         sourceAppName = try container.decodeIfPresent(String.self, forKey: .sourceAppName)
     }
