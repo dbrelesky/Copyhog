@@ -19,8 +19,8 @@ struct PopoverContent: View {
             if store.items.isEmpty {
                 ContentUnavailableView(
                     "No Clips Yet",
-                    systemImage: "pawprint.fill",
-                    description: Text("Copy text or take a screenshot — your hedgehog will keep it safe")
+                    systemImage: "nose.fill",
+                    description: Text("Nothing saved to your clipboard, start hoggin' and I'll keep it all here.")
                 )
                 .foregroundStyle(.secondary)
             } else {
