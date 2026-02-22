@@ -35,6 +35,7 @@
 		B10006 /* PasswordDetectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20007 /* PasswordDetectorTests.swift */; };
 		B10007 /* Phase6ScreenshotDetectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20008 /* Phase6ScreenshotDetectorTests.swift */; };
 		B10008 /* Phase7FavoritesHistoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20009 /* Phase7FavoritesHistoryTests.swift */; };
+		B10009 /* AppearanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20010 /* AppearanceTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,6 +81,7 @@
 		B20007 /* PasswordDetectorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordDetectorTests.swift; sourceTree = "<group>"; };
 		B20008 /* Phase6ScreenshotDetectorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phase6ScreenshotDetectorTests.swift; sourceTree = "<group>"; };
 		B20009 /* Phase7FavoritesHistoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phase7FavoritesHistoryTests.swift; sourceTree = "<group>"; };
+		B20010 /* AppearanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -190,6 +192,7 @@
 				B20007 /* PasswordDetectorTests.swift */,
 				B20008 /* Phase6ScreenshotDetectorTests.swift */,
 				B20009 /* Phase7FavoritesHistoryTests.swift */,
+				B20010 /* AppearanceTests.swift */,
 			);
 			path = CopyhogTests;
 			sourceTree = "<group>";
@@ -315,6 +318,7 @@
 				B10006 /* PasswordDetectorTests.swift in Sources */,
 				B10007 /* Phase6ScreenshotDetectorTests.swift in Sources */,
 				B10008 /* Phase7FavoritesHistoryTests.swift in Sources */,
+				B10009 /* AppearanceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
