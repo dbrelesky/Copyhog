@@ -39,6 +39,9 @@ struct PreviewPane: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background {
+            Color(red: 0.55, green: 0.35, blue: 0.2).opacity(0.06)
+        }
         .background(.regularMaterial)
         .clipShape(RoundedRectangle(cornerRadius: 12))
         .shadow(color: .black.opacity(0.1), radius: 8, y: 2)

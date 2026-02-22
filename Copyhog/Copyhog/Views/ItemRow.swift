@@ -31,7 +31,7 @@ struct ItemRow: View {
         .padding(.horizontal, 6)
         .background(
             RoundedRectangle(cornerRadius: 8)
-                .fill(.white.opacity(hoveredItemID == item.id ? 0.12 : 0))
+                .fill(Color(red: 0.7, green: 0.5, blue: 0.3).opacity(hoveredItemID == item.id ? 0.15 : 0))
         )
         .animation(.easeInOut(duration: 0.15), value: hoveredItemID)
         .clipShape(RoundedRectangle(cornerRadius: 8))
@@ -113,7 +113,7 @@ struct ItemRow: View {
                     .fontWeight(.medium)
                     .foregroundStyle(.secondary)
                     .frame(width: 64, height: 64)
-                    .background(.ultraThinMaterial)
+                    .background(Color(red: 0.55, green: 0.35, blue: 0.2).opacity(0.08))
                     .clipShape(RoundedRectangle(cornerRadius: 8))
             }
         } else {
