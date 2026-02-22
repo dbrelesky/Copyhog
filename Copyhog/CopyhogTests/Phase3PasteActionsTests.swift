@@ -141,6 +141,50 @@ final class PasteboardWriterTests: XCTestCase {
         PasteboardWriter.writeMultiple(items, imageStore: ImageStore(), clipboardObserver: observer)
         XCTAssertNotNil(observer, "writeMultiple should call skipNextChange without error")
     }
+
+    func testWriteMultipleWritesSinglePasteboardItem() {
+        let observer = makeClipboardObserver()
+        let items = [
+            ClipItem(id: UUID(), type: .text, content: "alpha", thumbnailPath: nil, filePath: nil, timestamp: Date()),
+            ClipItem(id: UUID(), type: .text, content: "beta", thumbnailPath: nil, filePath: nil, timestamp: Date()),
+        ]
+
+        PasteboardWriter.writeMultiple(items, imageStore: ImageStore(), clipboardObserver: observer)
+
+        let pasteboard = NSPasteboard.general
+        XCTAssertEqual(pasteboard.pasteboardItems?.count, 1,
+                       "Should write a single pasteboard item for universal paste compatibility")
+        XCTAssertEqual(pasteboard.string(forType: .string), "alpha\n\nbeta")
+    }
+
+    func testWriteMultipleSkipsImagesWhenTextPresent() {
+        let observer = makeClipboardObserver()
+        let items = [
+            ClipItem(id: UUID(), type: .image, content: nil, thumbnailPath: nil, filePath: "img.png", timestamp: Date()),
+            ClipItem(id: UUID(), type: .text, content: "text item", thumbnailPath: nil, filePath: nil, timestamp: Date()),
+        ]
+
+        PasteboardWriter.writeMultiple(items, imageStore: ImageStore(), clipboardObserver: observer)
+
+        let result = NSPasteboard.general.string(forType: .string)
+        XCTAssertEqual(result, "text item",
+                       "When mix of images and text, only text should be written as combined string")
+    }
+
+    func testWriteMultiplePreservesOrderFromStore() {
+        let observer = makeClipboardObserver()
+        let items = [
+            ClipItem(id: UUID(), type: .text, content: "first", thumbnailPath: nil, filePath: nil, timestamp: Date()),
+            ClipItem(id: UUID(), type: .text, content: "second", thumbnailPath: nil, filePath: nil, timestamp: Date()),
+            ClipItem(id: UUID(), type: .text, content: "third", thumbnailPath: nil, filePath: nil, timestamp: Date()),
+        ]
+
+        PasteboardWriter.writeMultiple(items, imageStore: ImageStore(), clipboardObserver: observer)
+
+        let result = NSPasteboard.general.string(forType: .string)
+        XCTAssertEqual(result, "first\n\nsecond\n\nthird",
+                       "Items should be concatenated in the order they appear")
+    }
 }
 
 // MARK: - ClipItem Transferable Tests

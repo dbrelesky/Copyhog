@@ -329,7 +329,7 @@ struct PopoverContent: View {
                             Button {
                                 copyMultiSelectedItems()
                             } label: {
-                                Text("Copy \(selectedItems.count)")
+                                Text("\(selectedItems.count) Copied")
                                     .font(.system(size: 11, weight: .medium))
                                     .foregroundStyle(.white)
                                     .padding(.horizontal, 10)

@@ -29,9 +29,10 @@ struct PasteboardWriter {
         }
     }
 
-    /// Copies multiple ClipItems to the system clipboard as individual pasteboard items.
-    /// Each item gets its own pasteboard entry so apps that support multi-paste receive all items.
-    /// Text items are also concatenated as a combined string on the first item for broad compatibility.
+    /// Copies multiple ClipItems to the system clipboard as a single combined string.
+    /// Text items are concatenated with double newlines so every app receives all content on paste.
+    /// When images are included alongside text, only the text portions are combined.
+    /// When all items are images, the first image is written to the clipboard.
     static func writeMultiple(
         _ items: [ClipItem],
         imageStore: ImageStore,
@@ -44,41 +45,18 @@ struct PasteboardWriter {
         let pasteboard = NSPasteboard.general
         pasteboard.clearContents()
 
-        var pbItems: [NSPasteboardItem] = []
-
-        // Build a combined text string for apps that only read the first pasteboard item
         let allText = items
             .filter { $0.type == .text }
             .compactMap { $0.content }
             .joined(separator: "\n\n")
 
-        for (index, item) in items.enumerated() {
-            let pbItem = NSPasteboardItem()
-
-            switch item.type {
-            case .text:
-                if index == 0 && !allText.isEmpty {
-                    // First item carries the combined text for single-paste apps
-                    pbItem.setString(allText, forType: .string)
-                } else {
-                    pbItem.setString(item.content ?? "", forType: .string)
-                }
-
-            case .image:
-                if let filePath = item.filePath,
-                   let image = imageStore.loadImage(relativePath: filePath),
-                   let tiffData = image.tiffRepresentation {
-                    pbItem.setData(tiffData, forType: .tiff)
-                }
-                if let filePath = item.filePath {
-                    let url = imageStore.resolveURL(relativePath: filePath)
-                    pbItem.setString(url.absoluteString, forType: .fileURL)
-                }
-            }
-
-            pbItems.append(pbItem)
+        if !allText.isEmpty {
+            pasteboard.setString(allText, forType: .string)
+        } else if let firstImage = items.first(where: { $0.type == .image }),
+                  let filePath = firstImage.filePath,
+                  let image = imageStore.loadImage(relativePath: filePath),
+                  let tiffData = image.tiffRepresentation {
+            pasteboard.setData(tiffData, forType: .tiff)
         }
-
-        pasteboard.writeObjects(pbItems)
     }
 }
