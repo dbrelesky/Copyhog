@@ -133,9 +133,8 @@ struct PopoverContent: View {
         }
         .frame(width: 400, height: 520)
         .background {
-            Color(red: 0.35, green: 0.15, blue: 0.45).opacity(0.12)
+            Color(red: 0.15, green: 0.08, blue: 0.2).opacity(0.65)
         }
-        .background(.ultraThinMaterial)
         .tint(Color(red: 0.7, green: 0.4, blue: 0.85))
     }
 }
