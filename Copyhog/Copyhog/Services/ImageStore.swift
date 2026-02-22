@@ -4,6 +4,7 @@ import Foundation
 final class ImageStore: @unchecked Sendable {
 
     private let baseDirectory: URL
+    private let thumbnailCache = NSCache<NSString, NSImage>()
 
     init() {
         let appSupport = FileManager.default.urls(
@@ -16,6 +17,8 @@ final class ImageStore: @unchecked Sendable {
             at: baseDirectory,
             withIntermediateDirectories: true
         )
+
+        thumbnailCache.countLimit = 200
     }
 
     // MARK: - Public API
@@ -46,9 +49,22 @@ final class ImageStore: @unchecked Sendable {
     }
 
     /// Loads an image from a relative path under App Support/Copyhog/.
+    /// Results are cached in memory; subsequent calls return the cached copy.
     func loadImage(relativePath: String) -> NSImage? {
+        let key = relativePath as NSString
+
+        // Check cache first
+        if let cached = thumbnailCache.object(forKey: key) {
+            return cached
+        }
+
+        // Load from disk
         let url = baseDirectory.appendingPathComponent(relativePath)
-        return NSImage(contentsOf: url)
+        guard let image = NSImage(contentsOf: url) else { return nil }
+
+        // Store in cache
+        thumbnailCache.setObject(image, forKey: key)
+        return image
     }
 
     /// Resolves a relative path to a full URL under App Support/Copyhog/.
@@ -56,8 +72,14 @@ final class ImageStore: @unchecked Sendable {
         baseDirectory.appendingPathComponent(relativePath)
     }
 
-    /// Deletes an image file at the given relative path.
+    /// Invalidates the cached thumbnail for the given relative path.
+    func invalidateCache(relativePath: String) {
+        thumbnailCache.removeObject(forKey: relativePath as NSString)
+    }
+
+    /// Deletes an image file at the given relative path and invalidates its cache entry.
     func deleteImage(relativePath: String) {
+        invalidateCache(relativePath: relativePath)
         let url = baseDirectory.appendingPathComponent(relativePath)
         try? FileManager.default.removeItem(at: url)
     }
