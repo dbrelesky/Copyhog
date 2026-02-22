@@ -14,7 +14,7 @@ struct ItemRow: View {
             // Multi-select checkbox (outside draggable area)
             if isMultiSelectActive {
                 Image(systemName: selectedItems.contains(item.id) ? "checkmark.circle.fill" : "circle")
-                    .foregroundStyle(selectedItems.contains(item.id) ? Color.accentColor : .secondary)
+                    .foregroundStyle(selectedItems.contains(item.id) ? Color(red: 0.7, green: 0.4, blue: 0.85) : .secondary)
                     .font(.title3)
             }
 
