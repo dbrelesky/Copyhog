@@ -18,6 +18,12 @@ struct SettingsMenu: View {
 
             excludedAppsSubmenu
 
+            Button {
+                setupScreenshotFolders()
+            } label: {
+                Label("Setup Screenshot Folders...", systemImage: "folder.badge.gearshape")
+            }
+
             Divider()
 
             Button(role: .destructive) {
@@ -90,6 +96,10 @@ struct SettingsMenu: View {
             return
         }
         exclusionManager.addExclusion(bundleID)
+    }
+
+    private func setupScreenshotFolders() {
+        NotificationCenter.default.post(name: .showScreenshotSetup, object: nil)
     }
 
     private func displayName(for bundleID: String) -> String {

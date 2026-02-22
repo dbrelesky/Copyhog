@@ -19,6 +19,7 @@ final class ClipboardObserver {
     // MARK: - Public API
 
     func start(onNewItem: @escaping (ClipItem) -> Void) {
+        print("[ClipboardObserver] Starting clipboard polling (changeCount: \(lastChangeCount))")
         timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] _ in
             MainActor.assumeIsolated {
                 self?.pollClipboard(onNewItem: onNewItem)
@@ -50,16 +51,20 @@ final class ClipboardObserver {
         // If this change was triggered by us (ScreenshotWatcher), skip it
         if isOwnWrite {
             isOwnWrite = false
+            print("[ClipboardObserver] Skipped own write")
             return
         }
 
         // Skip capture if the frontmost app is excluded
-        if exclusionManager?.isExcluded() == true {
+        if let em = exclusionManager, em.isExcluded() {
+            let bundleID = NSWorkspace.shared.frontmostApplication?.bundleIdentifier ?? "unknown"
+            print("[ClipboardObserver] Skipped — excluded app: \(bundleID)")
             return
         }
 
         // Check for text first
         if let string = pasteboard.string(forType: .string), !string.isEmpty {
+            print("[ClipboardObserver] Captured text (\(string.prefix(40))...)")
             let item = ClipItem(
                 id: UUID(),
                 type: .text,

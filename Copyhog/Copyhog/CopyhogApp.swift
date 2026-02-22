@@ -29,6 +29,10 @@ struct CopyhogApp: App {
     }
 }
 
+extension Notification.Name {
+    static let showScreenshotSetup = Notification.Name("showScreenshotSetup")
+}
+
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     let store = ClipItemStore()
@@ -42,6 +46,16 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         registerLaunchAtLogin()
         startClipboardCapture()
         startScreenshotCaptureIfReady()
+
+        NotificationCenter.default.addObserver(
+            forName: .showScreenshotSetup,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            MainActor.assumeIsolated {
+                self?.showOnboarding()
+            }
+        }
     }
 
     // MARK: - Clipboard Capture (always runs)
@@ -59,6 +73,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     // MARK: - Screenshot Capture (requires bookmarks)
 
     private func startScreenshotCaptureIfReady() {
+        print("[AppDelegate] hasCompletedSetup: \(bookmarkManager.hasCompletedSetup)")
         if bookmarkManager.hasCompletedSetup {
             launchScreenshotWatcher()
         } else {
@@ -66,8 +81,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         }
     }
 
-    private func launchScreenshotWatcher() {
-        guard let observer = clipboardObserver else { return }
+    func launchScreenshotWatcher() {
+        guard let observer = clipboardObserver else {
+            print("[AppDelegate] launchScreenshotWatcher failed — no clipboardObserver")
+            return
+        }
+        print("[AppDelegate] Launching ScreenshotWatcher...")
         let watcher = ScreenshotWatcher(bookmarkManager: bookmarkManager)
         watcher.start(
             clipboardObserver: observer,
@@ -79,7 +98,23 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         screenshotWatcher = watcher
     }
 
-    private func showOnboarding() {
+    func showOnboarding() {
+        // If already showing, just bring it forward
+        if let existing = onboardingWindow, existing.isVisible {
+            existing.orderFrontRegardless()
+            NSApp.activate(ignoringOtherApps: true)
+            return
+        }
+
+        // Dismiss the MenuBarExtra popover so it doesn't cover the setup window
+        for window in NSApp.windows where window is NSPanel {
+            window.close()
+        }
+
+        // Stop existing watcher so we can re-setup
+        screenshotWatcher?.stop()
+        screenshotWatcher = nil
+
         let view = OnboardingView(
             bookmarkManager: bookmarkManager,
             onComplete: { [weak self] in
@@ -103,8 +138,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         window.contentView = NSHostingView(rootView: view)
         window.center()
         window.isReleasedWhenClosed = false
+        window.level = .floating
         onboardingWindow = window
-        window.makeKeyAndOrderFront(nil)
+        window.orderFrontRegardless()
         NSApp.activate(ignoringOtherApps: true)
     }
 
