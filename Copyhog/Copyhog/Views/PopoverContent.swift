@@ -19,9 +19,10 @@ struct PopoverContent: View {
             if store.items.isEmpty {
                 ContentUnavailableView(
                     "No Clips Yet",
-                    systemImage: "clipboard",
-                    description: Text("Copy text or take a screenshot to get started")
+                    systemImage: "pawprint.fill",
+                    description: Text("Copy text or take a screenshot — your hedgehog will keep it safe")
                 )
+                .foregroundStyle(.secondary)
             } else {
                 VStack(spacing: 0) {
                     PreviewPane(item: previewItem, imageStore: store.imageStore)
@@ -115,6 +116,7 @@ struct PopoverContent: View {
                         }
                     }
                     .listStyle(.plain)
+                    .scrollContentBackground(.hidden)
                 }
                 .background(Color.orange.opacity(0.03))
             }
