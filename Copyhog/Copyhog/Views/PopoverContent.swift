@@ -6,6 +6,7 @@ struct PopoverContent: View {
     @State private var isMultiSelectActive = false
     @State private var selectedItems: Set<UUID> = []
     @State private var showWipeConfirmation = false
+    @State private var isVisible = false
 
     private var previewItem: ClipItem? {
         if let hoveredID = hoveredItemID {
@@ -206,6 +207,17 @@ struct PopoverContent: View {
             Color(red: 0.15, green: 0.08, blue: 0.2).opacity(0.65)
         }
         .tint(Color(red: 0.7, green: 0.4, blue: 0.85))
+        .opacity(isVisible ? 1 : 0)
+        .scaleEffect(isVisible ? 1 : 0.98, anchor: .top)
+        .offset(y: isVisible ? 0 : -4)
+        .onAppear {
+            withAnimation(.easeOut(duration: 0.15)) {
+                isVisible = true
+            }
+        }
+        .onDisappear {
+            isVisible = false
+        }
     }
 }
 
