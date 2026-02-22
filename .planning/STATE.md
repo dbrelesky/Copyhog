@@ -9,19 +9,19 @@ See: .planning/PROJECT.md (updated 2026-02-21)
 
 ## Current Position
 
-Phase: 7 of 9 (Favorites + History Scale)
-Plan: 1 of 2 in current phase
-Status: Plan 07-01 complete, Plan 07-02 remaining
-Last activity: 2026-02-22 - Completed 07-01 (data layer: isPinned, debounced save, NSCache, 500-item settings)
+Phase: 7 of 9 (Favorites + History Scale) -- COMPLETE
+Plan: 2 of 2 in current phase
+Status: Phase 07 complete, Phase 08 next
+Last activity: 2026-02-22 - Completed 07-02 (UI: sectioned Pinned/History layout, pin context menu, pin icon overlay)
 
-Progress: [########=-] 87% (Phase 7 plan 1/2 complete, Phases 8-9 remaining)
+Progress: [#########-] 90% (Phase 7 complete, Phases 8-9 remaining)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 11
-- Average duration: 9 min
-- Total execution time: 1.66 hours
+- Total plans completed: 12
+- Average duration: 8 min
+- Total execution time: 1.68 hours
 
 **By Phase:**
 
@@ -35,10 +35,10 @@ Progress: [########=-] 87% (Phase 7 plan 1/2 complete, Phases 8-9 remaining)
 | 04.2-liquid-glass | 1/2 | 1 min | 1 min |
 | 05-privacy | 1/1 | 3 min | 3 min |
 | 06-screenshot-auto-detection | 1/1 | 2 min | 2 min |
-| 07-favorites-history-scale | 1/2 | 2 min | 2 min |
+| 07-favorites-history-scale | 2/2 | 3 min | 1.5 min |
 
 **Recent Trend:**
-- Last 5 plans: 8 min, 1 min, 3 min, 2 min, 2 min
+- Last 5 plans: 1 min, 3 min, 2 min, 2 min, 1 min
 - Trend: improving
 
 *Updated after each plan completion*
@@ -58,6 +58,7 @@ Recent decisions affecting current work:
 - [Phase 6]: Used shared-preference read-only temporary exception for sandbox-safe screencapture defaults reading
 - [Phase 6]: Extracted ScreenshotLocationDetector utility for reuse; detect-and-confirm UX pattern established
 - [Phase 7]: 500ms debounced save with Task.sleep; NSCache countLimit 200 for thumbnails; pinned-first stable sort
+- [Phase 7]: Sectioned Pinned/History layout in PopoverContent; pin icon uses ultraThinMaterial circle overlay
 
 ### Pending Todos
 
@@ -86,5 +87,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-22
-Stopped at: Completed 07-01-PLAN.md (Favorites + History Scale data foundation)
+Stopped at: Completed 07-02-PLAN.md (Favorites UI: sectioned layout, pin/unpin context menu, pin icon overlay)
 Resume file: None

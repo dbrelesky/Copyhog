@@ -81,7 +81,7 @@ Requirements for milestone v1.2 (Power User Essentials). Each maps to roadmap ph
 ### Favorites
 
 - [x] **FAV-01**: User can pin/favorite a clipboard item via context menu or keyboard shortcut
-- [ ] **FAV-02**: Pinned items are displayed in a dedicated section at the top of the history list
+- [x] **FAV-02**: Pinned items are displayed in a dedicated section at the top of the history list
 - [x] **FAV-03**: Pinned items are never auto-purged regardless of history limit
 - [x] **FAV-04**: User can unpin an item to return it to normal history behavior
 
@@ -167,7 +167,7 @@ Deferred to future release. Tracked but not in current roadmap.
 | KBNAV-03 | Phase 8 | Pending |
 | KBNAV-04 | Phase 8 | Pending |
 | FAV-01 | Phase 7 | Complete |
-| FAV-02 | Phase 7 | Pending |
+| FAV-02 | Phase 7 | Complete |
 | FAV-03 | Phase 7 | Complete |
 | FAV-04 | Phase 7 | Complete |
 | HIST-01 | Phase 7 | Complete |
