@@ -12,7 +12,7 @@ See: .planning/PROJECT.md (updated 2026-02-21)
 Phase: 6 of 9 (Screenshot Auto-Detection)
 Plan: 1 of 1 in current phase (COMPLETE)
 Status: Phase 6 complete
-Last activity: 2026-02-22 -- Screenshot auto-detection implemented
+Last activity: 2026-02-22 - Completed quick task 1: we need an option to make an individual object unhidden
 
 Progress: [########=-] 85% (Phase 6 complete, Phases 7-9 remaining)
 
@@ -66,6 +66,12 @@ None.
 - [Phase 6]: RESOLVED -- shared-preference temporary exception entitlement works for sandbox screencapture reads
 - [Phase 9]: MenuBarExtraAccess uses private API introspection -- pin to tested version
 - [Phase 9]: CGEvent paste timing needs runtime calibration
+
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 1 | we need an option to make an individual object unhidden | 2026-02-22 | cc322e6 | [1-we-need-an-option-to-make-an-individual-](./quick/1-we-need-an-option-to-make-an-individual-/) |
 
 ### Roadmap Evolution
 
