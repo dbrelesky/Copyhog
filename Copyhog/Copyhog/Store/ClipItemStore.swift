@@ -5,6 +5,23 @@ import SwiftUI
 final class ClipItemStore: ObservableObject {
 
     @Published var items: [ClipItem] = []
+    @Published var searchQuery: String = ""
+
+    var displayItems: [ClipItem] {
+        if searchQuery.isEmpty {
+            return items
+        }
+        return items.filter { item in
+            guard !item.isSensitive else { return false }
+            if item.content?.localizedCaseInsensitiveContains(searchQuery) == true {
+                return true
+            }
+            if item.sourceAppName?.localizedCaseInsensitiveContains(searchQuery) == true {
+                return true
+            }
+            return false
+        }
+    }
 
     @AppStorage("historyLimit") var maxItems: Int = 20
     private let storeURL: URL
