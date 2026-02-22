@@ -87,10 +87,11 @@ Plans:
   3. Arrow keys move the selection highlight through items in the list, and the preview pane updates to show the selected item
   4. Pressing Enter on a selected item copies it to the clipboard
   5. Pressing Escape dismisses the popover (or clears the search field if text is present)
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] TBD (run /gsd:plan-phase 8 to break down)
+- [ ] 08-01-PLAN.md — Search field with real-time filtering, text highlighting, and no-results state
+- [ ] 08-02-PLAN.md — Keyboard navigation: arrow keys, Enter to copy, Escape, Tab focus management
 
 ### Phase 9: Global Hotkey + Paste-on-Select
 **Goal**: Users can summon their clipboard history from any app with a keyboard shortcut and paste items directly without switching windows
@@ -123,5 +124,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 04.1 -> 04.2 -> 04.3 -> 5 -
 | 5. Privacy & Compliance | v1.1 | 1/1 | Complete | 2026-02-21 |
 | 6. Screenshot Auto-Detection | v1.2 | 1/1 | Complete | 2026-02-22 |
 | 7. Favorites + History Scale | v1.2 | 2/2 | Complete | 2026-02-22 |
-| 8. Search + Keyboard Navigation | v1.2 | 0/? | Not started | - |
+| 8. Search + Keyboard Navigation | v1.2 | 0/2 | Not started | - |
 | 9. Global Hotkey + Paste-on-Select | v1.2 | 0/? | Not started | - |
