@@ -374,15 +374,6 @@ struct PopoverContent: View {
                                 let columns = Array(repeating: GridItem(.flexible(), spacing: 8), count: 3)
 
                                 LazyVStack(spacing: 0) {
-                                    HStack {
-                                        Label("History", systemImage: "clock")
-                                            .font(.caption)
-                                            .foregroundStyle(.secondary)
-                                        Spacer()
-                                    }
-                                    .padding(.horizontal, 12)
-                                    .padding(.top, 8)
-
                                     LazyVGrid(columns: columns, spacing: 8) {
                                         ForEach(store.displayItems) { item in
                                             ItemRow(

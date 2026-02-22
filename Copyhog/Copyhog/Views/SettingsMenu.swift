@@ -60,7 +60,7 @@ struct SettingsMenu: View {
 
             Divider()
 
-            Text("Copyhog v\(appVersion) by DeeB")
+            Label("Copyhog v\(appVersion) by DeeB", image: "MenuBarIcon")
         } label: {
             Image(systemName: "gearshape")
                 .fontWeight(.medium)
