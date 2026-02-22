@@ -24,6 +24,8 @@
 	<true/>
 	<key>NSPasteboardUsageDescription</key>
 	<string>Copyhog reads your clipboard to save a history of copied items.</string>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.utilities</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright 2026 Darren Brelesky</string>
 </dict>
