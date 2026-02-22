@@ -149,7 +149,7 @@ Plans:
 
 **Milestone Goal:** Make Copyhog a keyboard-driven power tool -- instant access from anywhere, searchable history, pinned favorites, and zero-config screenshot detection.
 
-- [ ] **Phase 6: Screenshot Auto-Detection** - Auto-detect macOS screenshot save location, eliminating manual folder setup
+- [x] **Phase 6: Screenshot Auto-Detection** - Auto-detect macOS screenshot save location, eliminating manual folder setup (completed 2026-02-22)
 - [ ] **Phase 7: Favorites + History Scale** - Pinned items, 500-item history, debounced persistence, thumbnail caching
 - [ ] **Phase 8: Search + Keyboard Navigation** - Text search with real-time filtering, arrow key navigation, Enter to copy
 - [ ] **Phase 9: Global Hotkey + Paste-on-Select** - Cmd+Shift+V summons history from any app, Enter pastes into previous app
@@ -227,7 +227,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 04.1 -> 04.2 -> 04.3 -> 5 -
 | 04.2 Liquid Glass UI | v1.1 | 1/2 | In Progress | - |
 | 04.3 App Store Readiness | v1.1 | 0/? | Not started | - |
 | 5. Privacy & Compliance | v1.1 | 1/1 | Complete | 2026-02-21 |
-| 6. Screenshot Auto-Detection | v1.2 | 0/? | Not started | - |
+| 6. Screenshot Auto-Detection | v1.2 | Complete    | 2026-02-22 | - |
 | 7. Favorites + History Scale | v1.2 | 0/? | Not started | - |
 | 8. Search + Keyboard Navigation | v1.2 | 0/? | Not started | - |
 | 9. Global Hotkey + Paste-on-Select | v1.2 | 0/? | Not started | - |
