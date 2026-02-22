@@ -10,6 +10,7 @@ struct ItemRow: View {
     var isSelected: Bool = false
     var searchQuery: String = ""
     var copiedItemID: UUID? = nil
+    var onCopy: (() -> Void)?
     var onDelete: (() -> Void)?
     var onMarkSensitive: (() -> Void)?
     var onUnmarkSensitive: (() -> Void)?
@@ -57,6 +58,7 @@ struct ItemRow: View {
                     }
                 } else if let observer = clipboardObserver {
                     PasteboardWriter.write(item, imageStore: imageStore, clipboardObserver: observer)
+                    onCopy?()
                     showCopyConfirmation = true
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
                         showCopyConfirmation = false

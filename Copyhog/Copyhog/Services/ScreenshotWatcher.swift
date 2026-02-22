@@ -150,7 +150,9 @@ final class ScreenshotWatcher {
                     content: nil,
                     thumbnailPath: paths.thumbnailPath,
                     filePath: paths.filePath,
-                    timestamp: Date()
+                    timestamp: Date(),
+                    sourceAppBundleID: "com.apple.screencaptureui",
+                    sourceAppName: "Screenshot"
                 )
                 onNewItem(item)
 

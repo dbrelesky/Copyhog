@@ -64,29 +64,53 @@ struct PreviewPane: View {
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else {
-                    switch item.type {
-                    case .image:
-                        if let filePath = item.filePath,
-                           let nsImage = imageStore.loadImage(relativePath: filePath) {
-                            Image(nsImage: nsImage)
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .clipShape(RoundedRectangle(cornerRadius: 8))
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        } else {
-                            Image(systemName: "photo")
-                                .font(.largeTitle)
-                                .foregroundStyle(.tertiary)
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    ZStack(alignment: .bottomLeading) {
+                        switch item.type {
+                        case .image:
+                            if let filePath = item.filePath,
+                               let nsImage = imageStore.loadImage(relativePath: filePath) {
+                                Image(nsImage: nsImage)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            } else {
+                                Image(systemName: "photo")
+                                    .font(.largeTitle)
+                                    .foregroundStyle(.tertiary)
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            }
+                        case .text:
+                            ScrollView {
+                                Text(item.content ?? "")
+                                    .font(.body)
+                                    .foregroundStyle(.primary)
+                                    .padding(12)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            }
                         }
-                    case .text:
-                        ScrollView {
-                            Text(item.content ?? "")
-                                .font(.body)
-                                .foregroundStyle(.primary)
-                                .padding(12)
-                                .frame(maxWidth: .infinity, alignment: .leading)
+
+                        // Type label with optional source app icon
+                        HStack(spacing: 4) {
+                            if item.sourceAppBundleID == "com.apple.screencaptureui" {
+                                Image(systemName: "camera.viewfinder")
+                                    .font(.system(size: 10, weight: .medium))
+                                    .foregroundStyle(.secondary)
+                            } else if let bundleID = item.sourceAppBundleID,
+                               let appURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleID) {
+                                Image(nsImage: NSWorkspace.shared.icon(forFile: appURL.path))
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 14, height: 14)
+                            }
+                            Text(itemTypeLabel(item))
+                                .font(.system(size: 10, weight: .medium))
+                                .foregroundStyle(.secondary)
                         }
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(.ultraThinMaterial, in: Capsule())
+                        .padding(8)
                     }
                 }
             } else {
@@ -100,5 +124,12 @@ struct PreviewPane: View {
         .background(.regularMaterial)
         .clipShape(RoundedRectangle(cornerRadius: 14))
         .shadow(color: .black.opacity(0.1), radius: 8, y: 2)
+    }
+
+    private func itemTypeLabel(_ item: ClipItem) -> String {
+        if item.sourceAppBundleID == "com.apple.screencaptureui" {
+            return "Screenshot"
+        }
+        return item.type == .text ? "Text" : "Image"
     }
 }

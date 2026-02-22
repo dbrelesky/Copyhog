@@ -14,6 +14,7 @@ struct PopoverContent: View {
     @State private var isSearchExpanded: Bool = false
     @State private var eventMonitor: Any? = nil
     @State private var copiedItemID: UUID? = nil
+    @State private var copyCount: Int = 0
 
     private enum ArrowDirection {
         case up, down, left, right
@@ -89,8 +90,13 @@ struct PopoverContent: View {
             case 36: // Enter/Return
                 copySelectedItem()
                 return nil
-            case 8: // C key (Cmd+C)
-                if event.modifierFlags.contains(.command) {
+            case 8: // C key
+                let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
+                if flags.contains([.control, .command]) {
+                    dismissPopover()
+                    return nil
+                }
+                if flags.contains(.command) && !flags.contains(.control) {
                     copySelectedItem()
                     return nil
                 }
@@ -153,6 +159,7 @@ struct PopoverContent: View {
         let item = store.displayItems[index]
         guard let observer = store.clipboardObserver else { return }
         PasteboardWriter.write(item, imageStore: store.imageStore, clipboardObserver: observer)
+        copyCount = 1
         copiedItemID = item.id
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
             copiedItemID = nil
@@ -298,18 +305,33 @@ struct PopoverContent: View {
 
                         if isMultiSelectActive && !selectedItems.isEmpty,
                            let observer = store.clipboardObserver {
-                            Button("Copy \(selectedItems.count)") {
+                            Button {
                                 let itemsToCopy = store.items.filter { selectedItems.contains($0.id) }
                                 PasteboardWriter.writeMultiple(
                                     itemsToCopy,
                                     imageStore: store.imageStore,
                                     clipboardObserver: observer
                                 )
+                                copyCount = selectedItems.count
                                 selectedItems.removeAll()
                                 isMultiSelectActive = false
+                            } label: {
+                                Text("\(selectedItems.count) Copied")
+                                    .font(.system(size: 11, weight: .medium))
+                                    .foregroundStyle(.white)
+                                    .padding(.horizontal, 10)
+                                    .padding(.vertical, 5)
                             }
                             .buttonStyle(.borderedProminent)
                             .controlSize(.small)
+                        } else if copyCount > 0 {
+                            Text("\(copyCount) Copied")
+                                .font(.system(size: 11, weight: .medium))
+                                .foregroundStyle(.white)
+                                .padding(.horizontal, 10)
+                                .padding(.vertical, 5)
+                                .background(Theme.accent)
+                                .clipShape(Capsule())
                         }
 
                         SettingsMenu(showWipeConfirmation: $showWipeConfirmation)
@@ -386,6 +408,9 @@ struct PopoverContent: View {
                                                 isSelected: selectedIndex.flatMap { idx in idx < store.displayItems.count ? store.displayItems[idx].id : nil } == item.id,
                                                 searchQuery: store.searchQuery,
                                                 copiedItemID: copiedItemID,
+                                                onCopy: {
+                                                    copyCount = 1
+                                                },
                                                 onDelete: {
                                                     selectedItems.remove(item.id)
                                                     store.remove(id: item.id)
@@ -455,6 +480,7 @@ struct PopoverContent: View {
                 eventMonitor = nil
             }
             selectedIndex = nil
+            copyCount = 0
             isSearchFocused = false
         }
         .onChange(of: store.searchQuery) { _, _ in

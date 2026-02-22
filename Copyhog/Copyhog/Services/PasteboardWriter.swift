@@ -29,9 +29,9 @@ struct PasteboardWriter {
         }
     }
 
-    /// Copies multiple ClipItems to the system clipboard.
-    /// Text items are concatenated with double-newline separators.
-    /// Image items are written as file URLs (Finder) with TIFF data for the first image (rich-paste apps).
+    /// Copies multiple ClipItems to the system clipboard as individual pasteboard items.
+    /// Each item gets its own pasteboard entry so apps that support multi-paste receive all items.
+    /// Text items are also concatenated as a combined string on the first item for broad compatibility.
     static func writeMultiple(
         _ items: [ClipItem],
         imageStore: ImageStore,
@@ -44,43 +44,41 @@ struct PasteboardWriter {
         let pasteboard = NSPasteboard.general
         pasteboard.clearContents()
 
-        // Separate by type
-        let textItems = items.filter { $0.type == .text }
-        let imageItems = items.filter { $0.type == .image }
+        var pbItems: [NSPasteboardItem] = []
 
-        // Concatenate all text content
-        let textContent = textItems.compactMap { $0.content }.joined(separator: "\n\n")
+        // Build a combined text string for apps that only read the first pasteboard item
+        let allText = items
+            .filter { $0.type == .text }
+            .compactMap { $0.content }
+            .joined(separator: "\n\n")
 
-        // Resolve image file URLs
-        let imageURLs: [URL] = imageItems.compactMap { item in
-            guard let filePath = item.filePath else { return nil }
-            return imageStore.resolveURL(relativePath: filePath)
+        for (index, item) in items.enumerated() {
+            let pbItem = NSPasteboardItem()
+
+            switch item.type {
+            case .text:
+                if index == 0 && !allText.isEmpty {
+                    // First item carries the combined text for single-paste apps
+                    pbItem.setString(allText, forType: .string)
+                } else {
+                    pbItem.setString(item.content ?? "", forType: .string)
+                }
+
+            case .image:
+                if let filePath = item.filePath,
+                   let image = imageStore.loadImage(relativePath: filePath),
+                   let tiffData = image.tiffRepresentation {
+                    pbItem.setData(tiffData, forType: .tiff)
+                }
+                if let filePath = item.filePath {
+                    let url = imageStore.resolveURL(relativePath: filePath)
+                    pbItem.setString(url.absoluteString, forType: .fileURL)
+                }
+            }
+
+            pbItems.append(pbItem)
         }
 
-        if !textContent.isEmpty && imageURLs.isEmpty {
-            // Text only: write directly as a single string (most reliable)
-            pasteboard.setString(textContent, forType: .string)
-        } else if textContent.isEmpty && !imageURLs.isEmpty {
-            // Images only: write file URLs for Finder + TIFF data for rich-paste apps
-            pasteboard.writeObjects(imageURLs.map { $0 as NSURL })
-            // Also write first image as TIFF so apps like Preview/Slack can paste it
-            if let firstPath = imageItems.first?.filePath,
-               let image = imageStore.loadImage(relativePath: firstPath),
-               let tiffData = image.tiffRepresentation {
-                pasteboard.setData(tiffData, forType: .tiff)
-            }
-        } else {
-            // Mixed: primary item has text + first image, extra images as file URLs
-            let primaryItem = NSPasteboardItem()
-            primaryItem.setString(textContent, forType: .string)
-            if let firstURL = imageURLs.first {
-                primaryItem.setString(firstURL.absoluteString, forType: .fileURL)
-            }
-            var pbItems: [NSPasteboardWriting] = [primaryItem]
-            for url in imageURLs.dropFirst() {
-                pbItems.append(url as NSURL)
-            }
-            pasteboard.writeObjects(pbItems)
-        }
+        pasteboard.writeObjects(pbItems)
     }
 }
