@@ -9,12 +9,22 @@ struct SettingsMenu: View {
     @AppStorage("plainPasteEnabled") private var plainPasteEnabled = true
     @AppStorage("appearanceMode") private var appearanceMode = 0
 
+    private var hotkeyHint: AttributedString {
+        var str = AttributedString("💡 Open the Hog from anywhere.  ⌃ ⌘ C")
+        str.foregroundColor = .purple
+        return str
+    }
+
     private var appVersion: String {
         Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
     }
 
     var body: some View {
         Menu {
+            Text(hotkeyHint)
+
+            Divider()
+
             Toggle(isOn: $launchAtLogin) {
                 Label("Launch at Login", systemImage: "arrow.clockwise")
             }
@@ -59,9 +69,6 @@ struct SettingsMenu: View {
             }
 
             Divider()
-
-            Label("Open the Hog from anywhere with ⌃⌘C", systemImage: "lightbulb")
-
 
             Label("Copyhog v\(appVersion) by DeeB", image: "MenuBarIcon")
         } label: {

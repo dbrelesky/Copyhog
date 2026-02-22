@@ -380,7 +380,7 @@ struct PopoverContent: View {
                             }
                             .controlSize(.small)
                             .buttonStyle(.borderedProminent)
-                            .tint(.red)
+                            .tint(.yellow)
                         }
                         .padding(.horizontal, 8)
                         .padding(.vertical, 4)
