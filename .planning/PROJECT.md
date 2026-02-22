@@ -2,7 +2,7 @@
 
 ## What This Is
 
-A native macOS menu bar app that automatically captures clipboard items (text and images) and screenshots into a browsable history with instant re-paste. Built with Swift + SwiftUI, it runs silently in the background and is accessible via the menu bar icon.
+A native macOS menu bar app that automatically captures clipboard items (text and images) and screenshots into a browsable history with instant re-paste. Features a liquid glass UI with translucent materials, pin/favorite system, configurable history (up to 500 items), and App Store-ready privacy compliance. Built with Swift + SwiftUI.
 
 ## Core Value
 
@@ -13,24 +13,26 @@ Every screenshot and clipboard copy is captured and instantly accessible — no 
 ### Validated
 
 - ✓ Automatically capture clipboard items (text + images) and screenshots into persistent history — v1.0
-- ✓ Run as macOS menu bar app with split-view popover (~360x480px): preview top, list bottom — v1.0
+- ✓ Run as macOS menu bar app with split-view popover: preview top, list bottom — v1.0
 - ✓ Observer mode — watch system clipboard + screenshot directory, don't replace native shortcuts — v1.0
-- ✓ When a screenshot is detected, automatically copy it to the system clipboard — v1.0
-- ✓ Move/save all detected screenshots to ~/Documents/Screenies/ — v1.0
-- ✓ Show browsable list of recent items with visual previews (thumbnails for images, text snippets for text) — v1.0
-- ✓ Single-select: clicking an item copies it to system clipboard for pasting — v1.0
-- ✓ Multi-select images: write multiple images as file URL references to pasteboard for batch paste — v1.0
-- ✓ Drag-and-drop: drag selected items from Copyhog into target apps — v1.0
-- ✓ Retain last 20 items, auto-purge oldest when limit exceeded — v1.0
+- ✓ Screenshots auto-copied to system clipboard and moved to ~/Documents/Screenies/ — v1.0
+- ✓ Browsable list with visual previews (thumbnails for images, text snippets) — v1.0
+- ✓ Single-click copy, multi-select batch paste, drag-and-drop — v1.0
+- ✓ Delete individual items and bulk wipe ("Hog Wipe") — v1.1
+- ✓ Settings menu with version, attribution, and relocated destructive actions — v1.1
+- ✓ Liquid glass UI — translucent materials, elevated preview, floating toolbar — v1.1
+- ✓ App Sandbox with privacy strings and sensitive app exclusion — v1.1
+- ✓ Privacy manifest, launch-at-login toggle, configurable history size — v1.1
+- ✓ Auto-detect macOS screenshot save location — v1.2
+- ✓ Pin/favorite clipboard items that never expire — v1.2
+- ✓ 500-item history with debounced persistence and thumbnail caching — v1.2
 
 ### Active
 
 - [ ] Global keyboard shortcut to summon clipboard history from any app
 - [ ] Search/filter clipboard history by text content
 - [ ] Keyboard navigation through items with Enter to paste
-- [ ] Pin/favorite items that persist regardless of history limit
-- [ ] Raise history limit to 500+ items
-- [ ] Auto-detect macOS screenshot save location (eliminate manual folder setup)
+- [ ] Paste-on-select: Enter pastes directly into previously active app
 
 ### Out of Scope
 
@@ -40,52 +42,46 @@ Every screenshot and clipboard copy is captured and instantly accessible — no 
 - Visual distinction between screenshots and regular copied images — not needed per user preference
 - Snippet/template system with placeholders — beyond clipboard history scope
 - iCloud sync — local-only for now
+- Fuzzy search — exact text match covers 90% of use cases
+- Pin categories/folders — simple pin/unpin is sufficient
 
 ## Context
 
-**Problem:** macOS screenshot workflow is broken. The thumbnail disappears after ~5 seconds, files save with arbitrary names like `Screenshot 2026-02-20 at 3.42.15 PM.png`, and getting a screenshot back into another app requires multiple steps (find file, open, copy, switch back, paste). The system clipboard only holds one item — previous copies are lost forever.
+**Shipped:** v1.0 MVP (2026-02-21), v1.1 Polish & Control (2026-02-22)
+**Current:** v1.2 Power User Essentials — Phases 6-7 complete, Phases 8-9 remaining
+**Codebase:** ~3800 LOC Swift/SwiftUI, 50+ files
+**Tech stack:** Swift + SwiftUI, MenuBarExtra, NSPasteboard polling, FSEvents, App Sandbox
 
-**Solution shaped as:** "Shape A: Menu Bar Observer with Local Image Store" — a background observer that polls the clipboard and watches the screenshot directory, captures items into a local store, and presents them in a popover UI for rapid re-paste.
-
-**Architecture (from breadboard):**
+**Architecture:**
 - P1: Menu Bar — persistent hedgehog silhouette icon
-- P2: Popover (Split View) — preview pane top, item list bottom
-- P3: Background Services — ClipboardObserver (polls NSPasteboard), ScreenshotWatcher (FSEvents), ScreenshotProcessor, ClipItemStore, ImageStore
+- P2: Popover (Split View) — glass preview pane top, item list bottom
+- P3: Background Services — ClipboardObserver, ScreenshotWatcher, ScreenshotLocationDetector, ClipItemStore, ImageStore, ExclusionManager
 
-**Multi-select mechanism:** Writes multiple images as file URL references to NSPasteboard (multiple NSPasteboardItem objects). Apps that accept file drops (Slack, Mail, Figma) receive all selected images. Text items concatenate with newlines.
+**Multi-select mechanism:** Writes multiple images as file URL references to NSPasteboard. Apps that accept file drops (Slack, Mail, Figma) receive all selected images.
 
-**Full shaping doc:** `copyhog-shaping.md` (requirements, shape, fit check, breadboard with full wiring)
-
-## Constraints
-
-- **Tech stack**: Swift + SwiftUI — native macOS, MenuBarExtra API, minimum footprint
-- **Platform**: macOS only (menu bar app pattern)
-- **Storage**: Configurable history limit (up to 500+), auto-purge oldest. Images stored in ~/Library/Application Support/Copyhog/
-- **Screenshots**: All screenshots moved to ~/Documents/Screenies/ (not left on Desktop)
-- **Clipboard**: Observer mode only — poll NSPasteboard.general.changeCount every 0.5s
+**Full shaping doc:** `copyhog-shaping.md`
 
 ## Current Milestone: v1.2 Power User Essentials
 
 **Goal:** Make Copyhog a keyboard-driven power tool — instant access from anywhere, searchable history, pinned favorites, and zero-config screenshot detection.
 
-**Target features:**
-- Global hotkey (Cmd+Shift+V) to summon clipboard history from any app
-- Search bar to filter history by text content
-- Keyboard navigation (arrow keys + Enter to paste)
-- Pin/favorite items that never expire
-- Raise history limit to 500+ items
-- Auto-detect macOS screenshot save location
+**Remaining:**
+- Phase 8: Search + Keyboard Navigation
+- Phase 9: Global Hotkey + Paste-on-Select
 
 ## Key Decisions
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Swift + SwiftUI over Electron/Tauri | Smallest memory footprint, native macOS feel, MenuBarExtra purpose-built for this | — Pending |
-| Observer mode over intercept mode | Non-invasive, user keeps native Cmd+Shift+3/4/5 shortcuts | — Pending |
-| File URL references for multi-image paste | NSPasteboard can't hold multiple independent images; file URLs work with apps that accept file drops | — Pending |
-| 20 item limit with auto-purge | Keeps storage minimal, browse is fast, no need for search | ⚠️ Revisit — raising to 500+ in v1.2 |
-| Popover over floating panel | Standard macOS pattern for menu bar utilities (1Password, Bartender), predictable appear/disappear | — Pending |
-| Split-view layout (preview top, list bottom) | 64px thumbnails aren't enough to distinguish screenshots; preview is the key differentiator | — Pending |
+| Swift + SwiftUI over Electron/Tauri | Smallest memory footprint, native macOS feel, MenuBarExtra purpose-built for this | ✓ Good |
+| Observer mode over intercept mode | Non-invasive, user keeps native Cmd+Shift+3/4/5 shortcuts | ✓ Good |
+| File URL references for multi-image paste | NSPasteboard can't hold multiple independent images; file URLs work with apps that accept file drops | ✓ Good |
+| Popover over floating panel | Standard macOS pattern for menu bar utilities, predictable appear/disappear | ✓ Good |
+| Split-view layout (preview top, list bottom) | 64px thumbnails aren't enough to distinguish screenshots; preview is the key differentiator | ✓ Good |
+| ultraThinMaterial / regularMaterial hierarchy | Creates visual depth without Divider() lines; warm orange tint adds personality | ✓ Good — v1.1 |
+| App Sandbox with temporary exceptions | Required for App Store; shared-preference exception enables screenshot location detection | ✓ Good — v1.1 |
+| 500-item limit with debounced saves | NSCache for thumbnails + 500ms debounced JSON writes keeps UI smooth at scale | ✓ Good — v1.2 |
+| Pinned-first stable sort | Favorites always visible at top; unpinned items subject to purge | ✓ Good — v1.2 |
 
 ---
-*Last updated: 2026-02-21 after milestone v1.2 started*
+*Last updated: 2026-02-22 after v1.1 milestone*

@@ -2,17 +2,17 @@
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-02-21)
+See: .planning/PROJECT.md (updated 2026-02-22)
 
 **Core value:** Every screenshot and clipboard copy is captured and instantly accessible -- no hunting, no lost items, no broken workflow.
-**Current focus:** v1.2 Power User Essentials (Phase 6: Screenshot Auto-Detection)
+**Current focus:** v1.2 Power User Essentials (Phase 8: Search + Keyboard Navigation)
 
 ## Current Position
 
 Phase: 7 of 9 (Favorites + History Scale) -- COMPLETE
 Plan: 2 of 2 in current phase
-Status: Phase 07 complete, Phase 08 next
-Last activity: 2026-02-22 - Completed 07-02 (UI: sectioned Pinned/History layout, pin context menu, pin icon overlay)
+Status: v1.1 archived, Phase 8 next
+Last activity: 2026-02-22 - Archived v1.1 milestone
 
 Progress: [#########-] 90% (Phase 7 complete, Phases 8-9 remaining)
 
@@ -50,13 +50,8 @@ Progress: [#########-] 90% (Phase 7 complete, Phases 8-9 remaining)
 Decisions are logged in PROJECT.md Key Decisions table.
 Recent decisions affecting current work:
 
-- App Sandbox disabled in entitlements -- required for NSEvent.addGlobalMonitorForEvents
-- ultraThinMaterial for popover background, regularMaterial for elevated cards
-- History size configurable 10-50 via @AppStorage("historyLimit"), default 20
-- [v1.2 Roadmap]: 4 phases (6-9) from 21 requirements -- screenshot detection, data model, search+kbd nav, global hotkey
 - [v1.2 Research]: soffes/HotKey + orchetect/MenuBarExtraAccess for global hotkey; debounced JSON for 500 items; NSEvent local monitor for keyboard nav
 - [Phase 6]: Used shared-preference read-only temporary exception for sandbox-safe screencapture defaults reading
-- [Phase 6]: Extracted ScreenshotLocationDetector utility for reuse; detect-and-confirm UX pattern established
 - [Phase 7]: 500ms debounced save with Task.sleep; NSCache countLimit 200 for thumbnails; pinned-first stable sort
 - [Phase 7]: Sectioned Pinned/History layout in PopoverContent; pin icon uses ultraThinMaterial circle overlay
 
@@ -66,7 +61,6 @@ None.
 
 ### Blockers/Concerns
 
-- [Phase 6]: RESOLVED -- shared-preference temporary exception entitlement works for sandbox screencapture reads
 - [Phase 9]: MenuBarExtraAccess uses private API introspection -- pin to tested version
 - [Phase 9]: CGEvent paste timing needs runtime calibration
 
@@ -87,5 +81,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-22
-Stopped at: Completed 07-02-PLAN.md (Favorites UI: sectioned layout, pin/unpin context menu, pin icon overlay)
+Stopped at: Archived v1.1 milestone
 Resume file: None
