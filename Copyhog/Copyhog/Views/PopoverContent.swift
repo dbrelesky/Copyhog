@@ -18,11 +18,11 @@ struct PopoverContent: View {
     }
 
     private var previewItem: ClipItem? {
-        if let index = selectedIndex, index < store.displayItems.count {
-            return store.displayItems[index]
-        }
         if let hoveredID = hoveredItemID {
             return store.displayItems.first { $0.id == hoveredID }
+        }
+        if let index = selectedIndex, index < store.displayItems.count {
+            return store.displayItems[index]
         }
         return store.displayItems.first
     }
@@ -287,133 +287,43 @@ struct PopoverContent: View {
                         ScrollViewReader { scrollProxy in
                             ScrollView {
                                 let columns = Array(repeating: GridItem(.flexible(), spacing: 8), count: 3)
-                                let pinnedItems = store.displayItems.filter { $0.isPinned }
-                                let unpinnedItems = store.displayItems.filter { !$0.isPinned }
 
                                 LazyVStack(spacing: 0) {
-                                    if !store.searchQuery.isEmpty {
-                                        // Flat grid when searching (no section headers)
-                                        LazyVGrid(columns: columns, spacing: 8) {
-                                            ForEach(store.displayItems) { item in
-                                                ItemRow(
-                                                    item: item,
-                                                    imageStore: store.imageStore,
-                                                    hoveredItemID: $hoveredItemID,
-                                                    isMultiSelectActive: isMultiSelectActive,
-                                                    selectedItems: $selectedItems,
-                                                    clipboardObserver: store.clipboardObserver,
-                                                    isSelected: selectedIndex.flatMap { idx in idx < store.displayItems.count ? store.displayItems[idx].id : nil } == item.id,
-                                                    searchQuery: store.searchQuery,
-                                                    onTogglePin: {
-                                                        withAnimation {
-                                                            store.togglePin(id: item.id)
-                                                        }
-                                                    },
-                                                    onDelete: {
-                                                        selectedItems.remove(item.id)
-                                                        store.remove(id: item.id)
-                                                    },
-                                                    onMarkSensitive: {
-                                                        store.markSensitive(id: item.id)
-                                                    },
-                                                    onUnmarkSensitive: {
-                                                        store.unmarkSensitive(id: item.id)
-                                                    }
-                                                )
-                                                .id(item.id)
-                                            }
-                                        }
-                                        .padding(.horizontal, 8)
-                                        .padding(.top, 8)
-                                    } else {
-                                        // Pinned section
-                                        if !pinnedItems.isEmpty {
-                                            HStack {
-                                                Label("Pinned", systemImage: "pin.fill")
-                                                    .font(.caption)
-                                                    .foregroundStyle(.secondary)
-                                                Spacer()
-                                            }
-                                            .padding(.horizontal, 12)
-                                            .padding(.top, 8)
+                                    HStack {
+                                        Label("History", systemImage: "clock")
+                                            .font(.caption)
+                                            .foregroundStyle(.secondary)
+                                        Spacer()
+                                    }
+                                    .padding(.horizontal, 12)
+                                    .padding(.top, 8)
 
-                                            LazyVGrid(columns: columns, spacing: 8) {
-                                                ForEach(pinnedItems) { item in
-                                                    ItemRow(
-                                                        item: item,
-                                                        imageStore: store.imageStore,
-                                                        hoveredItemID: $hoveredItemID,
-                                                        isMultiSelectActive: isMultiSelectActive,
-                                                        selectedItems: $selectedItems,
-                                                        clipboardObserver: store.clipboardObserver,
-                                                        isSelected: selectedIndex.flatMap { idx in idx < store.displayItems.count ? store.displayItems[idx].id : nil } == item.id,
-                                                        searchQuery: store.searchQuery,
-                                                        onTogglePin: {
-                                                            withAnimation {
-                                                                store.togglePin(id: item.id)
-                                                            }
-                                                        },
-                                                        onDelete: {
-                                                            selectedItems.remove(item.id)
-                                                            store.remove(id: item.id)
-                                                        },
-                                                        onMarkSensitive: {
-                                                            store.markSensitive(id: item.id)
-                                                        },
-                                                        onUnmarkSensitive: {
-                                                            store.unmarkSensitive(id: item.id)
-                                                        }
-                                                    )
-                                                    .id(item.id)
+                                    LazyVGrid(columns: columns, spacing: 8) {
+                                        ForEach(store.displayItems) { item in
+                                            ItemRow(
+                                                item: item,
+                                                imageStore: store.imageStore,
+                                                hoveredItemID: $hoveredItemID,
+                                                isMultiSelectActive: isMultiSelectActive,
+                                                selectedItems: $selectedItems,
+                                                clipboardObserver: store.clipboardObserver,
+                                                isSelected: selectedIndex.flatMap { idx in idx < store.displayItems.count ? store.displayItems[idx].id : nil } == item.id,
+                                                searchQuery: store.searchQuery,
+                                                onDelete: {
+                                                    selectedItems.remove(item.id)
+                                                    store.remove(id: item.id)
+                                                },
+                                                onMarkSensitive: {
+                                                    store.markSensitive(id: item.id)
+                                                },
+                                                onUnmarkSensitive: {
+                                                    store.unmarkSensitive(id: item.id)
                                                 }
-                                            }
-                                            .padding(.horizontal, 8)
-                                        }
-
-                                        // History section
-                                        if !unpinnedItems.isEmpty {
-                                            HStack {
-                                                Label("History", systemImage: "clock")
-                                                    .font(.caption)
-                                                    .foregroundStyle(.secondary)
-                                                Spacer()
-                                            }
-                                            .padding(.horizontal, 12)
-                                            .padding(.top, 8)
-
-                                            LazyVGrid(columns: columns, spacing: 8) {
-                                                ForEach(unpinnedItems) { item in
-                                                    ItemRow(
-                                                        item: item,
-                                                        imageStore: store.imageStore,
-                                                        hoveredItemID: $hoveredItemID,
-                                                        isMultiSelectActive: isMultiSelectActive,
-                                                        selectedItems: $selectedItems,
-                                                        clipboardObserver: store.clipboardObserver,
-                                                        isSelected: selectedIndex.flatMap { idx in idx < store.displayItems.count ? store.displayItems[idx].id : nil } == item.id,
-                                                        searchQuery: store.searchQuery,
-                                                        onTogglePin: {
-                                                            withAnimation {
-                                                                store.togglePin(id: item.id)
-                                                            }
-                                                        },
-                                                        onDelete: {
-                                                            selectedItems.remove(item.id)
-                                                            store.remove(id: item.id)
-                                                        },
-                                                        onMarkSensitive: {
-                                                            store.markSensitive(id: item.id)
-                                                        },
-                                                        onUnmarkSensitive: {
-                                                            store.unmarkSensitive(id: item.id)
-                                                        }
-                                                    )
-                                                    .id(item.id)
-                                                }
-                                            }
-                                            .padding(.horizontal, 8)
+                                            )
+                                            .id(item.id)
                                         }
                                     }
+                                    .padding(.horizontal, 8)
                                 }
                                 .padding(.bottom, 8)
                             }
