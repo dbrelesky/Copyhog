@@ -13,11 +13,10 @@ struct OnboardingView: View {
 
     var body: some View {
         VStack(spacing: 20) {
-            Image("MenuBarIcon")
+            Image(nsImage: NSApp.applicationIconImage)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .frame(width: 36, height: 36)
-                .opacity(0.6)
+                .frame(width: 80, height: 80)
 
             Text("Welcome to Copyhog")
                 .font(.title.bold())
@@ -65,8 +64,9 @@ struct OnboardingView: View {
                 .disabled(!(screenshotGranted && screeniesGranted))
             }
         }
-        .padding(24)
-        .frame(width: 400, height: 320)
+        .padding(.horizontal, 24)
+        .padding(.vertical, 36)
+        .frame(width: 400, height: 400)
         .background {
             Color(red: 0.35, green: 0.15, blue: 0.45).opacity(0.12)
         }
