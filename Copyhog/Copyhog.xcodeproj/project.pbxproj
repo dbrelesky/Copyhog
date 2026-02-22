@@ -26,6 +26,7 @@
 		A10017 /* PasswordDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20020 /* PasswordDetector.swift */; };
 		A10018 /* ScreenshotLocationDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20021 /* ScreenshotLocationDetector.swift */; };
 		A10019 /* PlainPasteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20022 /* PlainPasteService.swift */; };
+		A10020 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20023 /* Theme.swift */; };
 		B10001 /* PopoverContentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20001 /* PopoverContentTests.swift */; };
 		B10002 /* Phase4UserControlTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20003 /* Phase4UserControlTests.swift */; };
 		B10003 /* Phase1CaptureEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20004 /* Phase1CaptureEngineTests.swift */; };
@@ -69,6 +70,7 @@
 		A20020 /* PasswordDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordDetector.swift; sourceTree = "<group>"; };
 		A20021 /* ScreenshotLocationDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotLocationDetector.swift; sourceTree = "<group>"; };
 		A20022 /* PlainPasteService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainPasteService.swift; sourceTree = "<group>"; };
+		A20023 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		B20001 /* PopoverContentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverContentTests.swift; sourceTree = "<group>"; };
 		B20002 /* CopyhogTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CopyhogTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B20003 /* Phase4UserControlTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phase4UserControlTests.swift; sourceTree = "<group>"; };
@@ -140,6 +142,7 @@
 				A20013 /* ItemRow.swift */,
 				A20015 /* SettingsMenu.swift */,
 				A20018 /* OnboardingView.swift */,
+				A20023 /* Theme.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -296,6 +299,7 @@
 				A10015 /* OnboardingView.swift in Sources */,
 				A10018 /* ScreenshotLocationDetector.swift in Sources */,
 				A10019 /* PlainPasteService.swift in Sources */,
+				A10020 /* Theme.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

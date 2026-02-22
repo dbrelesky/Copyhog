@@ -10,8 +10,6 @@ struct OnboardingView: View {
     @State private var screeniesGranted = false
     @State private var detectedScreenshotURL: URL = ScreenshotLocationDetector.detect()
 
-    private let accentPurple = Color(red: 0.7, green: 0.4, blue: 0.85)
-
     var body: some View {
         VStack(spacing: 20) {
             Image(nsImage: NSApp.applicationIconImage)
@@ -61,11 +59,8 @@ struct OnboardingView: View {
         .padding(.horizontal, 24)
         .padding(.vertical, 36)
         .frame(width: 400, height: 400)
-        .background {
-            Color(red: 0.35, green: 0.15, blue: 0.45).opacity(0.12)
-        }
         .background(.ultraThinMaterial)
-        .tint(accentPurple)
+        .tint(Theme.accent)
     }
 
     // MARK: - Screenshot Folder Row (Detect + Confirm)
@@ -84,7 +79,7 @@ struct OnboardingView: View {
         HStack(spacing: 12) {
             if screenshotGranted {
                 Image(systemName: "checkmark.circle.fill")
-                    .foregroundStyle(accentPurple)
+                    .foregroundStyle(Theme.accent)
                     .font(.title2)
                     .frame(width: 28)
             } else {
@@ -92,7 +87,7 @@ struct OnboardingView: View {
                     .font(.headline)
                     .foregroundStyle(.white)
                     .frame(width: 28, height: 28)
-                    .background(Circle().fill(accentPurple.opacity(0.4)))
+                    .background(Circle().fill(Color.secondary.opacity(0.3)))
             }
 
             VStack(alignment: .leading, spacing: 2) {
@@ -116,11 +111,11 @@ struct OnboardingView: View {
         }
         .padding(10)
         .background {
-            RoundedRectangle(cornerRadius: 10)
-                .fill(Color(red: 0.4, green: 0.2, blue: 0.5).opacity(0.1))
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color.primary.opacity(0.04))
         }
         .background(.regularMaterial)
-        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 
     // MARK: - Folder Row
@@ -137,7 +132,7 @@ struct OnboardingView: View {
         HStack(spacing: 12) {
             if granted {
                 Image(systemName: "checkmark.circle.fill")
-                    .foregroundStyle(accentPurple)
+                    .foregroundStyle(Theme.accent)
                     .font(.title2)
                     .frame(width: 28)
             } else {
@@ -145,7 +140,7 @@ struct OnboardingView: View {
                     .font(.headline)
                     .foregroundStyle(.white)
                     .frame(width: 28, height: 28)
-                    .background(Circle().fill(accentPurple.opacity(0.4)))
+                    .background(Circle().fill(Color.secondary.opacity(0.3)))
             }
 
             VStack(alignment: .leading, spacing: 2) {
@@ -160,11 +155,11 @@ struct OnboardingView: View {
         }
         .padding(10)
         .background {
-            RoundedRectangle(cornerRadius: 10)
-                .fill(Color(red: 0.4, green: 0.2, blue: 0.5).opacity(0.1))
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color.primary.opacity(0.04))
         }
         .background(.regularMaterial)
-        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 
     // MARK: - Folder Pickers

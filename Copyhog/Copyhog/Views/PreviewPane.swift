@@ -19,7 +19,7 @@ struct PreviewPane: View {
                             } else {
                                 Image(systemName: "lock.shield.fill")
                                     .font(.system(size: 36))
-                                    .foregroundStyle(Color(red: 0.7, green: 0.4, blue: 0.85))
+                                    .foregroundStyle(.secondary)
                             }
 
                             // Lock badge
@@ -31,7 +31,7 @@ struct PreviewPane: View {
                                         .font(.system(size: 12, weight: .bold))
                                         .foregroundStyle(.white)
                                         .padding(4)
-                                        .background(Color(red: 0.7, green: 0.4, blue: 0.85), in: Circle())
+                                        .background(Color.secondary, in: Circle())
                                 }
                             }
                             .frame(width: 52, height: 52)
@@ -50,12 +50,12 @@ struct PreviewPane: View {
                         Text("HIDDEN")
                             .font(.system(size: 10, weight: .heavy))
                             .tracking(2)
-                            .foregroundStyle(Color(red: 0.7, green: 0.4, blue: 0.85))
+                            .foregroundStyle(.secondary)
                             .padding(.horizontal, 10)
                             .padding(.vertical, 4)
                             .background(
                                 Capsule()
-                                    .fill(Color(red: 0.7, green: 0.4, blue: 0.85).opacity(0.15))
+                                    .fill(Color.secondary.opacity(0.12))
                             )
 
                         Text("Content is protected — click card to copy")
@@ -97,11 +97,8 @@ struct PreviewPane: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background {
-            Color(red: 0.4, green: 0.2, blue: 0.5).opacity(0.1)
-        }
         .background(.regularMaterial)
-        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .clipShape(RoundedRectangle(cornerRadius: 14))
         .shadow(color: .black.opacity(0.1), radius: 8, y: 2)
     }
 }

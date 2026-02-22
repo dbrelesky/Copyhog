@@ -188,8 +188,8 @@ struct PopoverContent: View {
                     }
                     .padding(.horizontal, 10)
                     .padding(.vertical, 6)
-                    .background(Color(red: 0.4, green: 0.2, blue: 0.5).opacity(0.1))
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .background(Color.primary.opacity(0.06))
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
                     .padding(.horizontal, 8)
                     .padding(.top, 4)
                     .onChange(of: searchText) { _, newValue in
@@ -427,14 +427,11 @@ struct PopoverContent: View {
                         }
                     }
                 }
-                .background(Color(red: 0.45, green: 0.2, blue: 0.55).opacity(0.06))
+                .background(.clear)
             }
         }
         .frame(width: 400, height: 520)
-        .background {
-            Color(red: 0.15, green: 0.08, blue: 0.2).opacity(0.65)
-        }
-        .tint(Color(red: 0.7, green: 0.4, blue: 0.85))
+        .tint(Theme.accent)
         .opacity(isVisible ? 1 : 0)
         .scaleEffect(isVisible ? 1 : 0.98, anchor: .top)
         .offset(y: isVisible ? 0 : -4)
@@ -454,6 +451,10 @@ struct PopoverContent: View {
                 selectedIndex = 0
             }
             isSearchFocused = false
+            // Resign first responder so the search field doesn't capture keystrokes
+            DispatchQueue.main.async {
+                NSApp.keyWindow?.makeFirstResponder(nil)
+            }
         }
         .onDisappear {
             isVisible = false
