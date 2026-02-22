@@ -9,6 +9,7 @@ struct ItemRow: View {
     let clipboardObserver: ClipboardObserver?
     var onDelete: (() -> Void)?
     var onMarkSensitive: (() -> Void)?
+    var onUnmarkSensitive: (() -> Void)?
     @State private var showCopyConfirmation = false
 
     var body: some View {
@@ -58,7 +59,13 @@ struct ItemRow: View {
                 hoveredItemID = hovering ? item.id : nil
             }
             .contextMenu {
-                if !item.isSensitive {
+                if item.isSensitive {
+                    Button {
+                        onUnmarkSensitive?()
+                    } label: {
+                        Label("Unhide", systemImage: "eye")
+                    }
+                } else {
                     Button {
                         onMarkSensitive?()
                     } label: {

@@ -126,6 +126,9 @@ struct PopoverContent: View {
                                     },
                                     onMarkSensitive: {
                                         store.markSensitive(id: item.id)
+                                    },
+                                    onUnmarkSensitive: {
+                                        store.unmarkSensitive(id: item.id)
                                     }
                                 )
                             }
