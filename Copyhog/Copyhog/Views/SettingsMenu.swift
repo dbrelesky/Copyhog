@@ -60,6 +60,9 @@ struct SettingsMenu: View {
 
             Divider()
 
+            Label("Open the Hog from anywhere with ⌃⌘C", systemImage: "lightbulb")
+
+
             Label("Copyhog v\(appVersion) by DeeB", image: "MenuBarIcon")
         } label: {
             Image(systemName: "gearshape")
