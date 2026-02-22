@@ -7,28 +7,45 @@ struct PreviewPane: View {
     var body: some View {
         Group {
             if let item {
-                switch item.type {
-                case .image:
-                    if let filePath = item.filePath,
-                       let nsImage = imageStore.loadImage(relativePath: filePath) {
-                        Image(nsImage: nsImage)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .clipShape(RoundedRectangle(cornerRadius: 8))
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    } else {
-                        Image(systemName: "photo")
-                            .font(.largeTitle)
+                if item.isSensitive {
+                    VStack(spacing: 8) {
+                        Image(systemName: "lock.shield.fill")
+                            .font(.system(size: 36))
+                            .foregroundStyle(Color(red: 0.7, green: 0.4, blue: 0.85))
+                        Text("Sensitive Content")
+                            .font(.headline)
+                            .foregroundStyle(.secondary)
+                        Text("This item was copied from an excluded app and has been redacted.")
+                            .font(.caption)
                             .foregroundStyle(.tertiary)
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal, 24)
                     }
-                case .text:
-                    ScrollView {
-                        Text(item.content ?? "")
-                            .font(.body)
-                            .foregroundStyle(.primary)
-                            .padding(12)
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                } else {
+                    switch item.type {
+                    case .image:
+                        if let filePath = item.filePath,
+                           let nsImage = imageStore.loadImage(relativePath: filePath) {
+                            Image(nsImage: nsImage)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .clipShape(RoundedRectangle(cornerRadius: 8))
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        } else {
+                            Image(systemName: "photo")
+                                .font(.largeTitle)
+                                .foregroundStyle(.tertiary)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        }
+                    case .text:
+                        ScrollView {
+                            Text(item.content ?? "")
+                                .font(.body)
+                                .foregroundStyle(.primary)
+                                .padding(12)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
                     }
                 }
             } else {

@@ -28,6 +28,8 @@
 		B10004 /* Phase2BrowseUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20005 /* Phase2BrowseUITests.swift */; };
 		B10005 /* Phase3PasteActionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20006 /* Phase3PasteActionsTests.swift */; };
 		A10016 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = A20019 /* PrivacyInfo.xcprivacy */; };
+		A10017 /* PasswordDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20020 /* PasswordDetector.swift */; };
+		B10006 /* PasswordDetectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20007 /* PasswordDetectorTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,6 +58,8 @@
 		B20004 /* Phase1CaptureEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phase1CaptureEngineTests.swift; sourceTree = "<group>"; };
 		B20005 /* Phase2BrowseUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phase2BrowseUITests.swift; sourceTree = "<group>"; };
 		B20006 /* Phase3PasteActionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phase3PasteActionsTests.swift; sourceTree = "<group>"; };
+		A20020 /* PasswordDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordDetector.swift; sourceTree = "<group>"; };
+		B20007 /* PasswordDetectorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordDetectorTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXContainerItemProxy section */
@@ -128,6 +132,7 @@
 				B20004 /* Phase1CaptureEngineTests.swift */,
 				B20005 /* Phase2BrowseUITests.swift */,
 				B20006 /* Phase3PasteActionsTests.swift */,
+				B20007 /* PasswordDetectorTests.swift */,
 			);
 			path = CopyhogTests;
 			sourceTree = "<group>";
@@ -161,6 +166,7 @@
 				A20014 /* PasteboardWriter.swift */,
 				A20016 /* ExclusionManager.swift */,
 				A20017 /* BookmarkManager.swift */,
+				A20020 /* PasswordDetector.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -274,6 +280,7 @@
 				A10012 /* SettingsMenu.swift in Sources */,
 				A10013 /* ExclusionManager.swift in Sources */,
 				A10014 /* BookmarkManager.swift in Sources */,
+				A10017 /* PasswordDetector.swift in Sources */,
 				A10015 /* OnboardingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -287,6 +294,7 @@
 				B10003 /* Phase1CaptureEngineTests.swift in Sources */,
 				B10004 /* Phase2BrowseUITests.swift in Sources */,
 				B10005 /* Phase3PasteActionsTests.swift in Sources */,
+				B10006 /* PasswordDetectorTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

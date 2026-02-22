@@ -8,6 +8,7 @@ struct ItemRow: View {
     @Binding var selectedItems: Set<UUID>
     let clipboardObserver: ClipboardObserver?
     var onDelete: (() -> Void)?
+    var onMarkSensitive: (() -> Void)?
     @State private var showCopyConfirmation = false
 
     var body: some View {
@@ -52,6 +53,14 @@ struct ItemRow: View {
                 hoveredItemID = hovering ? item.id : nil
             }
             .contextMenu {
+                if !item.isSensitive {
+                    Button {
+                        onMarkSensitive?()
+                    } label: {
+                        Label("Mark as Sensitive", systemImage: "lock.shield")
+                    }
+                }
+
                 Button(role: .destructive) {
                     onDelete?()
                 } label: {
@@ -123,7 +132,17 @@ struct ItemRow: View {
 
     @ViewBuilder
     private var imageCardContent: some View {
-        if let thumbPath = item.thumbnailPath,
+        if item.isSensitive {
+            VStack(spacing: 6) {
+                Image(systemName: "lock.shield.fill")
+                    .font(.title2)
+                    .foregroundStyle(Color(red: 0.7, green: 0.4, blue: 0.85))
+                Text("Sensitive")
+                    .font(.system(size: 9, weight: .medium))
+                    .foregroundStyle(.secondary)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        } else if let thumbPath = item.thumbnailPath,
            let nsImage = imageStore.loadImage(relativePath: thumbPath) {
             Image(nsImage: nsImage)
                 .resizable()
@@ -141,13 +160,25 @@ struct ItemRow: View {
     @ViewBuilder
     private var textCardContent: some View {
         VStack(spacing: 0) {
-            Text(item.content ?? "")
-                .font(.system(size: 10))
-                .foregroundStyle(.primary)
-                .lineLimit(6)
-                .multilineTextAlignment(.leading)
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-                .padding(8)
+            if item.isSensitive {
+                VStack(spacing: 6) {
+                    Image(systemName: "lock.shield.fill")
+                        .font(.title2)
+                        .foregroundStyle(Color(red: 0.7, green: 0.4, blue: 0.85))
+                    Text("Sensitive")
+                        .font(.system(size: 9, weight: .medium))
+                        .foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else {
+                Text(item.content ?? "")
+                    .font(.system(size: 10))
+                    .foregroundStyle(.primary)
+                    .lineLimit(6)
+                    .multilineTextAlignment(.leading)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                    .padding(8)
+            }
         }
     }
 }

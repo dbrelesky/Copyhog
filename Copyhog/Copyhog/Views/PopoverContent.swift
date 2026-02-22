@@ -123,6 +123,9 @@ struct PopoverContent: View {
                                     onDelete: {
                                         selectedItems.remove(item.id)
                                         store.remove(id: item.id)
+                                    },
+                                    onMarkSensitive: {
+                                        store.markSensitive(id: item.id)
                                     }
                                 )
                             }

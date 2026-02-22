@@ -43,6 +43,21 @@ final class ClipItemStore: ObservableObject {
         save()
     }
 
+    func markSensitive(id: UUID) {
+        guard let index = items.firstIndex(where: { $0.id == id }) else { return }
+        let old = items[index]
+        items[index] = ClipItem(
+            id: old.id,
+            type: old.type,
+            content: old.content,
+            thumbnailPath: old.thumbnailPath,
+            filePath: old.filePath,
+            timestamp: old.timestamp,
+            isSensitive: true
+        )
+        save()
+    }
+
     func remove(id: UUID) {
         guard let index = items.firstIndex(where: { $0.id == id }) else { return }
         let removed = items.remove(at: index)
