@@ -34,10 +34,10 @@ Requirements for milestone v1.2 (Power User Essentials). Each maps to roadmap ph
 
 ### Keyboard Navigation
 
-- [ ] **KBNAV-01**: User can press arrow keys to move selection through items in the popover
-- [ ] **KBNAV-02**: User can press Enter on a selected item to copy it (or paste-on-select if enabled)
-- [ ] **KBNAV-03**: User can press Escape to dismiss the popover
-- [ ] **KBNAV-04**: When popover opens via hotkey, the search field is focused and ready for typing
+- [x] **KBNAV-01**: User can press arrow keys to move selection through items in the popover
+- [x] **KBNAV-02**: User can press Enter on a selected item to copy it (or paste-on-select if enabled)
+- [x] **KBNAV-03**: User can press Escape to dismiss the popover
+- [x] **KBNAV-04**: When popover opens via hotkey, the search field is focused and ready for typing
 
 ### Global Access
 
@@ -95,10 +95,10 @@ Deferred to future release. Tracked but not in current roadmap.
 | SRCH-01 | Phase 8 | Complete |
 | SRCH-02 | Phase 8 | Complete |
 | SRCH-03 | Phase 8 | Complete |
-| KBNAV-01 | Phase 8 | Pending |
-| KBNAV-02 | Phase 8 | Pending |
-| KBNAV-03 | Phase 8 | Pending |
-| KBNAV-04 | Phase 8 | Pending |
+| KBNAV-01 | Phase 8 | Complete |
+| KBNAV-02 | Phase 8 | Complete |
+| KBNAV-03 | Phase 8 | Complete |
+| KBNAV-04 | Phase 8 | Complete |
 | ACCESS-01 | Phase 9 | Pending |
 | ACCESS-02 | Phase 9 | Pending |
 | ACCESS-03 | Phase 9 | Pending |

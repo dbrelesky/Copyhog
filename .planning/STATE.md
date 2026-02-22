@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-22)
 
 **Core value:** Every screenshot and clipboard copy is captured and instantly accessible -- no hunting, no lost items, no broken workflow.
-**Current focus:** v1.2 Power User Essentials (Phase 8: Search + Keyboard Navigation)
+**Current focus:** v1.2 Power User Essentials (Phase 9: Global Hotkey)
 
 ## Current Position
 
-Phase: 8 of 9 (Search + Keyboard Navigation)
-Plan: 1 of 2 in current phase
-Status: Plan 08-01 complete, Plan 08-02 next
-Last activity: 2026-02-22 - Completed search filtering plan
+Phase: 9 of 9 (Global Hotkey)
+Plan: 0 of ? in current phase
+Status: Phase 8 complete, Phase 9 next
+Last activity: 2026-02-22 - Completed keyboard navigation plan
 
-Progress: [##########] 93% (Phase 8 plan 1/2 complete, Phase 9 remaining)
+Progress: [##########] 96% (Phase 8 complete, Phase 9 remaining)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 13
+- Total plans completed: 14
 - Average duration: 8 min
-- Total execution time: 1.71 hours
+- Total execution time: 1.76 hours
 
 **By Phase:**
 
@@ -36,11 +36,11 @@ Progress: [##########] 93% (Phase 8 plan 1/2 complete, Phase 9 remaining)
 | 05-privacy | 1/1 | 3 min | 3 min |
 | 06-screenshot-auto-detection | 1/1 | 2 min | 2 min |
 | 07-favorites-history-scale | 2/2 | 3 min | 1.5 min |
-| 08-search-keyboard-navigation | 1/2 | 2 min | 2 min |
+| 08-search-keyboard-navigation | 2/2 | 5 min | 2.5 min |
 
 **Recent Trend:**
-- Last 5 plans: 3 min, 2 min, 2 min, 1 min, 2 min
-- Trend: improving
+- Last 5 plans: 2 min, 2 min, 1 min, 2 min, 3 min
+- Trend: stable
 
 *Updated after each plan completion*
 
@@ -56,6 +56,7 @@ Recent decisions affecting current work:
 - [Phase 7]: 500ms debounced save with Task.sleep; NSCache countLimit 200 for thumbnails; pinned-first stable sort
 - [Phase 7]: Sectioned Pinned/History layout in PopoverContent; pin icon uses ultraThinMaterial circle overlay
 - [Phase 8]: 150ms Task.sleep debounce for search; displayItems computed property; flat grid during search, sectioned when cleared; AttributedString highlighting
+- [Phase 8]: NSEvent local monitor for keyboard nav; first list item selected on open; arrow keys stop at edges; isSearchFocused state for Phase 9
 
 ### Pending Todos
 
@@ -83,5 +84,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-22
-Stopped at: Completed 08-01-PLAN.md
+Stopped at: Completed 08-02-PLAN.md
 Resume file: None
