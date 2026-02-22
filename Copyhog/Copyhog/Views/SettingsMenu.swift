@@ -10,12 +10,6 @@ struct SettingsMenu: View {
 
     var body: some View {
         Menu {
-            Text("Copyhog v\(appVersion)")
-
-            Text("by Darren Brelesky")
-
-            Divider()
-
             excludedAppsSubmenu
 
             Button {
@@ -37,6 +31,12 @@ struct SettingsMenu: View {
             } label: {
                 Label("Quit Copyhog", systemImage: "xmark.circle")
             }
+
+            Divider()
+
+            Text("Copyhog v\(appVersion)")
+
+            Text("by DeeB")
         } label: {
             Image(systemName: "gearshape")
                 .fontWeight(.medium)
