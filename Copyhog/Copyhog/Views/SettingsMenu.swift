@@ -1,8 +1,11 @@
 import SwiftUI
+import ServiceManagement
 
 struct SettingsMenu: View {
     @Binding var showWipeConfirmation: Bool
     @EnvironmentObject var exclusionManager: ExclusionManager
+    @AppStorage("launchAtLogin") private var launchAtLogin = false
+    @AppStorage("historyLimit") private var historyLimit = 20
 
     private var appVersion: String {
         Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
@@ -10,6 +13,19 @@ struct SettingsMenu: View {
 
     var body: some View {
         Menu {
+            Toggle("Launch at Login", isOn: $launchAtLogin)
+                .onChange(of: launchAtLogin) { _, newValue in
+                    if newValue {
+                        try? SMAppService.mainApp.register()
+                    } else {
+                        try? SMAppService.mainApp.unregister()
+                    }
+                }
+
+            historySizePicker
+
+            Divider()
+
             excludedAppsSubmenu
 
             Button {
@@ -34,14 +50,24 @@ struct SettingsMenu: View {
 
             Divider()
 
-            Text("Copyhog v\(appVersion)")
-
-            Text("by DeeB")
+            Text("Copyhog v\(appVersion) by DeeB")
         } label: {
             Image(systemName: "gearshape")
                 .fontWeight(.medium)
         }
         .menuStyle(.borderlessButton)
+    }
+
+    // MARK: - History Size Picker
+
+    private var historySizePicker: some View {
+        Picker("History Size", selection: $historyLimit) {
+            Text("10").tag(10)
+            Text("20").tag(20)
+            Text("30").tag(30)
+            Text("40").tag(40)
+            Text("50").tag(50)
+        }
     }
 
     // MARK: - Excluded Apps Submenu

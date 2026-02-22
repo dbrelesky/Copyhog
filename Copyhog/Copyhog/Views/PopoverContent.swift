@@ -106,27 +106,28 @@ struct PopoverContent: View {
                         .padding(.horizontal, 8)
                     }
 
-                    List {
-                        ForEach(store.items) { item in
-                            ItemRow(
-                                item: item,
-                                imageStore: store.imageStore,
-                                hoveredItemID: $hoveredItemID,
-                                isMultiSelectActive: isMultiSelectActive,
-                                selectedItems: $selectedItems,
-                                clipboardObserver: store.clipboardObserver
-                            )
-                        }
-                        .onDelete { indexSet in
-                            for index in indexSet {
-                                let item = store.items[index]
-                                selectedItems.remove(item.id)
-                                store.remove(id: item.id)
+                    ScrollView {
+                        LazyVGrid(
+                            columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 3),
+                            spacing: 8
+                        ) {
+                            ForEach(store.items) { item in
+                                ItemRow(
+                                    item: item,
+                                    imageStore: store.imageStore,
+                                    hoveredItemID: $hoveredItemID,
+                                    isMultiSelectActive: isMultiSelectActive,
+                                    selectedItems: $selectedItems,
+                                    clipboardObserver: store.clipboardObserver,
+                                    onDelete: {
+                                        selectedItems.remove(item.id)
+                                        store.remove(id: item.id)
+                                    }
+                                )
                             }
                         }
+                        .padding(8)
                     }
-                    .listStyle(.plain)
-                    .scrollContentBackground(.hidden)
                 }
                 .background(Color(red: 0.45, green: 0.2, blue: 0.55).opacity(0.06))
             }

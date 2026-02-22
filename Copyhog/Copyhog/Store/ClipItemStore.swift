@@ -1,11 +1,12 @@
 import Foundation
+import SwiftUI
 
 @MainActor
 final class ClipItemStore: ObservableObject {
 
     @Published var items: [ClipItem] = []
 
-    private let maxItems = 20
+    @AppStorage("historyLimit") var maxItems: Int = 20
     private let storeURL: URL
     let imageStore: ImageStore
     var clipboardObserver: ClipboardObserver?

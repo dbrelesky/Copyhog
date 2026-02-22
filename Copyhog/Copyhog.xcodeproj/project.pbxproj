@@ -27,6 +27,7 @@
 		B10003 /* Phase1CaptureEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20004 /* Phase1CaptureEngineTests.swift */; };
 		B10004 /* Phase2BrowseUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20005 /* Phase2BrowseUITests.swift */; };
 		B10005 /* Phase3PasteActionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20006 /* Phase3PasteActionsTests.swift */; };
+		A10016 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = A20019 /* PrivacyInfo.xcprivacy */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +49,7 @@
 		A20016 /* ExclusionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclusionManager.swift; sourceTree = "<group>"; };
 		A20017 /* BookmarkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkManager.swift; sourceTree = "<group>"; };
 		A20018 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		A20019 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		B20001 /* PopoverContentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverContentTests.swift; sourceTree = "<group>"; };
 		B20003 /* Phase4UserControlTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phase4UserControlTests.swift; sourceTree = "<group>"; };
 		B20002 /* CopyhogTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CopyhogTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -104,6 +106,7 @@
 				A20002 /* Assets.xcassets */,
 				A20003 /* Info.plist */,
 				A20004 /* Copyhog.entitlements */,
+				A20019 /* PrivacyInfo.xcprivacy */,
 			);
 			path = Copyhog;
 			sourceTree = "<group>";
@@ -247,6 +250,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A10002 /* Assets.xcassets in Resources */,
+				A10016 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -43,7 +43,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     private var onboardingWindow: NSWindow?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        registerLaunchAtLogin()
+        syncLaunchAtLogin()
         startClipboardCapture()
         startScreenshotCaptureIfReady()
 
@@ -139,8 +139,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         NSApp.activate(ignoringOtherApps: true)
     }
 
-    private func registerLaunchAtLogin() {
-        try? SMAppService.mainApp.register()
+    private func syncLaunchAtLogin() {
+        if UserDefaults.standard.bool(forKey: "launchAtLogin") {
+            try? SMAppService.mainApp.register()
+        } else {
+            try? SMAppService.mainApp.unregister()
+        }
     }
 
     func applicationWillTerminate(_ notification: Notification) {

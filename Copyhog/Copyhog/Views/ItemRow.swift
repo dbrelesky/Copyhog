@@ -7,129 +7,147 @@ struct ItemRow: View {
     let isMultiSelectActive: Bool
     @Binding var selectedItems: Set<UUID>
     let clipboardObserver: ClipboardObserver?
+    var onDelete: (() -> Void)?
     @State private var showCopyConfirmation = false
 
     var body: some View {
-        HStack(spacing: 8) {
-            // Multi-select checkbox (outside draggable area)
-            if isMultiSelectActive {
-                Image(systemName: selectedItems.contains(item.id) ? "checkmark.circle.fill" : "circle")
-                    .foregroundStyle(selectedItems.contains(item.id) ? Color(red: 0.7, green: 0.4, blue: 0.85) : .secondary)
-                    .font(.title3)
+        cardContent
+            .frame(maxWidth: .infinity)
+            .aspectRatio(1, contentMode: .fit)
+            .background(
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(Color(red: 0.4, green: 0.2, blue: 0.5).opacity(0.12))
+            )
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(Color(red: 0.6, green: 0.35, blue: 0.75).opacity(hoveredItemID == item.id ? 0.4 : 0.1), lineWidth: 1)
+            )
+            .shadow(color: Color(red: 0.5, green: 0.2, blue: 0.7).opacity(hoveredItemID == item.id ? 0.3 : 0), radius: 8, y: 2)
+            .animation(.easeInOut(duration: 0.15), value: hoveredItemID)
+            .animation(.easeInOut(duration: 0.2), value: showCopyConfirmation)
+            .contentShape(Rectangle())
+            .draggable(item) {
+                Label(
+                    item.type == .text ? "Text" : "Image",
+                    systemImage: item.type == .text ? "doc.text" : "photo"
+                )
             }
-
-            // Inner content with draggable
-            rowContent
-                .draggable(item) {
-                    Label(
-                        item.type == .text ? "Text" : "Image",
-                        systemImage: item.type == .text ? "doc.text" : "photo"
-                    )
+            .simultaneousGesture(TapGesture().onEnded {
+                if isMultiSelectActive {
+                    if selectedItems.contains(item.id) {
+                        selectedItems.remove(item.id)
+                    } else {
+                        selectedItems.insert(item.id)
+                    }
+                } else if let observer = clipboardObserver {
+                    PasteboardWriter.write(item, imageStore: imageStore, clipboardObserver: observer)
+                    showCopyConfirmation = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                        showCopyConfirmation = false
+                    }
                 }
-        }
-        .padding(.vertical, 6)
-        .padding(.horizontal, 6)
-        .background(
-            RoundedRectangle(cornerRadius: 8)
-                .fill(Color(red: 0.6, green: 0.35, blue: 0.75).opacity(hoveredItemID == item.id ? 0.15 : 0))
-        )
-        .animation(.easeInOut(duration: 0.15), value: hoveredItemID)
-        .clipShape(RoundedRectangle(cornerRadius: 8))
-        .animation(.easeInOut(duration: 0.2), value: showCopyConfirmation)
-        .contentShape(Rectangle())
-        .simultaneousGesture(TapGesture().onEnded {
-            if isMultiSelectActive {
-                if selectedItems.contains(item.id) {
-                    selectedItems.remove(item.id)
-                } else {
-                    selectedItems.insert(item.id)
-                }
-            } else if let observer = clipboardObserver {
-                PasteboardWriter.write(item, imageStore: imageStore, clipboardObserver: observer)
-                showCopyConfirmation = true
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
-                    showCopyConfirmation = false
+            })
+            .onHover { hovering in
+                hoveredItemID = hovering ? item.id : nil
+            }
+            .contextMenu {
+                Button(role: .destructive) {
+                    onDelete?()
+                } label: {
+                    Label("Delete", systemImage: "trash")
                 }
             }
-        })
-        .onHover { hovering in
-            hoveredItemID = hovering ? item.id : nil
-        }
     }
 
     @ViewBuilder
-    private var rowContent: some View {
-        HStack(spacing: 8) {
-            // Thumbnail area
-            thumbnailView
-                .overlay(alignment: .topLeading) {
-                    if showCopyConfirmation {
-                        Image(systemName: "checkmark.circle.fill")
-                            .font(.title2)
-                            .symbolRenderingMode(.palette)
-                            .foregroundStyle(.white, Color(red: 0.6, green: 0.35, blue: 0.75).opacity(0.7))
+    private var cardContent: some View {
+        ZStack {
+            // Main card content
+            if item.type == .image {
+                imageCardContent
+            } else {
+                textCardContent
+            }
+
+            // Timestamp overlay — bottom-right
+            VStack {
+                Spacer()
+                HStack {
+                    Spacer()
+                    Text(item.timestamp, style: .relative)
+                        .font(.system(size: 9))
+                        .foregroundStyle(.secondary)
+                        .padding(.horizontal, 5)
+                        .padding(.vertical, 2)
+                        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 4))
+                }
+            }
+            .padding(5)
+
+            // Multi-select checkbox — top-left
+            if isMultiSelectActive {
+                VStack {
+                    HStack {
+                        Image(systemName: selectedItems.contains(item.id) ? "checkmark.circle.fill" : "circle")
+                            .foregroundStyle(selectedItems.contains(item.id) ? Color(red: 0.7, green: 0.4, blue: 0.85) : .secondary)
+                            .font(.body)
                             .background(
                                 Circle()
                                     .fill(.ultraThinMaterial)
-                                    .frame(width: 24, height: 24)
+                                    .frame(width: 20, height: 20)
                             )
-                            .shadow(color: Color(red: 0.5, green: 0.2, blue: 0.7).opacity(0.4), radius: 4, y: 1)
-                            .offset(x: -6, y: -6)
-                            .transition(.scale.combined(with: .opacity))
+                        Spacer()
                     }
+                    Spacer()
                 }
-
-            // Content area
-
-            if item.type == .text {
-                VStack(alignment: .leading) {
-                    Text(item.content ?? "")
-                        .lineLimit(2)
-                        .font(.caption)
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-            } else {
-                Spacer()
+                .padding(5)
             }
 
-            // Timestamp
-            Text(item.timestamp, style: .relative)
-                .font(.caption2)
-                .foregroundStyle(.tertiary)
+            // Copy confirmation checkmark — centered
+            if showCopyConfirmation {
+                Image(systemName: "checkmark.circle.fill")
+                    .font(.largeTitle)
+                    .symbolRenderingMode(.palette)
+                    .foregroundStyle(.white, Color(red: 0.6, green: 0.35, blue: 0.75).opacity(0.85))
+                    .background(
+                        Circle()
+                            .fill(.ultraThinMaterial)
+                            .frame(width: 36, height: 36)
+                    )
+                    .shadow(color: Color(red: 0.5, green: 0.2, blue: 0.7).opacity(0.4), radius: 4, y: 1)
+                    .transition(.scale.combined(with: .opacity))
+            }
         }
     }
 
     @ViewBuilder
-    private var thumbnailView: some View {
-        if item.type == .image {
-            if let thumbPath = item.thumbnailPath,
-               let nsImage = imageStore.loadImage(relativePath: thumbPath) {
-                Image(nsImage: nsImage)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 64, height: 64)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(.white.opacity(0.1), lineWidth: 0.5)
-                    )
-            } else {
-                Image(systemName: "photo")
-                    .font(.title2)
-                    .fontWeight(.medium)
-                    .foregroundStyle(.secondary)
-                    .frame(width: 64, height: 64)
-                    .background(Color(red: 0.4, green: 0.2, blue: 0.5).opacity(0.12))
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
-            }
+    private var imageCardContent: some View {
+        if let thumbPath = item.thumbnailPath,
+           let nsImage = imageStore.loadImage(relativePath: thumbPath) {
+            Image(nsImage: nsImage)
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .clipped()
         } else {
-            Image(systemName: "doc.text")
-                .font(.title2)
-                .fontWeight(.medium)
+            Image(systemName: "photo")
+                .font(.title)
                 .foregroundStyle(.secondary)
-                .frame(width: 64, height: 64)
-                .background(.ultraThinMaterial)
-                .clipShape(RoundedRectangle(cornerRadius: 8))
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
+    }
+
+    @ViewBuilder
+    private var textCardContent: some View {
+        VStack(spacing: 0) {
+            Text(item.content ?? "")
+                .font(.system(size: 10))
+                .foregroundStyle(.primary)
+                .lineLimit(6)
+                .multilineTextAlignment(.leading)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                .padding(8)
         }
     }
 }

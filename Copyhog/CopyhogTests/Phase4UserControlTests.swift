@@ -192,26 +192,6 @@ final class PopoverContentPhase4Tests: XCTestCase {
                       "Store should be empty after removeAll, triggering empty state in UI")
     }
 
-    func testOnDeleteRemovesCorrectItem() {
-        // Simulates what the .onDelete handler does in PopoverContent
-        let store = makeCleanStore()
-        let item1 = makeTextItem("first")
-        let item2 = makeTextItem("second")
-        let item3 = makeTextItem("third")
-        store.add(item1)
-        store.add(item2)
-        store.add(item3)
-
-        // Simulate .onDelete for index 1 (which is item2 since add inserts at front)
-        // After adding: [item3, item2, item1]
-        let indexToDelete = 1
-        let itemToRemove = store.items[indexToDelete]
-        store.remove(id: itemToRemove.id)
-
-        XCTAssertEqual(store.items.count, 2)
-        XCTAssertNil(store.items.first(where: { $0.id == item2.id }))
-    }
-
     func testHogWipeResetsSelectionState() {
         // Verifies the logic that Hog Wipe clears selectedItems and isMultiSelectActive
         let store = makeCleanStore()

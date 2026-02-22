@@ -100,6 +100,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | 04.1 Settings Menu | v1.1 | 1/1 | Complete | 2026-02-21 |
 | 04.3 App Store Readiness | v1.1 | 0/? | Not started | - |
 | 04.2 Liquid Glass UI | 1/2 | In Progress|  | - |
+| 5. Privacy & Compliance | v1.1 | 1/1 | Complete | 2026-02-21 |
 
 ### Phase 04.3: Remaining App Store readiness (INSERTED)
 
@@ -127,6 +128,20 @@ Plans:
 Plans:
 - [ ] 04.2-01-PLAN.md — Glass popover shell, floating toolbar, elevated preview pane
 - [ ] 04.2-02-PLAN.md — Glass item rows with glow hover, copy confirmation, warm empty state
+
+### Phase 5: Privacy — App Store Compliance + Configurable History
+
+**Goal:** Add required privacy manifest, pasteboard usage description, launch-at-login toggle, and configurable history size for App Store compliance
+**Depends on:** Phase 04.1
+**Success Criteria** (what must be TRUE):
+  1. PrivacyInfo.xcprivacy declares FileTimestamp (C617.1) and UserDefaults (CA92.1) APIs, no tracking, no collected data
+  2. NSPasteboardUsageDescription is set in Info.plist
+  3. Launch at Login is a user-controlled toggle (default: off) in the settings menu
+  4. History size is configurable (10–50) via settings menu picker, persisted in UserDefaults
+**Plans:** 1/1 complete
+
+Plans:
+- [x] 05-01-PLAN.md — Privacy manifest, pasteboard description, launch toggle, history size picker
 
 ### Phase 04.1: Settings menu with version display, attribution, and relocated actions (INSERTED)
 
