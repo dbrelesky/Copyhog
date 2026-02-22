@@ -8,6 +8,7 @@ struct SettingsMenu: View {
     @AppStorage("historyLimit") private var historyLimit = 20
     @AppStorage("plainPasteEnabled") private var plainPasteEnabled = true
     @AppStorage("appearanceMode") private var appearanceMode = 0
+    @AppStorage("autoPasteEnabled") private var autoPasteEnabled = false
 
     private var hotkeyHint: AttributedString {
         var str = AttributedString("💡 Open the Hog from anywhere.  ⌃ ⌘ C")
@@ -40,6 +41,10 @@ struct SettingsMenu: View {
 
             Toggle(isOn: $plainPasteEnabled) {
                 Label("Plain Paste (⇧⌘V)", systemImage: "doc.plaintext")
+            }
+
+            Toggle(isOn: $autoPasteEnabled) {
+                Label("Auto-Paste on Select", systemImage: "doc.on.clipboard")
             }
 
             appearanceSubmenu

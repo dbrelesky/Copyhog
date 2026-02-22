@@ -141,6 +141,7 @@ final class ScreenshotWatcher {
                     let pasteboard = NSPasteboard.general
                     pasteboard.clearContents()
                     pasteboard.writeObjects([nsImage])
+                    clipboardObserver.finishOwnWrite()
                 }
 
                 // Create ClipItem and notify

@@ -62,5 +62,6 @@ final class PlainPasteService {
         clipboardObserver.skipNextChange()
         pasteboard.clearContents()
         pasteboard.setString(plainText, forType: .string)
+        clipboardObserver.finishOwnWrite()
     }
 }

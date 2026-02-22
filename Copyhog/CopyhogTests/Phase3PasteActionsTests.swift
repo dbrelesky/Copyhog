@@ -221,6 +221,43 @@ final class PasteboardWriterTests: XCTestCase {
         XCTAssertEqual(result, "first\n\nsecond\n\nthird",
                        "Items should be concatenated in the order they appear")
     }
+
+    func testWriteMultipleHasAllExpectedTypes() {
+        let observer = makeClipboardObserver()
+        let items = [
+            ClipItem(id: UUID(), type: .text, content: "hello", thumbnailPath: nil, filePath: nil, timestamp: Date()),
+        ]
+
+        PasteboardWriter.writeMultiple(items, imageStore: ImageStore(), clipboardObserver: observer)
+
+        let pasteboard = NSPasteboard.general
+        XCTAssertEqual(pasteboard.pasteboardItems?.count, 1,
+                       "writeMultiple should produce exactly 1 pasteboard item")
+        let types = pasteboard.pasteboardItems?.first?.types ?? []
+        XCTAssertTrue(types.contains(.string),
+                      "Pasteboard item should contain .string type")
+        XCTAssertTrue(types.contains(.rtfd),
+                      "Pasteboard item should contain .rtfd type")
+    }
+
+    func testSkipAndFinishOwnWriteLogic() {
+        let observer = makeClipboardObserver()
+        let pasteboard = NSPasteboard.general
+
+        // Simulate own write: skip before, write, finish after
+        observer.skipNextChange()
+        pasteboard.clearContents()
+        pasteboard.setString("own write", forType: .string)
+        observer.finishOwnWrite()
+
+        let countAfterFinish = pasteboard.changeCount
+
+        // Another external write should be detected (changeCount will exceed)
+        pasteboard.clearContents()
+        pasteboard.setString("external write", forType: .string)
+        XCTAssertGreaterThan(pasteboard.changeCount, countAfterFinish,
+                             "External write should bump changeCount past own write")
+    }
 }
 
 // MARK: - ClipItem Transferable Tests

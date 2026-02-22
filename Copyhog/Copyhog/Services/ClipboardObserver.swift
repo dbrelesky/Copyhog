@@ -56,10 +56,18 @@ final class ClipboardObserver {
         }
     }
 
-    /// Called by ScreenshotWatcher before writing to the clipboard
-    /// to prevent the observer from re-capturing its own write.
+    /// Call *before* writing to the clipboard to prevent the observer
+    /// from re-capturing its own write. Sets a flag so all polls are
+    /// skipped until `finishOwnWrite()` is called.
     func skipNextChange() {
         isOwnWrite = true
+    }
+
+    /// Call *after* all pasteboard writes are done. Clears the skip flag
+    /// and records the final changeCount so the next external change is
+    /// detected correctly.
+    func finishOwnWrite() {
+        isOwnWrite = false
         lastChangeCount = pasteboard.changeCount
     }
 
@@ -109,15 +117,12 @@ final class ClipboardObserver {
     }
 
     private func pollClipboard(onNewItem: @escaping (ClipItem) -> Void) {
+        // Skip all polls while our own write is in progress
+        guard !isOwnWrite else { return }
+
         let currentCount = pasteboard.changeCount
         guard currentCount != lastChangeCount else { return }
         lastChangeCount = currentCount
-
-        // If this change was triggered by us (ScreenshotWatcher), skip it
-        if isOwnWrite {
-            isOwnWrite = false
-            return
-        }
 
         // Check sensitivity BEFORE reading any content
         var sensitive = isSensitiveCapture

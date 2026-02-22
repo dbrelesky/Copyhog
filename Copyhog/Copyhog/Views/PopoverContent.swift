@@ -172,6 +172,7 @@ struct PopoverContent: View {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
             copiedItemID = nil
         }
+        AutoPasteService.pasteAfterDismiss()
     }
 
     private func copyMultiSelectedItems() {
@@ -185,6 +186,7 @@ struct PopoverContent: View {
         copyCount = selectedItems.count
         selectedItems.removeAll()
         isMultiSelectActive = false
+        AutoPasteService.pasteAfterDismiss()
     }
 
     private func dismissPopover() {
@@ -196,20 +198,67 @@ struct PopoverContent: View {
     var body: some View {
         Group {
             if store.items.isEmpty {
-                VStack(spacing: 16) {
-                    Image(nsImage: NSApp.applicationIconImage)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 128, height: 128)
-                    Text("No Clips Yet")
-                        .font(.title2)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(.secondary)
-                    Text("Nothing in your clipboard yet, start screenshotting and copying text and I'll hog it all here.")
-                        .font(.subheadline)
-                        .foregroundStyle(.tertiary)
+                VStack(spacing: 0) {
+                    // Pig icon with speech bubble
+                    HStack(alignment: .center, spacing: 6) {
+                        Image(nsImage: NSApp.applicationIconImage)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 160, height: 160)
+
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Hey!")
+                            Text("I'm Copyhog.")
+                        }
+                        .font(.system(size: 22, weight: .heavy))
+                        .foregroundStyle(.purple)
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 10)
+                        .background(
+                            SpeechBubble()
+                                .fill(.white)
+                                .shadow(color: .black.opacity(0.08), radius: 4, y: 2)
+                        )
+                    }
+                    .padding(.top, 24)
+
+                    // Conversational body
+                    Text("I live in your menu bar and remember everything you copy — screenshots, text, code, links. My clipboard is empty right now and I'm starving!")
+                        .font(.system(size: 13))
+                        .foregroundStyle(.primary.opacity(0.8))
                         .multilineTextAlignment(.center)
-                        .padding(.horizontal, 40)
+                        .lineSpacing(3)
+                        .padding(.horizontal, 32)
+                        .padding(.top, 16)
+
+                    // Pro tip pill
+                    Text("Pro Tip: Press ⌃⌘C to open me anytime")
+                        .font(.system(size: 11, weight: .medium))
+                        .foregroundStyle(.purple)
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 6)
+                        .background(.purple.opacity(0.1))
+                        .clipShape(Capsule())
+                        .overlay(
+                            Capsule()
+                                .strokeBorder(.purple.opacity(0.2), lineWidth: 0.5)
+                        )
+                        .padding(.top, 16)
+
+                    Spacer()
+
+                    // Quit button pinned to bottom
+                    Button {
+                        NSApplication.shared.terminate(nil)
+                    } label: {
+                        Label("Quit Copyhog", systemImage: "power")
+                            .font(.system(size: 12, weight: .medium))
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .tint(.gray.opacity(0.3))
+                    .foregroundStyle(.primary)
+                    .controlSize(.small)
+                    .padding(.bottom, 16)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
@@ -500,6 +549,40 @@ struct PopoverContent: View {
         .onChange(of: store.searchQuery) { _, _ in
             selectedIndex = store.displayItems.isEmpty ? nil : 0
         }
+    }
+}
+
+private struct SpeechBubble: Shape {
+    func path(in rect: CGRect) -> Path {
+        let cornerRadius: CGFloat = 12
+        let tailWidth: CGFloat = 12
+        let tailHeight: CGFloat = 10
+
+        var path = Path()
+
+        // Main rounded rectangle
+        path.addRoundedRect(
+            in: rect,
+            cornerSize: CGSize(width: cornerRadius, height: cornerRadius)
+        )
+
+        // Comic-style tail pointing left toward the pig icon
+        let tailTop = rect.midY - tailWidth / 2
+        let tailBottom = rect.midY + tailWidth / 2
+
+        path.move(to: CGPoint(x: rect.minX, y: tailTop))
+        path.addCurve(
+            to: CGPoint(x: rect.minX - tailHeight, y: rect.midY + 4),
+            control1: CGPoint(x: rect.minX - 4, y: tailTop),
+            control2: CGPoint(x: rect.minX - tailHeight, y: rect.midY - 2)
+        )
+        path.addCurve(
+            to: CGPoint(x: rect.minX, y: tailBottom),
+            control1: CGPoint(x: rect.minX - tailHeight + 2, y: rect.midY + 8),
+            control2: CGPoint(x: rect.minX - 2, y: tailBottom)
+        )
+
+        return path
     }
 }
 

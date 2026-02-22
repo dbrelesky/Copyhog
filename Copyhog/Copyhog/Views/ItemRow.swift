@@ -59,9 +59,13 @@ struct ItemRow: View {
                 } else if let observer = clipboardObserver {
                     PasteboardWriter.write(item, imageStore: imageStore, clipboardObserver: observer)
                     onCopy?()
-                    showCopyConfirmation = true
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
-                        showCopyConfirmation = false
+                    if AutoPasteService.isEnabled {
+                        AutoPasteService.pasteAfterDismiss()
+                    } else {
+                        showCopyConfirmation = true
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                            showCopyConfirmation = false
+                        }
                     }
                 }
             })
