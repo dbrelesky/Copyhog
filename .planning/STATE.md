@@ -53,9 +53,8 @@ Recent decisions affecting current work:
 
 - [v1.2 Research]: soffes/HotKey + orchetect/MenuBarExtraAccess for global hotkey; debounced JSON for 500 items; NSEvent local monitor for keyboard nav
 - [Phase 6]: Used shared-preference read-only temporary exception for sandbox-safe screencapture defaults reading
-- [Phase 7]: 500ms debounced save with Task.sleep; NSCache countLimit 200 for thumbnails; pinned-first stable sort
-- [Phase 7]: Sectioned Pinned/History layout in PopoverContent; pin icon uses ultraThinMaterial circle overlay
-- [Phase 8]: 150ms Task.sleep debounce for search; displayItems computed property; flat grid during search, sectioned when cleared; AttributedString highlighting
+- [Phase 7]: 500ms debounced save with Task.sleep; NSCache countLimit 200 for thumbnails
+- [Phase 8]: 150ms Task.sleep debounce for search; displayItems computed property; flat grid layout; AttributedString highlighting
 - [Phase 8]: NSEvent local monitor for keyboard nav; first list item selected on open; arrow keys stop at edges; isSearchFocused state for Phase 9
 
 ### Pending Todos

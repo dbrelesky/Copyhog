@@ -13,13 +13,6 @@ Requirements for milestone v1.2 (Power User Essentials). Each maps to roadmap ph
 - [x] **SCRN-05**: Onboarding pre-fills the detected screenshot folder, allowing user to confirm or change
 - [x] **SCRN-06**: If no custom screenshot location is set, app defaults to ~/Desktop
 
-### Favorites
-
-- [x] **FAV-01**: User can pin/favorite a clipboard item via context menu or keyboard shortcut
-- [x] **FAV-02**: Pinned items are displayed in a dedicated section at the top of the history list
-- [x] **FAV-03**: Pinned items are never auto-purged regardless of history limit
-- [x] **FAV-04**: User can unpin an item to return it to normal history behavior
-
 ### History Scale
 
 - [x] **HIST-01**: History limit is raised to support up to 500 items
@@ -73,7 +66,7 @@ Deferred to future release. Tracked but not in current roadmap.
 | Intercepting native screenshot shortcuts | Observer-only approach -- non-invasive |
 | Visual distinction between screenshots and copied images | User preference -- not needed |
 | Fuzzy search | Text search is sufficient for v1.2; exact match covers 90% of use cases |
-| Pin categories/folders | Simple pin/unpin is sufficient; organization adds complexity |
+| Pin/favorites system | Removed — feature wasn't successful |
 | Snippet/template system | Beyond clipboard history scope |
 | iCloud sync | Local-only for now |
 | Windows/Linux support | macOS-only, uses native APIs |
@@ -85,10 +78,6 @@ Deferred to future release. Tracked but not in current roadmap.
 | SCRN-04 | Phase 6 | Complete |
 | SCRN-05 | Phase 6 | Complete |
 | SCRN-06 | Phase 6 | Complete |
-| FAV-01 | Phase 7 | Complete |
-| FAV-02 | Phase 7 | Complete |
-| FAV-03 | Phase 7 | Complete |
-| FAV-04 | Phase 7 | Complete |
 | HIST-01 | Phase 7 | Complete |
 | HIST-02 | Phase 7 | Complete |
 | HIST-03 | Phase 7 | Complete |
@@ -105,10 +94,10 @@ Deferred to future release. Tracked but not in current roadmap.
 | ACCESS-04 | Phase 9 | Pending |
 
 **Coverage:**
-- v1.2 requirements: 21 total
-- Complete: 10 (Phases 6-7)
-- Pending: 11 (Phases 8-9)
-- Mapped to phases: 21/21
+- v1.2 requirements: 17 total
+- Complete: 13 (Phases 6-8)
+- Pending: 4 (Phase 9)
+- Mapped to phases: 17/17
 - Unmapped: 0
 
 ---

@@ -30,7 +30,7 @@ AppDelegate (@MainActor)
 - All services are `@MainActor`. Fine for current scale, but important for new feature integration.
 - `MenuBarExtra(.window)` has NO first-party API for programmatic show/hide. This is the central architectural challenge for global hotkey.
 - Persistence is a single `items.json` file encoded/decoded in full on every mutation. Currently ~20 items. Will not scale to 500+.
-- `ClipItem` is a flat struct with no `isPinned` field. Adding one is straightforward but has purge-logic implications.
+- `ClipItem` is a flat struct. Purge logic removes the oldest items when the limit is exceeded.
 
 ## System Overview After v1.2
 
@@ -85,10 +85,9 @@ AppDelegate (@MainActor)
 | **SearchBar** | NEW view | Text field at top of PopoverContent, binds to `searchQuery` | PopoverContent, ClipItemStore filtering |
 | **KeyboardNavigationHandler** | NEW | NSEvent local monitor for arrow keys + Enter inside popover | PopoverContent, ClipItemStore, PasteboardWriter |
 | **ScreenshotLocationDetector** | NEW | Read `com.apple.screencapture` defaults for auto-detect | ScreenshotWatcher, BookmarkManager |
-| **ClipItem** | MODIFIED | Add `isPinned: Bool` field | ClipItemStore purge logic |
-| **ClipItemStore** | MODIFIED | Pin/unpin, search filtering, higher limit, possible SQLite migration | All views, persistence layer |
-| **PopoverContent** | MODIFIED | Add search bar, keyboard nav state, pin UI | SearchBar, KeyboardNavigationHandler |
-| **ItemRow** | MODIFIED | Pin indicator, pin/unpin context menu action | ClipItemStore |
+| **ClipItemStore** | MODIFIED | Search filtering, higher limit, possible SQLite migration | All views, persistence layer |
+| **PopoverContent** | MODIFIED | Add search bar, keyboard nav state | SearchBar, KeyboardNavigationHandler |
+| **ItemRow** | MODIFIED | Context menu actions | ClipItemStore |
 | **ScreenshotWatcher** | MODIFIED | Accept auto-detected path as fallback when no bookmark exists | ScreenshotLocationDetector |
 
 ## Feature-by-Feature Integration Analysis
@@ -218,63 +217,7 @@ var displayItems: [ClipItem] {
 
 **Confidence:** MEDIUM. NSEvent local monitors work in NSPanel popovers, but the interaction between SwiftUI focus system and raw event monitoring needs careful testing. The `onDisappear` cleanup of the monitor is critical to avoid leaks.
 
-### 4. Pinned Items
-
-**Data model change in ClipItem:**
-
-```swift
-struct ClipItem: Codable, Identifiable {
-    // ... existing fields ...
-    let isPinned: Bool  // NEW -- defaults to false
-
-    // Need custom init(from:) to handle migration from existing JSON
-    // that lacks isPinned field (decode as false if missing)
-}
-```
-
-The existing `init(from decoder:)` already uses `decodeIfPresent` for `isSensitive`, so the same pattern applies:
-
-```swift
-isPinned = try container.decodeIfPresent(Bool.self, forKey: .isPinned) ?? false
-```
-
-**Purge logic change in ClipItemStore:**
-
-Current purge removes the last item when count exceeds `maxItems`. With pinned items, purge must skip pinned items:
-
-```swift
-func add(_ item: ClipItem) {
-    items.insert(item, at: firstUnpinnedIndex)
-
-    // Purge only unpinned items beyond the cap
-    let unpinnedCount = items.filter { !$0.isPinned }.count
-    while unpinnedCount > maxItems {
-        if let lastUnpinnedIndex = items.lastIndex(where: { !$0.isPinned }) {
-            let removed = items.remove(at: lastUnpinnedIndex)
-            cleanupImages(for: removed)
-        }
-    }
-    save()
-}
-```
-
-**Display order:** Pinned items appear at the top of the list, sorted by timestamp (newest first). Unpinned items follow. The `displayItems` computed property handles this:
-
-```swift
-var displayItems: [ClipItem] {
-    let pinned = items.filter { $0.isPinned }.sorted { $0.timestamp > $1.timestamp }
-    let unpinned = items.filter { !$0.isPinned }
-    let combined = pinned + unpinned
-    guard !searchQuery.isEmpty else { return combined }
-    return combined.filter { /* search logic */ }
-}
-```
-
-**UI:** Add a pin/unpin action to the existing `contextMenu` on `ItemRow`. Show a small pin icon overlay on pinned items (similar to the existing checkmark overlay for multi-select).
-
-**Confidence:** HIGH. Straightforward model + logic change.
-
-### 5. 500+ Item History
+### 4. 500+ Item History (Pinned Items Feature Removed)
 
 **Current bottleneck:** `ClipItemStore` encodes the ENTIRE `[ClipItem]` array to JSON and writes to disk on every single `add()` call. At 500 items with text content, the JSON file could be 500KB-2MB. Re-encoding and writing atomically on every clipboard change (potentially multiple times per second) will cause noticeable lag.
 
@@ -363,11 +306,11 @@ NSPasteboard change → ClipboardObserver.pollClipboard()
 NSPasteboard change → ClipboardObserver.pollClipboard()
     → ClipItem created
     → ClipItemStore.add()
-    → items.insert(at: firstUnpinnedIndex)
-    → purge only unpinned items beyond cap
+    → items.insert(at: 0)
+    → purge oldest items beyond cap
     → debounced save (JSON or SQLite)
     → @Published triggers SwiftUI re-render
-    → displayItems applies: pin sort → search filter
+    → displayItems applies: search filter
     → PopoverContent > SearchBar + LazyVGrid rebuilds
     → KeyboardNavigationHandler updates selectedIndex
 
@@ -400,7 +343,7 @@ Arrow key / Enter → NSEvent local monitor
 
 ### Pattern 2: Computed Display List
 
-**What:** Instead of storing separate filtered/sorted arrays, compute `displayItems` from the source `items` array on access. Pin sorting + search filtering happen in one computed property.
+**What:** Instead of storing separate filtered/sorted arrays, compute `displayItems` from the source `items` array on access. Search filtering happens in one computed property.
 
 **When to use:** When the source data is small enough that recomputation is cheaper than cache invalidation (500 items qualifies).
 
@@ -432,14 +375,6 @@ Arrow key / Enter → NSEvent local monitor
 
 **Do this instead:** Debounce saves with a 1-second timer. Trigger immediate save on `applicationWillTerminate`.
 
-### Anti-Pattern 3: Storing isPinned Separately from ClipItem
-
-**What people do:** Keep a separate `Set<UUID>` of pinned IDs, stored in UserDefaults.
-
-**Why it's wrong:** Two sources of truth for item state. IDs can go stale when items are purged. Migration and backup become harder.
-
-**Do this instead:** Add `isPinned` directly to `ClipItem`. Single source of truth. Codable migration is trivial with `decodeIfPresent`.
-
 ## Suggested Build Order
 
 Features have dependencies. Build in this order:
@@ -450,14 +385,11 @@ Phase 1: Auto-detect screenshot location
   └── Simplifies onboarding (user benefit immediately)
   └── Low risk, isolated change
 
-Phase 2: Pinned items + 500+ history limit
-  └── Data model change (isPinned on ClipItem)
-  └── Purge logic change
+Phase 2: 500+ history limit
   └── Debounced save
-  └── Must be done BEFORE search (search needs to work with pins)
+  └── NSCache thumbnail caching
 
 Phase 3: Search
-  └── Depends on: displayItems pattern from Phase 2 (pin sorting)
   └── SearchBar UI + filtering logic
   └── Foundation for keyboard navigation
 
@@ -470,8 +402,7 @@ Phase 4: Global hotkey + keyboard navigation
 
 **Rationale:**
 - Auto-detect is fully isolated, ships value with zero risk to other features.
-- Pinned items change the data model. Every subsequent feature (search, keyboard nav) needs to understand pins. Do it first.
-- 500+ history limit pairs with pinned items because both modify purge logic and persistence. Ship together.
+- 500+ history limit modifies purge logic and persistence.
 - Search is a prerequisite for keyboard navigation (users summon with hotkey, type to search, arrow to select, Enter to paste -- this is the core power-user flow).
 - Global hotkey + keyboard nav is the capstone. It ties everything together and has the most integration points. Build it last when the underlying pieces are stable.
 
@@ -480,7 +411,7 @@ Phase 4: Global hotkey + keyboard navigation
 | New Feature | Files Modified | Files Created | SPM Packages |
 |------------|---------------|--------------|-------------|
 | Auto-detect screenshot | ScreenshotWatcher, OnboardingView, BookmarkManager | ScreenshotLocationDetector.swift | none |
-| Pinned items | ClipItem, ClipItemStore, ItemRow, PopoverContent | none | none |
+| ~~Pinned items~~ | ~~Removed~~ | - | - |
 | 500+ history | ClipItemStore (debounced save) | none (GRDB only if needed) | none (GRDB only if needed) |
 | Search | PopoverContent, ClipItemStore | SearchBar.swift (or inline) | none |
 | Global hotkey | CopyhogApp, AppDelegate | none | HotKey, MenuBarExtraAccess |

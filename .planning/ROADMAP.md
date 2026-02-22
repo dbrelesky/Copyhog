@@ -40,10 +40,10 @@ Full details: `.planning/milestones/v1.1-ROADMAP.md`
 
 ## v1.2 Power User Essentials
 
-**Milestone Goal:** Make Copyhog a keyboard-driven power tool -- instant access from anywhere, searchable history, pinned favorites, and zero-config screenshot detection.
+**Milestone Goal:** Make Copyhog a keyboard-driven power tool -- instant access from anywhere, searchable history, and zero-config screenshot detection.
 
 - [x] **Phase 6: Screenshot Auto-Detection** - Auto-detect macOS screenshot save location (completed 2026-02-22)
-- [x] **Phase 7: Favorites + History Scale** - Pinned items, 500-item history, debounced persistence (completed 2026-02-22)
+- [x] **Phase 7: History Scale** - 500-item history, debounced persistence, thumbnail caching (completed 2026-02-22)
 - [ ] **Phase 8: Search + Keyboard Navigation** - Text search with real-time filtering, arrow key navigation, Enter to copy
 - [ ] **Phase 9: Global Hotkey + Paste-on-Select** - Cmd+Shift+V summons history from any app, Enter pastes into previous app
 
@@ -61,21 +61,14 @@ Full details: `.planning/milestones/v1.1-ROADMAP.md`
 Plans:
 - [x] 06-01-PLAN.md — Screenshot location detector, sandbox entitlement, and onboarding pre-fill UX
 
-### Phase 7: Favorites + History Scale
-**Goal**: Users can pin important clipboard items that never expire, and the history holds up to 500 items without performance degradation
+### Phase 7: History Scale
+**Goal**: The history holds up to 500 items without performance degradation
 **Depends on**: Phase 6
-**Requirements**: FAV-01, FAV-02, FAV-03, FAV-04, HIST-01, HIST-02, HIST-03
+**Requirements**: HIST-01, HIST-02, HIST-03
 **Success Criteria** (what must be TRUE):
-  1. User can pin a clipboard item via context menu, and pinned items appear in a dedicated section at the top of the history list
-  2. Pinned items survive history purges -- when the 500-item limit is reached, only unpinned items are auto-purged
-  3. User can unpin an item and it returns to normal history behavior (subject to purge)
-  4. Scrolling through 500 items is smooth with no visible stutter or lag
-  5. Saving 500 items to disk does not cause the UI to freeze (debounced writes, no blocking the main thread)
-**Plans**: 2/2 complete
-
-Plans:
-- [x] 07-01-PLAN.md — Data layer: isPinned model field, pin/unpin + pinned-aware purge, debounced save, NSCache thumbnails, 500-item settings
-- [x] 07-02-PLAN.md — UI layer: sectioned Pinned/History layout, context menu pin action, pin icon overlay
+  1. Scrolling through 500 items is smooth with no visible stutter or lag
+  2. Saving 500 items to disk does not cause the UI to freeze (debounced writes, no blocking the main thread)
+**Plans**: 2/2 complete (pin/favorites feature removed)
 
 ### Phase 8: Search + Keyboard Navigation
 **Goal**: Users can instantly find any item in their history by typing, and navigate the entire popover without touching the mouse
@@ -83,7 +76,7 @@ Plans:
 **Requirements**: SRCH-01, SRCH-02, SRCH-03, KBNAV-01, KBNAV-02, KBNAV-03, KBNAV-04
 **Success Criteria** (what must be TRUE):
   1. A search field at the top of the popover filters history items in real-time as the user types (case-insensitive text match)
-  2. Clearing the search field restores the full history list including pinned items at the top
+  2. Clearing the search field restores the full history list
   3. Arrow keys move the selection highlight through items in the list, and the preview pane updates to show the selected item
   4. Pressing Enter on a selected item copies it to the clipboard
   5. Pressing Escape dismisses the popover (or clears the search field if text is present)
@@ -123,6 +116,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 04.1 -> 04.2 -> 04.3 -> 5 -
 | 04.3 App Store Readiness | v1.1 | 1/1 | Complete | 2026-02-21 |
 | 5. Privacy & Compliance | v1.1 | 1/1 | Complete | 2026-02-21 |
 | 6. Screenshot Auto-Detection | v1.2 | 1/1 | Complete | 2026-02-22 |
-| 7. Favorites + History Scale | v1.2 | 2/2 | Complete | 2026-02-22 |
+| 7. History Scale | v1.2 | 2/2 | Complete | 2026-02-22 |
 | 8. Search + Keyboard Navigation | v1.2 | 0/2 | Not started | - |
 | 9. Global Hotkey + Paste-on-Select | v1.2 | 0/? | Not started | - |

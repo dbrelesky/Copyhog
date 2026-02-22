@@ -2,7 +2,7 @@
 
 ## What This Is
 
-A native macOS menu bar app that automatically captures clipboard items (text and images) and screenshots into a browsable history with instant re-paste. Features a liquid glass UI with translucent materials, pin/favorite system, configurable history (up to 500 items), and App Store-ready privacy compliance. Built with Swift + SwiftUI.
+A native macOS menu bar app that automatically captures clipboard items (text and images) and screenshots into a browsable history with instant re-paste. Features a liquid glass UI with translucent materials, configurable history (up to 500 items), and App Store-ready privacy compliance. Built with Swift + SwiftUI.
 
 ## Core Value
 
@@ -24,7 +24,6 @@ Every screenshot and clipboard copy is captured and instantly accessible — no 
 - ✓ App Sandbox with privacy strings and sensitive app exclusion — v1.1
 - ✓ Privacy manifest, launch-at-login toggle, configurable history size — v1.1
 - ✓ Auto-detect macOS screenshot save location — v1.2
-- ✓ Pin/favorite clipboard items that never expire — v1.2
 - ✓ 500-item history with debounced persistence and thumbnail caching — v1.2
 
 ### Active
@@ -43,7 +42,7 @@ Every screenshot and clipboard copy is captured and instantly accessible — no 
 - Snippet/template system with placeholders — beyond clipboard history scope
 - iCloud sync — local-only for now
 - Fuzzy search — exact text match covers 90% of use cases
-- Pin categories/folders — simple pin/unpin is sufficient
+- Pin/favorites system — removed, feature wasn't successful
 
 ## Context
 
@@ -63,7 +62,7 @@ Every screenshot and clipboard copy is captured and instantly accessible — no 
 
 ## Current Milestone: v1.2 Power User Essentials
 
-**Goal:** Make Copyhog a keyboard-driven power tool — instant access from anywhere, searchable history, pinned favorites, and zero-config screenshot detection.
+**Goal:** Make Copyhog a keyboard-driven power tool — instant access from anywhere, searchable history, and zero-config screenshot detection.
 
 **Remaining:**
 - Phase 8: Search + Keyboard Navigation
@@ -81,7 +80,7 @@ Every screenshot and clipboard copy is captured and instantly accessible — no 
 | ultraThinMaterial / regularMaterial hierarchy | Creates visual depth without Divider() lines; warm orange tint adds personality | ✓ Good — v1.1 |
 | App Sandbox with temporary exceptions | Required for App Store; shared-preference exception enables screenshot location detection | ✓ Good — v1.1 |
 | 500-item limit with debounced saves | NSCache for thumbnails + 500ms debounced JSON writes keeps UI smooth at scale | ✓ Good — v1.2 |
-| Pinned-first stable sort | Favorites always visible at top; unpinned items subject to purge | ✓ Good — v1.2 |
+| Pin/favorites removed | Feature wasn't successful; simplified to flat history list | Removed — v1.2 |
 
 ---
 *Last updated: 2026-02-22 after v1.1 milestone*

@@ -44,7 +44,7 @@ Migrate from JSON to SQLite (via SwiftData, GRDB, or raw SQLite). SwiftData is t
 3. On first launch after update, read `items.json`, insert into SwiftData, delete JSON file
 4. All subsequent reads/writes go through SwiftData
 
-Key design point: store the `isPinned` flag in the database (needed for pinned items feature anyway). SQLite handles concurrent reads during UI rendering while a background write commits new items.
+SQLite handles concurrent reads during UI rendering while a background write commits new items.
 
 **Warning signs:**
 - `save()` calls taking >50ms (profile with Instruments)
@@ -145,7 +145,7 @@ Keyboard navigation phase -- must come AFTER search is implemented, because the 
 | Load full images instead of thumbnails in grid | Simpler code path | 500+ full PNGs in memory = hundreds of MB | Never at 500+ items |
 | Hardcode Cmd+Shift+V without recorder | Ship faster | Conflict reports, no fix without app update | MVP only if you ship a Settings shortcut recorder within 2 weeks |
 | Skip NSImage cache, reload from disk each render | No cache invalidation logic | Disk I/O on every scroll, visible stutter | Acceptable at 20 items; not at 500+ |
-| Store pinned items in a separate JSON file | Avoids full migration | Two sources of truth, sync bugs, orphaned pins | Never -- pins belong in the same store as items |
+| ~~Store pinned items in a separate JSON file~~ | - | - | Feature removed |
 
 ## Integration Gotchas
 
@@ -170,7 +170,7 @@ Keyboard navigation phase -- must come AFTER search is implemented, because the 
 
 | Mistake | Risk | Prevention |
 |---------|------|------------|
-| Pinned items containing passwords that never expire | Sensitive data persists indefinitely in plaintext on disk | Do not allow pinning items marked as sensitive. Show a warning if user tries to pin recently-copied content from a password manager. |
+| ~~Pinned items containing passwords~~ | - | Feature removed |
 | Search indexing sensitive/redacted items | Searching for "password" reveals which items were from password managers (even if content is redacted, the existence is metadata) | Exclude items where `isSensitive == true` from search results entirely. |
 | Global hotkey handler logging clipboard content for debugging | Debug logs contain passwords in plaintext | Never log clipboard content. Log item types and counts only. Strip debug logging before release builds. |
 | Storing full screenshots at original resolution indefinitely | 500+ screenshots at 5-10MB each = 2.5-5GB disk usage | Compress stored images (JPEG at 80% quality for screenshots), implement a separate disk usage cap, or store only thumbnails after N days. |
@@ -181,7 +181,7 @@ Keyboard navigation phase -- must come AFTER search is implemented, because the 
 |---------|-------------|-----------------|
 | Global hotkey opens popover but does not focus the search field | User presses hotkey, then has to click the search field -- defeats keyboard-driven workflow | Auto-focus search field when popover opens via hotkey (but NOT when opened via menu bar click, since click users may want to browse) |
 | Arrow key navigation has no visible selection indicator | User presses arrow keys but cannot tell which item is "selected" | Add a visible highlight ring/background on the keyboard-selected item, distinct from the hover highlight |
-| Pinned items mixed into chronological list | User cannot quickly find their pinned items among 500 others | Show pinned items in a separate section at the top (collapsible), with a divider. Pinned items should not count toward the history limit. |
+| ~~Pinned items mixed into list~~ | - | Feature removed |
 | Search clears when popover closes | User searches, copies an item, popover closes, reopens -- search is gone and they are back at the full list | Persist search text for the session (clear on app restart, not on popover dismiss). Or provide a "recent searches" shortcut. |
 | No empty state for search results | User searches for something that does not exist, sees a blank white space | Show "No results for [query]" with a suggestion to clear the search |
 | Hotkey pastes item but does not dismiss popover or switch to previous app | User has to manually close popover and click back to their app | After paste via Enter key: dismiss popover, then use `NSWorkspace` to activate the previous app, then optionally simulate Cmd+V to paste from the now-populated system clipboard |
@@ -193,8 +193,7 @@ Keyboard navigation phase -- must come AFTER search is implemented, because the 
 - [ ] **Keyboard navigation:** Arrow keys work in both the grid layout and any future list layout -- grid requires 2D navigation (left/right/up/down), not just up/down
 - [ ] **Search:** Handles unicode, emoji, and CJK characters correctly in filter matching
 - [ ] **Search:** Does not crash or hang on extremely long text items (e.g., user copied a 50KB log file)
-- [ ] **Pinned items:** Survive app updates -- if storage format changes, migration must preserve pin status
-- [ ] **Pinned items:** Have their images preserved even when history limit purges old items -- pinned image files must not be cleaned up by the auto-purge
+- [x] ~~**Pinned items:**~~ Feature removed
 - [ ] **500+ history:** Startup time remains under 2 seconds -- loading 500+ items from storage on launch must not block the main thread
 - [ ] **Screenshot location detection:** Falls back gracefully when user has not customized location (default is Desktop, but `defaults read com.apple.screencapture location` returns error when unset)
 - [ ] **Screenshot location detection:** Handles paths with spaces and special characters (e.g., `~/Documents/My Screenshots`)
@@ -220,7 +219,7 @@ Keyboard navigation phase -- must come AFTER search is implemented, because the 
 | Global hotkey conflicts | Global Hotkey phase | Works on 3+ test machines with different apps installed |
 | Keyboard nav focus conflicts | Keyboard Navigation phase (after search) | Arrow keys navigate items when list focused; type in search field without triggering navigation |
 | Screenshot location sandbox access | Screenshot Detection phase | Auto-detects custom screenshot location on a fresh macOS install with and without customization |
-| Pinned items surviving purge | Pinned Items phase | Pin 5 items, add 500+ more, verify all 5 pins remain with images |
+| ~~Pinned items surviving purge~~ | - | Feature removed |
 | Search performance on large history | Search phase | Type a query against 500 items, results appear within 300ms |
 
 ## Sources

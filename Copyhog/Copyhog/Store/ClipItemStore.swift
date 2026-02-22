@@ -45,9 +45,6 @@ final class ClipItemStore: ObservableObject {
         imageStore = ImageStore()
 
         load()
-
-        // Sort so pinned items appear first on launch
-        sortItems()
     }
 
     // MARK: - Public API
@@ -55,25 +52,12 @@ final class ClipItemStore: ObservableObject {
     func add(_ item: ClipItem) {
         items.insert(item, at: 0)
 
-        // Re-sort to maintain pinned-first ordering
-        sortItems()
-
-        // Purge oldest unpinned items beyond the cap
+        // Purge oldest items beyond the cap
         while items.count > maxItems {
-            guard let lastUnpinnedIndex = items.lastIndex(where: { !$0.isPinned }) else {
-                break // All items are pinned, cannot purge
-            }
-            let removed = items.remove(at: lastUnpinnedIndex)
+            let removed = items.removeLast()
             cleanupImages(for: removed)
         }
 
-        scheduleSave()
-    }
-
-    func togglePin(id: UUID) {
-        guard let index = items.firstIndex(where: { $0.id == id }) else { return }
-        items[index].isPinned.toggle()
-        sortItems()
         scheduleSave()
     }
 
@@ -88,7 +72,6 @@ final class ClipItemStore: ObservableObject {
             filePath: old.filePath,
             timestamp: old.timestamp,
             isSensitive: true,
-            isPinned: old.isPinned,
             sourceAppBundleID: old.sourceAppBundleID,
             sourceAppName: old.sourceAppName
         )
@@ -106,7 +89,6 @@ final class ClipItemStore: ObservableObject {
             filePath: old.filePath,
             timestamp: old.timestamp,
             isSensitive: false,
-            isPinned: old.isPinned,
             sourceAppBundleID: old.sourceAppBundleID,
             sourceAppName: old.sourceAppName
         )
@@ -126,17 +108,6 @@ final class ClipItemStore: ObservableObject {
         }
         items = []
         scheduleSave()
-    }
-
-    // MARK: - Sorting
-
-    private func sortItems() {
-        items.sort { a, b in
-            if a.isPinned != b.isPinned {
-                return a.isPinned // pinned first
-            }
-            return a.timestamp > b.timestamp // newest first within each group
-        }
     }
 
     // MARK: - Persistence

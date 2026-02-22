@@ -24,7 +24,7 @@ Features that set Copyhog apart. Not all competitors have these, and they add re
 | Feature | Value Proposition | Complexity | Notes |
 |---------|-------------------|------------|-------|
 | Paste-on-select (Enter pastes into previous app) | Most clipboard managers just copy to clipboard and leave you to Cmd+V yourself. Maccy offers Option+Enter to paste directly. This is the "magic" -- select an item and it instantly pastes into whatever app you were using before summoning Copyhog. Requires: (1) dismiss popover, (2) write to clipboard, (3) simulate Cmd+V via CGEvent. | HIGH | Requires Accessibility permission (System Settings > Privacy & Security > Accessibility). Use CGEvent to post keyDown/keyUp for Cmd+V to the cgSessionEventTap. Maccy's open-source implementation is the reference pattern. Must handle the timing: dismiss popover first, brief delay (~100ms), then simulate paste. Without Accessibility permission, fall back to copy-only (no paste simulation). Show permission prompt on first use. |
-| Pinned/favorited items | Pin frequently-used items that survive history purge. Maccy (Option+P), ClipBook (Cmd+S), CleanClip (favorites lists) all have this. Not every user needs it, but power users who keep boilerplate text or reference images love it. | MEDIUM | Add `isPinned: Bool` to ClipItem model. Pinned items sort to top of list, excluded from auto-purge logic in `ClipItemStore.add()`. Visual indicator (pin icon) on pinned rows. Toggle via right-click context menu or keyboard shortcut (Option+P matches Maccy convention). Pinned items should still be searchable and deletable. |
+| ~~Pinned/favorited items~~ | ~~Removed — feature wasn't successful. Pin/favorites functionality has been stripped from the codebase.~~ | - | - |
 | Auto-detect screenshot location | Current setup requires manual folder selection via onboarding. Users who change their screenshot location (or use the default Desktop) have to redo setup. Reading `com.apple.screencapture` UserDefaults eliminates this friction entirely. | LOW | Read `UserDefaults(suiteName: "com.apple.screencapture")?.string(forKey: "location")`. If nil, default to `~/Desktop`. If set, use that path. Eliminates the need for BookmarkManager's screenshot source bookmark on first launch -- can auto-resolve. Still need security-scoped bookmark for sandbox access, but can pre-fill the path in the folder picker or auto-request access. Reduces onboarding from 2 folder picks to 1 (just the Screenies destination). |
 | Customizable hotkey | Let users change the global shortcut in settings. KeyboardShortcuts package includes a SwiftUI `Recorder` component for this. Maccy and Paste both allow customization. | LOW | `KeyboardShortcuts.Recorder` SwiftUI view in settings. Ships with sensible default (Cmd+Shift+V) but lets users avoid conflicts with other apps. Nearly free if using the KeyboardShortcuts package. |
 
@@ -89,7 +89,7 @@ Features that seem good but create problems. Explicitly do NOT build these.
 ### Should Ship (Strong v1.2)
 
 - [ ] **Paste-on-select** -- paste directly into previous app on Enter. Requires Accessibility permission. HIGH value but adds permission complexity.
-- [ ] **Pinned items** -- model change + UI indicator + purge exclusion. Medium effort, high retention value.
+- [x] ~~**Pinned items**~~ -- removed, feature wasn't successful
 - [ ] **Auto-detect screenshot location** -- low effort, removes onboarding friction.
 
 ### Defer (v1.3+)
@@ -105,7 +105,7 @@ Features that seem good but create problems. Explicitly do NOT build these.
 | Keyboard navigation | HIGH | MEDIUM | P1 |
 | Large history (500 items) | HIGH | LOW | P1 |
 | Paste-on-select | HIGH | HIGH | P1 |
-| Pinned items | MEDIUM | MEDIUM | P2 |
+| ~~Pinned items~~ | - | - | Removed |
 | Auto-detect screenshot location | MEDIUM | LOW | P2 |
 | Customizable hotkey | LOW | LOW | P3 |
 
