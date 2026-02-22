@@ -5,16 +5,14 @@
 See: .planning/PROJECT.md (updated 2026-02-21)
 
 **Core value:** Every screenshot and clipboard copy is captured and instantly accessible -- no hunting, no lost items, no broken workflow.
-**Current focus:** Milestone v1.1 — Phase 5 complete, Phase 04.2 in progress
+**Current focus:** Milestone v1.2 — Power User Essentials
 
 ## Current Position
 
-Phase: 04.2 (Liquid Glass UI Redesign)
-Plan: 1 of 2 complete in current phase
-Status: Plan 01 complete, Plan 02 pending
-Last activity: 2026-02-21 — Completed Phase 5 (Privacy & Compliance)
-
-Progress: [##########] v1.0 complete | [##########] v1.1 100% | [#####     ] 04.2 50%
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-02-21 — Milestone v1.2 started
 
 ## Performance Metrics
 
@@ -76,5 +74,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-21
-Stopped at: Completed Phase 5 — Privacy & Compliance
+Stopped at: Starting milestone v1.2 — Power User Essentials
 Resume file: None

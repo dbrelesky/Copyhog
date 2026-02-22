@@ -25,16 +25,21 @@ Every screenshot and clipboard copy is captured and instantly accessible — no 
 
 ### Active
 
-- [ ] Delete individual item from clipboard history
-- [ ] Master wipe ("Hog Wipe") to clear all saved items at once
+- [ ] Global keyboard shortcut to summon clipboard history from any app
+- [ ] Search/filter clipboard history by text content
+- [ ] Keyboard navigation through items with Enter to paste
+- [ ] Pin/favorite items that persist regardless of history limit
+- [ ] Raise history limit to 500+ items
+- [ ] Auto-detect macOS screenshot save location (eliminate manual folder setup)
 
 ### Out of Scope
 
-- Copyhog-initiated screenshot capture (own capture shortcut) — deferred, observer-only for v1
-- Rich text / file clipboard types — text + images only for v1
-- Search/filter within history — only 20 items, browse is sufficient
-- Clipboard sync across devices — local-only for v1
+- Copyhog-initiated screenshot capture (own capture shortcut) — deferred, observer-only
+- Rich text / file clipboard types — text + images only
+- Clipboard sync across devices — local-only
 - Visual distinction between screenshots and regular copied images — not needed per user preference
+- Snippet/template system with placeholders — beyond clipboard history scope
+- iCloud sync — local-only for now
 
 ## Context
 
@@ -55,17 +60,21 @@ Every screenshot and clipboard copy is captured and instantly accessible — no 
 
 - **Tech stack**: Swift + SwiftUI — native macOS, MenuBarExtra API, minimum footprint
 - **Platform**: macOS only (menu bar app pattern)
-- **Storage**: Last 20 items, auto-purge oldest. Images stored in ~/Library/Application Support/Copyhog/
+- **Storage**: Configurable history limit (up to 500+), auto-purge oldest. Images stored in ~/Library/Application Support/Copyhog/
 - **Screenshots**: All screenshots moved to ~/Documents/Screenies/ (not left on Desktop)
 - **Clipboard**: Observer mode only — poll NSPasteboard.general.changeCount every 0.5s
 
-## Current Milestone: v1.1 Polish & Control
+## Current Milestone: v1.2 Power User Essentials
 
-**Goal:** Give the user full control over their clipboard history — let them delete individual items and wipe everything clean.
+**Goal:** Make Copyhog a keyboard-driven power tool — instant access from anywhere, searchable history, pinned favorites, and zero-config screenshot detection.
 
 **Target features:**
-- Delete individual clipboard items
-- Master "Hog Wipe" to clear all items
+- Global hotkey (Cmd+Shift+V) to summon clipboard history from any app
+- Search bar to filter history by text content
+- Keyboard navigation (arrow keys + Enter to paste)
+- Pin/favorite items that never expire
+- Raise history limit to 500+ items
+- Auto-detect macOS screenshot save location
 
 ## Key Decisions
 
@@ -74,9 +83,9 @@ Every screenshot and clipboard copy is captured and instantly accessible — no 
 | Swift + SwiftUI over Electron/Tauri | Smallest memory footprint, native macOS feel, MenuBarExtra purpose-built for this | — Pending |
 | Observer mode over intercept mode | Non-invasive, user keeps native Cmd+Shift+3/4/5 shortcuts | — Pending |
 | File URL references for multi-image paste | NSPasteboard can't hold multiple independent images; file URLs work with apps that accept file drops | — Pending |
-| 20 item limit with auto-purge | Keeps storage minimal, browse is fast, no need for search | — Pending |
+| 20 item limit with auto-purge | Keeps storage minimal, browse is fast, no need for search | ⚠️ Revisit — raising to 500+ in v1.2 |
 | Popover over floating panel | Standard macOS pattern for menu bar utilities (1Password, Bartender), predictable appear/disappear | — Pending |
 | Split-view layout (preview top, list bottom) | 64px thumbnails aren't enough to distinguish screenshots; preview is the key differentiator | — Pending |
 
 ---
-*Last updated: 2026-02-21 after milestone v1.1 started*
+*Last updated: 2026-02-21 after milestone v1.2 started*
