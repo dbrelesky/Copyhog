@@ -15,7 +15,9 @@ struct SettingsMenu: View {
 
     var body: some View {
         Menu {
-            Toggle("Launch at Login", isOn: $launchAtLogin)
+            Toggle(isOn: $launchAtLogin) {
+                Label("Launch at Login", systemImage: "arrow.clockwise")
+            }
                 .onChange(of: launchAtLogin) { _, newValue in
                     if newValue {
                         try? SMAppService.mainApp.register()
@@ -26,7 +28,9 @@ struct SettingsMenu: View {
 
             historySizePicker
 
-            Toggle("Plain Paste (⇧⌘V)", isOn: $plainPasteEnabled)
+            Toggle(isOn: $plainPasteEnabled) {
+                Label("Plain Paste (⇧⌘V)", systemImage: "doc.plaintext")
+            }
 
             appearanceSubmenu
 
@@ -67,12 +71,14 @@ struct SettingsMenu: View {
     // MARK: - History Size Picker
 
     private var historySizePicker: some View {
-        Picker("History Size", selection: $historyLimit) {
+        Picker(selection: $historyLimit) {
             Text("20").tag(20)
             Text("50").tag(50)
             Text("100").tag(100)
             Text("200").tag(200)
             Text("500").tag(500)
+        } label: {
+            Label("History Size", systemImage: "clock.arrow.circlepath")
         }
     }
 
