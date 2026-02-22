@@ -129,14 +129,11 @@ struct PopoverContent: View {
                     .listStyle(.plain)
                     .scrollContentBackground(.hidden)
                 }
-                .background(Color(red: 0.6, green: 0.35, blue: 0.15).opacity(0.06))
+                .background(Color.clear)
             }
         }
         .frame(width: 400, height: 520)
-        .background {
-            Color(red: 0.55, green: 0.35, blue: 0.2).opacity(0.08)
-        }
-        .background(.ultraThinMaterial)
+        .background(Color(red: 0.96, green: 0.93, blue: 0.88))
         .tint(.accentColor)
     }
 }
