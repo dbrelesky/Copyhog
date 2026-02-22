@@ -42,6 +42,8 @@ struct PopoverContent: View {
                 return nil
             case 125: // Down arrow
                 isSearchFocused = false
+                // Resign first responder from search field so keystrokes go to list
+                NSApp.keyWindow?.makeFirstResponder(nil)
                 if selectedIndex == nil && !store.displayItems.isEmpty {
                     selectedIndex = 0
                 }
@@ -51,6 +53,8 @@ struct PopoverContent: View {
                     return event
                 }
                 isSearchFocused = false
+                // Resign first responder from search field so keystrokes go to list
+                NSApp.keyWindow?.makeFirstResponder(nil)
                 if selectedIndex == nil && !store.displayItems.isEmpty {
                     selectedIndex = 0
                 }
