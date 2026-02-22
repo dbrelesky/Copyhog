@@ -9,12 +9,127 @@ struct PopoverContent: View {
     @State private var isVisible = false
     @State private var searchText: String = ""
     @State private var searchTask: Task<Void, Never>?
+    @State private var selectedIndex: Int? = nil
+    @State private var isSearchFocused: Bool = false
+    @State private var eventMonitor: Any? = nil
+
+    private enum ArrowDirection {
+        case up, down, left, right
+    }
 
     private var previewItem: ClipItem? {
+        if let index = selectedIndex, index < store.displayItems.count {
+            return store.displayItems[index]
+        }
         if let hoveredID = hoveredItemID {
             return store.displayItems.first { $0.id == hoveredID }
         }
         return store.displayItems.first
+    }
+
+    private func handleKeyEvent(_ event: NSEvent) -> NSEvent? {
+        let keyCode = event.keyCode
+
+        if isSearchFocused {
+            switch keyCode {
+            case 53: // Escape
+                if !searchText.isEmpty {
+                    searchText = ""
+                    store.searchQuery = ""
+                    return nil
+                }
+                dismissPopover()
+                return nil
+            case 125: // Down arrow
+                isSearchFocused = false
+                if selectedIndex == nil && !store.displayItems.isEmpty {
+                    selectedIndex = 0
+                }
+                return nil
+            case 48: // Tab
+                if event.modifierFlags.contains(.shift) {
+                    return event
+                }
+                isSearchFocused = false
+                if selectedIndex == nil && !store.displayItems.isEmpty {
+                    selectedIndex = 0
+                }
+                return nil
+            default:
+                return event
+            }
+        } else {
+            switch keyCode {
+            case 125: // Down arrow
+                handleArrowKey(.down)
+                return nil
+            case 126: // Up arrow
+                handleArrowKey(.up)
+                return nil
+            case 124: // Right arrow
+                handleArrowKey(.right)
+                return nil
+            case 123: // Left arrow
+                handleArrowKey(.left)
+                return nil
+            case 36: // Enter/Return
+                copySelectedItem()
+                return nil
+            case 53: // Escape
+                if !searchText.isEmpty {
+                    searchText = ""
+                    store.searchQuery = ""
+                    selectedIndex = store.displayItems.isEmpty ? nil : 0
+                    return nil
+                }
+                dismissPopover()
+                return nil
+            case 48: // Tab
+                isSearchFocused = true
+                return nil
+            default:
+                return event
+            }
+        }
+    }
+
+    private func handleArrowKey(_ direction: ArrowDirection) {
+        let columns = 3
+        switch direction {
+        case .down:
+            let next = (selectedIndex ?? -1) + columns
+            if next < store.displayItems.count {
+                selectedIndex = next
+            }
+        case .up:
+            let next = (selectedIndex ?? 0) - columns
+            if next >= 0 {
+                selectedIndex = next
+            }
+        case .right:
+            let next = (selectedIndex ?? -1) + 1
+            if next < store.displayItems.count {
+                selectedIndex = next
+            }
+        case .left:
+            let next = (selectedIndex ?? 0) - 1
+            if next >= 0 {
+                selectedIndex = next
+            }
+        }
+    }
+
+    private func copySelectedItem() {
+        guard let index = selectedIndex, index < store.displayItems.count else { return }
+        let item = store.displayItems[index]
+        guard let observer = store.clipboardObserver else { return }
+        PasteboardWriter.write(item, imageStore: store.imageStore, clipboardObserver: observer)
+    }
+
+    private func dismissPopover() {
+        for window in NSApp.windows where window is NSPanel {
+            window.close()
+        }
     }
 
     var body: some View {
@@ -49,7 +164,9 @@ struct PopoverContent: View {
                             .foregroundStyle(.secondary)
                             .font(.system(size: 12))
 
-                        TextField("Search history...", text: $searchText)
+                        TextField("Search history...", text: $searchText, onEditingChanged: { editing in
+                            isSearchFocused = editing
+                        })
                             .textFieldStyle(.plain)
                             .font(.system(size: 13))
                             .onSubmit { }
@@ -163,131 +280,146 @@ struct PopoverContent: View {
                         }
                         .frame(maxWidth: .infinity)
                     } else {
-                        ScrollView {
-                            let columns = Array(repeating: GridItem(.flexible(), spacing: 8), count: 3)
-                            let pinnedItems = store.displayItems.filter { $0.isPinned }
-                            let unpinnedItems = store.displayItems.filter { !$0.isPinned }
+                        ScrollViewReader { scrollProxy in
+                            ScrollView {
+                                let columns = Array(repeating: GridItem(.flexible(), spacing: 8), count: 3)
+                                let pinnedItems = store.displayItems.filter { $0.isPinned }
+                                let unpinnedItems = store.displayItems.filter { !$0.isPinned }
 
-                            LazyVStack(spacing: 0) {
-                                if !store.searchQuery.isEmpty {
-                                    // Flat grid when searching (no section headers)
-                                    LazyVGrid(columns: columns, spacing: 8) {
-                                        ForEach(store.displayItems) { item in
-                                            ItemRow(
-                                                item: item,
-                                                imageStore: store.imageStore,
-                                                hoveredItemID: $hoveredItemID,
-                                                isMultiSelectActive: isMultiSelectActive,
-                                                selectedItems: $selectedItems,
-                                                clipboardObserver: store.clipboardObserver,
-                                                searchQuery: store.searchQuery,
-                                                onTogglePin: {
-                                                    withAnimation {
-                                                        store.togglePin(id: item.id)
+                                LazyVStack(spacing: 0) {
+                                    if !store.searchQuery.isEmpty {
+                                        // Flat grid when searching (no section headers)
+                                        LazyVGrid(columns: columns, spacing: 8) {
+                                            ForEach(store.displayItems) { item in
+                                                ItemRow(
+                                                    item: item,
+                                                    imageStore: store.imageStore,
+                                                    hoveredItemID: $hoveredItemID,
+                                                    isMultiSelectActive: isMultiSelectActive,
+                                                    selectedItems: $selectedItems,
+                                                    clipboardObserver: store.clipboardObserver,
+                                                    isSelected: selectedIndex.flatMap { idx in idx < store.displayItems.count ? store.displayItems[idx].id : nil } == item.id,
+                                                    searchQuery: store.searchQuery,
+                                                    onTogglePin: {
+                                                        withAnimation {
+                                                            store.togglePin(id: item.id)
+                                                        }
+                                                    },
+                                                    onDelete: {
+                                                        selectedItems.remove(item.id)
+                                                        store.remove(id: item.id)
+                                                    },
+                                                    onMarkSensitive: {
+                                                        store.markSensitive(id: item.id)
+                                                    },
+                                                    onUnmarkSensitive: {
+                                                        store.unmarkSensitive(id: item.id)
                                                     }
-                                                },
-                                                onDelete: {
-                                                    selectedItems.remove(item.id)
-                                                    store.remove(id: item.id)
-                                                },
-                                                onMarkSensitive: {
-                                                    store.markSensitive(id: item.id)
-                                                },
-                                                onUnmarkSensitive: {
-                                                    store.unmarkSensitive(id: item.id)
+                                                )
+                                                .id(item.id)
+                                            }
+                                        }
+                                        .padding(.horizontal, 8)
+                                        .padding(.top, 8)
+                                    } else {
+                                        // Pinned section
+                                        if !pinnedItems.isEmpty {
+                                            HStack {
+                                                Label("Pinned", systemImage: "pin.fill")
+                                                    .font(.caption)
+                                                    .foregroundStyle(.secondary)
+                                                Spacer()
+                                            }
+                                            .padding(.horizontal, 12)
+                                            .padding(.top, 8)
+
+                                            LazyVGrid(columns: columns, spacing: 8) {
+                                                ForEach(pinnedItems) { item in
+                                                    ItemRow(
+                                                        item: item,
+                                                        imageStore: store.imageStore,
+                                                        hoveredItemID: $hoveredItemID,
+                                                        isMultiSelectActive: isMultiSelectActive,
+                                                        selectedItems: $selectedItems,
+                                                        clipboardObserver: store.clipboardObserver,
+                                                        isSelected: selectedIndex.flatMap { idx in idx < store.displayItems.count ? store.displayItems[idx].id : nil } == item.id,
+                                                        searchQuery: store.searchQuery,
+                                                        onTogglePin: {
+                                                            withAnimation {
+                                                                store.togglePin(id: item.id)
+                                                            }
+                                                        },
+                                                        onDelete: {
+                                                            selectedItems.remove(item.id)
+                                                            store.remove(id: item.id)
+                                                        },
+                                                        onMarkSensitive: {
+                                                            store.markSensitive(id: item.id)
+                                                        },
+                                                        onUnmarkSensitive: {
+                                                            store.unmarkSensitive(id: item.id)
+                                                        }
+                                                    )
+                                                    .id(item.id)
                                                 }
-                                            )
+                                            }
+                                            .padding(.horizontal, 8)
+                                        }
+
+                                        // History section
+                                        if !unpinnedItems.isEmpty {
+                                            HStack {
+                                                Label("History", systemImage: "clock")
+                                                    .font(.caption)
+                                                    .foregroundStyle(.secondary)
+                                                Spacer()
+                                            }
+                                            .padding(.horizontal, 12)
+                                            .padding(.top, 8)
+
+                                            LazyVGrid(columns: columns, spacing: 8) {
+                                                ForEach(unpinnedItems) { item in
+                                                    ItemRow(
+                                                        item: item,
+                                                        imageStore: store.imageStore,
+                                                        hoveredItemID: $hoveredItemID,
+                                                        isMultiSelectActive: isMultiSelectActive,
+                                                        selectedItems: $selectedItems,
+                                                        clipboardObserver: store.clipboardObserver,
+                                                        isSelected: selectedIndex.flatMap { idx in idx < store.displayItems.count ? store.displayItems[idx].id : nil } == item.id,
+                                                        searchQuery: store.searchQuery,
+                                                        onTogglePin: {
+                                                            withAnimation {
+                                                                store.togglePin(id: item.id)
+                                                            }
+                                                        },
+                                                        onDelete: {
+                                                            selectedItems.remove(item.id)
+                                                            store.remove(id: item.id)
+                                                        },
+                                                        onMarkSensitive: {
+                                                            store.markSensitive(id: item.id)
+                                                        },
+                                                        onUnmarkSensitive: {
+                                                            store.unmarkSensitive(id: item.id)
+                                                        }
+                                                    )
+                                                    .id(item.id)
+                                                }
+                                            }
+                                            .padding(.horizontal, 8)
                                         }
                                     }
-                                    .padding(.horizontal, 8)
-                                    .padding(.top, 8)
-                                } else {
-                                    // Pinned section
-                                    if !pinnedItems.isEmpty {
-                                        HStack {
-                                            Label("Pinned", systemImage: "pin.fill")
-                                                .font(.caption)
-                                                .foregroundStyle(.secondary)
-                                            Spacer()
-                                        }
-                                        .padding(.horizontal, 12)
-                                        .padding(.top, 8)
-
-                                        LazyVGrid(columns: columns, spacing: 8) {
-                                            ForEach(pinnedItems) { item in
-                                                ItemRow(
-                                                    item: item,
-                                                    imageStore: store.imageStore,
-                                                    hoveredItemID: $hoveredItemID,
-                                                    isMultiSelectActive: isMultiSelectActive,
-                                                    selectedItems: $selectedItems,
-                                                    clipboardObserver: store.clipboardObserver,
-                                                searchQuery: store.searchQuery,
-                                                    onTogglePin: {
-                                                        withAnimation {
-                                                            store.togglePin(id: item.id)
-                                                        }
-                                                    },
-                                                    onDelete: {
-                                                        selectedItems.remove(item.id)
-                                                        store.remove(id: item.id)
-                                                    },
-                                                    onMarkSensitive: {
-                                                        store.markSensitive(id: item.id)
-                                                    },
-                                                    onUnmarkSensitive: {
-                                                        store.unmarkSensitive(id: item.id)
-                                                    }
-                                                )
-                                            }
-                                        }
-                                        .padding(.horizontal, 8)
-                                    }
-
-                                    // History section
-                                    if !unpinnedItems.isEmpty {
-                                        HStack {
-                                            Label("History", systemImage: "clock")
-                                                .font(.caption)
-                                                .foregroundStyle(.secondary)
-                                            Spacer()
-                                        }
-                                        .padding(.horizontal, 12)
-                                        .padding(.top, 8)
-
-                                        LazyVGrid(columns: columns, spacing: 8) {
-                                            ForEach(unpinnedItems) { item in
-                                                ItemRow(
-                                                    item: item,
-                                                    imageStore: store.imageStore,
-                                                    hoveredItemID: $hoveredItemID,
-                                                    isMultiSelectActive: isMultiSelectActive,
-                                                    selectedItems: $selectedItems,
-                                                    clipboardObserver: store.clipboardObserver,
-                                                searchQuery: store.searchQuery,
-                                                    onTogglePin: {
-                                                        withAnimation {
-                                                            store.togglePin(id: item.id)
-                                                        }
-                                                    },
-                                                    onDelete: {
-                                                        selectedItems.remove(item.id)
-                                                        store.remove(id: item.id)
-                                                    },
-                                                    onMarkSensitive: {
-                                                        store.markSensitive(id: item.id)
-                                                    },
-                                                    onUnmarkSensitive: {
-                                                        store.unmarkSensitive(id: item.id)
-                                                    }
-                                                )
-                                            }
-                                        }
-                                        .padding(.horizontal, 8)
+                                }
+                                .padding(.bottom, 8)
+                            }
+                            .onChange(of: selectedIndex) { _, newIndex in
+                                if let idx = newIndex, idx < store.displayItems.count {
+                                    withAnimation(.easeInOut(duration: 0.15)) {
+                                        scrollProxy.scrollTo(store.displayItems[idx].id, anchor: .center)
                                     }
                                 }
                             }
-                            .padding(.bottom, 8)
                         }
                     }
                 }
@@ -306,12 +438,34 @@ struct PopoverContent: View {
             withAnimation(.easeOut(duration: 0.15)) {
                 isVisible = true
             }
+            // Install keyboard event monitor
+            if let existing = eventMonitor {
+                NSEvent.removeMonitor(existing)
+            }
+            eventMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
+                return handleKeyEvent(event)
+            }
+            // Default: first list item selected, not search field
+            if !store.displayItems.isEmpty {
+                selectedIndex = 0
+            }
+            isSearchFocused = false
         }
         .onDisappear {
             isVisible = false
             searchText = ""
             store.searchQuery = ""
             searchTask?.cancel()
+            // Remove keyboard event monitor
+            if let monitor = eventMonitor {
+                NSEvent.removeMonitor(monitor)
+                eventMonitor = nil
+            }
+            selectedIndex = nil
+            isSearchFocused = false
+        }
+        .onChange(of: store.searchQuery) { _, _ in
+            selectedIndex = store.displayItems.isEmpty ? nil : 0
         }
     }
 }
