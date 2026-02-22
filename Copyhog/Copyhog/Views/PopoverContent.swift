@@ -48,9 +48,10 @@ struct PopoverContent: View {
                                 selectedItems.removeAll()
                             }
                         } label: {
-                            Image(systemName: isMultiSelectActive
+                            Label("Multi-Select", systemImage: isMultiSelectActive
                                   ? "checklist.checked"
                                   : "checklist.unchecked")
+                            .font(.caption)
                         }
                         .buttonStyle(.borderless)
                         .help(isMultiSelectActive ? "Exit multi-select" : "Multi-select")
