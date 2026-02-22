@@ -7,6 +7,7 @@ struct SettingsMenu: View {
     @AppStorage("launchAtLogin") private var launchAtLogin = false
     @AppStorage("historyLimit") private var historyLimit = 20
     @AppStorage("plainPasteEnabled") private var plainPasteEnabled = true
+    @AppStorage("appearanceMode") private var appearanceMode = 0
 
     private var appVersion: String {
         Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
@@ -26,6 +27,8 @@ struct SettingsMenu: View {
             historySizePicker
 
             Toggle("Plain Paste (⇧⌘V)", isOn: $plainPasteEnabled)
+
+            appearanceSubmenu
 
             Divider()
 
@@ -139,5 +142,38 @@ struct SettingsMenu: View {
             if !name.isEmpty { return name }
         }
         return bundleID
+    }
+
+    // MARK: - Appearance Submenu
+
+    private var appearanceSubmenu: some View {
+        Menu {
+            Button {
+                appearanceMode = 0
+            } label: {
+                HStack {
+                    Label("System", systemImage: "circle.lefthalf.filled")
+                    if appearanceMode == 0 { Image(systemName: "checkmark") }
+                }
+            }
+            Button {
+                appearanceMode = 1
+            } label: {
+                HStack {
+                    Label("Light", systemImage: "sun.max")
+                    if appearanceMode == 1 { Image(systemName: "checkmark") }
+                }
+            }
+            Button {
+                appearanceMode = 2
+            } label: {
+                HStack {
+                    Label("Dark", systemImage: "moon")
+                    if appearanceMode == 2 { Image(systemName: "checkmark") }
+                }
+            }
+        } label: {
+            Label("Appearance", systemImage: "paintbrush")
+        }
     }
 }

@@ -5,6 +5,15 @@ import ServiceManagement
 @main
 struct CopyhogApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    @AppStorage("appearanceMode") private var appearanceMode = 0
+
+    private var nsAppearance: NSAppearance? {
+        switch appearanceMode {
+        case 1: return NSAppearance(named: .aqua)
+        case 2: return NSAppearance(named: .darkAqua)
+        default: return nil
+        }
+    }
 
     var body: some Scene {
         MenuBarExtra {
@@ -12,6 +21,8 @@ struct CopyhogApp: App {
                 .environmentObject(appDelegate.store)
                 .environmentObject(appDelegate.exclusionManager)
                 .frame(width: 400, height: 520)
+                .onAppear { applyAppearance() }
+                .onChange(of: appearanceMode) { _, _ in applyAppearance() }
         } label: {
             if let image = NSImage(named: "MenuBarIcon") {
                 let ratio = image.size.height / image.size.width
@@ -26,6 +37,13 @@ struct CopyhogApp: App {
             }
         }
         .menuBarExtraStyle(.window)
+    }
+
+    private func applyAppearance() {
+        let appearance = nsAppearance
+        for window in NSApp.windows where window is NSPanel {
+            window.appearance = appearance
+        }
     }
 }
 
