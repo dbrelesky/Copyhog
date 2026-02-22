@@ -178,10 +178,11 @@ Plans:
   3. User can unpin an item and it returns to normal history behavior (subject to purge)
   4. Scrolling through 500 items is smooth with no visible stutter or lag
   5. Saving 500 items to disk does not cause the UI to freeze (debounced writes, no blocking the main thread)
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] TBD (run /gsd:plan-phase 7 to break down)
+- [ ] 07-01-PLAN.md — Data layer: isPinned model field, pin/unpin + pinned-aware purge, debounced save, NSCache thumbnails, 500-item settings
+- [ ] 07-02-PLAN.md — UI layer: sectioned Pinned/History layout, context menu pin action, pin icon overlay
 
 ### Phase 8: Search + Keyboard Navigation
 **Goal**: Users can instantly find any item in their history by typing, and navigate the entire popover without touching the mouse
@@ -228,6 +229,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 04.1 -> 04.2 -> 04.3 -> 5 -
 | 04.3 App Store Readiness | v1.1 | 0/? | Not started | - |
 | 5. Privacy & Compliance | v1.1 | 1/1 | Complete | 2026-02-21 |
 | 6. Screenshot Auto-Detection | v1.2 | Complete    | 2026-02-22 | - |
-| 7. Favorites + History Scale | v1.2 | 0/? | Not started | - |
+| 7. Favorites + History Scale | v1.2 | 0/2 | Not started | - |
 | 8. Search + Keyboard Navigation | v1.2 | 0/? | Not started | - |
 | 9. Global Hotkey + Paste-on-Select | v1.2 | 0/? | Not started | - |
