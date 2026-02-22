@@ -30,6 +30,7 @@
 		A10016 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = A20019 /* PrivacyInfo.xcprivacy */; };
 		A10017 /* PasswordDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20020 /* PasswordDetector.swift */; };
 		B10006 /* PasswordDetectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20007 /* PasswordDetectorTests.swift */; };
+		A10018 /* ScreenshotLocationDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20021 /* ScreenshotLocationDetector.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -60,6 +61,7 @@
 		B20006 /* Phase3PasteActionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phase3PasteActionsTests.swift; sourceTree = "<group>"; };
 		A20020 /* PasswordDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordDetector.swift; sourceTree = "<group>"; };
 		B20007 /* PasswordDetectorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordDetectorTests.swift; sourceTree = "<group>"; };
+		A20021 /* ScreenshotLocationDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotLocationDetector.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXContainerItemProxy section */
@@ -167,6 +169,7 @@
 				A20016 /* ExclusionManager.swift */,
 				A20017 /* BookmarkManager.swift */,
 				A20020 /* PasswordDetector.swift */,
+				A20021 /* ScreenshotLocationDetector.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -282,6 +285,7 @@
 				A10014 /* BookmarkManager.swift in Sources */,
 				A10017 /* PasswordDetector.swift in Sources */,
 				A10015 /* OnboardingView.swift in Sources */,
+				A10018 /* ScreenshotLocationDetector.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
