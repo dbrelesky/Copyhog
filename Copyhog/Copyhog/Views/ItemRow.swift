@@ -65,10 +65,16 @@ struct ItemRow: View {
                 .overlay(alignment: .topLeading) {
                     if showCopyConfirmation {
                         Image(systemName: "checkmark.circle.fill")
-                            .font(.caption)
-                            .foregroundStyle(.white)
-                            .background(Circle().fill(Color.accentColor).padding(-1))
-                            .offset(x: -4, y: -4)
+                            .font(.title2)
+                            .symbolRenderingMode(.palette)
+                            .foregroundStyle(.white, Color(red: 0.6, green: 0.35, blue: 0.75).opacity(0.7))
+                            .background(
+                                Circle()
+                                    .fill(.ultraThinMaterial)
+                                    .frame(width: 24, height: 24)
+                            )
+                            .shadow(color: Color(red: 0.5, green: 0.2, blue: 0.7).opacity(0.4), radius: 4, y: 1)
+                            .offset(x: -6, y: -6)
                             .transition(.scale.combined(with: .opacity))
                     }
                 }
