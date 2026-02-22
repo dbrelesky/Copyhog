@@ -8,6 +8,7 @@ struct OnboardingView: View {
 
     @State private var screenshotGranted = false
     @State private var screeniesGranted = false
+    @State private var detectedScreenshotURL: URL = ScreenshotLocationDetector.detect()
 
     private let accentPurple = Color(red: 0.7, green: 0.4, blue: 0.85)
 
@@ -27,14 +28,7 @@ struct OnboardingView: View {
                 .multilineTextAlignment(.center)
 
             VStack(spacing: 12) {
-                folderRow(
-                    step: 1,
-                    title: "Screenshot Folder",
-                    description: "Where macOS saves screenshots",
-                    granted: screenshotGranted,
-                    disabled: false,
-                    action: selectScreenshotFolder
-                )
+                screenshotFolderRow
 
                 folderRow(
                     step: 2,
@@ -72,6 +66,61 @@ struct OnboardingView: View {
         }
         .background(.ultraThinMaterial)
         .tint(accentPurple)
+    }
+
+    // MARK: - Screenshot Folder Row (Detect + Confirm)
+
+    private var displayPath: String {
+        let home = FileManager.default.homeDirectoryForCurrentUser.path
+        let path = detectedScreenshotURL.path
+        if path.hasPrefix(home) {
+            return "~" + path.dropFirst(home.count)
+        }
+        return path
+    }
+
+    @ViewBuilder
+    private var screenshotFolderRow: some View {
+        HStack(spacing: 12) {
+            if screenshotGranted {
+                Image(systemName: "checkmark.circle.fill")
+                    .foregroundStyle(accentPurple)
+                    .font(.title2)
+                    .frame(width: 28)
+            } else {
+                Text("1")
+                    .font(.headline)
+                    .foregroundStyle(.white)
+                    .frame(width: 28, height: 28)
+                    .background(Circle().fill(accentPurple.opacity(0.4)))
+            }
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Screenshot Folder").font(.headline)
+                Text(displayPath).font(.caption).foregroundStyle(.secondary)
+            }
+
+            Spacer()
+
+            if !screenshotGranted {
+                Button("Use This") {
+                    bookmarkManager.saveBookmark(url: detectedScreenshotURL, key: BookmarkManager.screenshotSourceKey)
+                    screenshotGranted = true
+                }
+                .buttonStyle(.borderedProminent)
+
+                Button("Change...") {
+                    selectScreenshotFolder()
+                }
+            }
+        }
+        .padding(10)
+        .background {
+            RoundedRectangle(cornerRadius: 10)
+                .fill(Color(red: 0.4, green: 0.2, blue: 0.5).opacity(0.1))
+        }
+        .background(.regularMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: 10))
     }
 
     // MARK: - Folder Row
@@ -126,15 +175,7 @@ struct OnboardingView: View {
         panel.canChooseDirectories = true
         panel.allowsMultipleSelection = false
         panel.message = "Select your screenshot folder"
-
-        // Pre-select macOS screenshot location if available
-        if let location = UserDefaults(suiteName: "com.apple.screencapture")?.string(forKey: "location"),
-           !location.isEmpty {
-            let url = URL(fileURLWithPath: (location as NSString).expandingTildeInPath)
-            if FileManager.default.fileExists(atPath: url.path) {
-                panel.directoryURL = url
-            }
-        }
+        panel.directoryURL = detectedScreenshotURL
 
         guard panel.runModal() == .OK, let url = panel.url else { return }
         bookmarkManager.saveBookmark(url: url, key: BookmarkManager.screenshotSourceKey)
