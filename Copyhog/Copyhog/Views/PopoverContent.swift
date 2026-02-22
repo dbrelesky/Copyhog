@@ -180,6 +180,7 @@ struct PopoverContent: View {
                                                 isMultiSelectActive: isMultiSelectActive,
                                                 selectedItems: $selectedItems,
                                                 clipboardObserver: store.clipboardObserver,
+                                                searchQuery: store.searchQuery,
                                                 onTogglePin: {
                                                     withAnimation {
                                                         store.togglePin(id: item.id)
@@ -221,6 +222,7 @@ struct PopoverContent: View {
                                                     isMultiSelectActive: isMultiSelectActive,
                                                     selectedItems: $selectedItems,
                                                     clipboardObserver: store.clipboardObserver,
+                                                searchQuery: store.searchQuery,
                                                     onTogglePin: {
                                                         withAnimation {
                                                             store.togglePin(id: item.id)
@@ -262,6 +264,7 @@ struct PopoverContent: View {
                                                     isMultiSelectActive: isMultiSelectActive,
                                                     selectedItems: $selectedItems,
                                                     clipboardObserver: store.clipboardObserver,
+                                                searchQuery: store.searchQuery,
                                                     onTogglePin: {
                                                         withAnimation {
                                                             store.togglePin(id: item.id)

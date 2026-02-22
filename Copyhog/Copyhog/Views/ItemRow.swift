@@ -7,6 +7,8 @@ struct ItemRow: View {
     let isMultiSelectActive: Bool
     @Binding var selectedItems: Set<UUID>
     let clipboardObserver: ClipboardObserver?
+    var isSelected: Bool = false
+    var searchQuery: String = ""
     var onTogglePin: (() -> Void)?
     var onDelete: (() -> Void)?
     var onMarkSensitive: (() -> Void)?
@@ -25,13 +27,15 @@ struct ItemRow: View {
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
                     .stroke(
-                        item.isSensitive
-                            ? Color(red: 0.7, green: 0.4, blue: 0.85).opacity(0.4)
-                            : Color(red: 0.6, green: 0.35, blue: 0.75).opacity(hoveredItemID == item.id ? 0.4 : 0.1),
-                        lineWidth: item.isSensitive ? 1.5 : 1
+                        isSelected
+                            ? Color(red: 0.7, green: 0.4, blue: 0.85).opacity(0.8)
+                            : item.isSensitive
+                                ? Color(red: 0.7, green: 0.4, blue: 0.85).opacity(0.4)
+                                : Color(red: 0.6, green: 0.35, blue: 0.75).opacity(hoveredItemID == item.id ? 0.4 : 0.1),
+                        lineWidth: isSelected ? 2 : (item.isSensitive ? 1.5 : 1)
                     )
             )
-            .shadow(color: Color(red: 0.5, green: 0.2, blue: 0.7).opacity(hoveredItemID == item.id ? 0.3 : 0), radius: 8, y: 2)
+            .shadow(color: Color(red: 0.5, green: 0.2, blue: 0.7).opacity((hoveredItemID == item.id || isSelected) ? 0.3 : 0), radius: 8, y: 2)
             .animation(.easeInOut(duration: 0.15), value: hoveredItemID)
             .animation(.easeInOut(duration: 0.2), value: showCopyConfirmation)
             .contentShape(Rectangle())
@@ -249,6 +253,14 @@ struct ItemRow: View {
         VStack(spacing: 0) {
             if item.isSensitive {
                 sensitiveCardContent
+            } else if !searchQuery.isEmpty {
+                Text(highlightedText(content: item.content ?? "", query: searchQuery))
+                    .font(.system(size: 10))
+                    .foregroundStyle(.primary)
+                    .lineLimit(6)
+                    .multilineTextAlignment(.leading)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                    .padding(8)
             } else {
                 Text(item.content ?? "")
                     .font(.system(size: 10))
@@ -259,5 +271,29 @@ struct ItemRow: View {
                     .padding(8)
             }
         }
+    }
+
+    private func highlightedText(content: String, query: String) -> AttributedString {
+        var attributed = AttributedString(content)
+        guard !query.isEmpty else { return attributed }
+
+        let contentLower = content.lowercased()
+        let queryLower = query.lowercased()
+
+        var searchStart = contentLower.startIndex
+        while searchStart < contentLower.endIndex {
+            guard let range = contentLower.range(of: queryLower, range: searchStart..<contentLower.endIndex) else {
+                break
+            }
+            // Convert String.Index range to AttributedString.Index range
+            if let attrStart = AttributedString.Index(range.lowerBound, within: attributed),
+               let attrEnd = AttributedString.Index(range.upperBound, within: attributed) {
+                attributed[attrStart..<attrEnd].foregroundColor = Color(red: 0.7, green: 0.4, blue: 0.85)
+                attributed[attrStart..<attrEnd].font = .system(size: 10, weight: .bold)
+            }
+            searchStart = range.upperBound
+        }
+
+        return attributed
     }
 }
