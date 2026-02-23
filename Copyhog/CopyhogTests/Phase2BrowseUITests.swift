@@ -191,7 +191,6 @@ final class ItemRowTests: XCTestCase {
             item: item,
             imageStore: ImageStore(),
             hoveredItemID: Binding(get: { hoveredID }, set: { hoveredID = $0 }),
-            isMultiSelectActive: false,
             selectedItems: Binding(get: { selectedItems }, set: { selectedItems = $0 }),
             clipboardObserver: nil
         )
@@ -210,14 +209,13 @@ final class ItemRowTests: XCTestCase {
             item: item,
             imageStore: ImageStore(),
             hoveredItemID: Binding(get: { hoveredID }, set: { hoveredID = $0 }),
-            isMultiSelectActive: false,
             selectedItems: Binding(get: { selectedItems }, set: { selectedItems = $0 }),
             clipboardObserver: nil
         )
         XCTAssertNotNil(view, "ItemRow with image should instantiate")
     }
 
-    func testItemRowInMultiSelectMode() {
+    func testItemRowWithCommandSelection() {
         let item = ClipItem(
             id: UUID(), type: .text, content: "selectable",
             thumbnailPath: nil, filePath: nil, timestamp: Date()
@@ -229,11 +227,10 @@ final class ItemRowTests: XCTestCase {
             item: item,
             imageStore: ImageStore(),
             hoveredItemID: Binding(get: { hoveredID }, set: { hoveredID = $0 }),
-            isMultiSelectActive: true,
             selectedItems: Binding(get: { selectedItems }, set: { selectedItems = $0 }),
             clipboardObserver: nil
         )
-        XCTAssertNotNil(view, "ItemRow in multi-select mode should instantiate")
+        XCTAssertNotNil(view, "ItemRow with selected item should instantiate")
     }
 
     func testItemRowHoverState() {
@@ -248,7 +245,6 @@ final class ItemRowTests: XCTestCase {
             item: item,
             imageStore: ImageStore(),
             hoveredItemID: Binding(get: { hoveredID }, set: { hoveredID = $0 }),
-            isMultiSelectActive: false,
             selectedItems: Binding(get: { selectedItems }, set: { selectedItems = $0 }),
             clipboardObserver: nil
         )
@@ -269,7 +265,6 @@ final class ItemRowTests: XCTestCase {
             item: item,
             imageStore: ImageStore(),
             hoveredItemID: Binding(get: { hoveredID }, set: { hoveredID = $0 }),
-            isMultiSelectActive: false,
             selectedItems: Binding(get: { selectedItems }, set: { selectedItems = $0 }),
             clipboardObserver: nil
         )

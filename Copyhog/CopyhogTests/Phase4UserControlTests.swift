@@ -193,21 +193,18 @@ final class PopoverContentPhase4Tests: XCTestCase {
     }
 
     func testHogWipeResetsSelectionState() {
-        // Verifies the logic that Hog Wipe clears selectedItems and isMultiSelectActive
+        // Verifies the logic that Hog Wipe clears command-selected items
         let store = makeCleanStore()
         store.add(makeTextItem("item"))
 
         var selectedItems: Set<UUID> = [store.items[0].id]
-        var isMultiSelectActive = true
 
         // Simulate Hog Wipe button action
         store.removeAll()
         selectedItems.removeAll()
-        isMultiSelectActive = false
 
         XCTAssertTrue(store.items.isEmpty)
         XCTAssertTrue(selectedItems.isEmpty, "Selected items should be cleared after Hog Wipe")
-        XCTAssertFalse(isMultiSelectActive, "Multi-select should be deactivated after Hog Wipe")
     }
 
     func testMaxItemsPurgesOldest() {

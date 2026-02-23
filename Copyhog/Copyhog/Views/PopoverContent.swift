@@ -3,7 +3,6 @@ import SwiftUI
 struct PopoverContent: View {
     @EnvironmentObject var store: ClipItemStore
     @State private var hoveredItemID: UUID?
-    @State private var isMultiSelectActive = false
     @State private var selectedItems: Set<UUID> = []
     @State private var showWipeConfirmation = false
     @State private var isVisible = false
@@ -88,7 +87,7 @@ struct PopoverContent: View {
                 handleArrowKey(.left)
                 return nil
             case 36: // Enter/Return
-                if isMultiSelectActive && !selectedItems.isEmpty {
+                if !selectedItems.isEmpty {
                     copyMultiSelectedItems()
                 } else {
                     copySelectedItem()
@@ -101,7 +100,7 @@ struct PopoverContent: View {
                     return nil
                 }
                 if flags.contains(.command) && !flags.contains(.control) {
-                    if isMultiSelectActive && !selectedItems.isEmpty {
+                    if !selectedItems.isEmpty {
                         copyMultiSelectedItems()
                     } else {
                         copySelectedItem()
@@ -130,6 +129,17 @@ struct PopoverContent: View {
                 }
                 isSearchFocused = true
                 return nil
+            case 18, 19, 20, 21, 23, 22, 26, 28, 25: // digit keys 1–9
+                let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
+                if flags.contains(.command) && !flags.contains(.control) {
+                    let digitMap: [UInt16: Int] = [18:0, 19:1, 20:2, 21:3, 23:4, 22:5, 26:6, 28:7, 25:8]
+                    if let idx = digitMap[keyCode], idx < store.displayItems.count {
+                        selectedIndex = idx
+                        copySelectedItem()
+                    }
+                    return nil
+                }
+                return event
             default:
                 return event
             }
@@ -166,6 +176,7 @@ struct PopoverContent: View {
         guard let index = selectedIndex, index < store.displayItems.count else { return }
         let item = store.displayItems[index]
         guard let observer = store.clipboardObserver else { return }
+        selectedItems.removeAll()
         PasteboardWriter.write(item, imageStore: store.imageStore, clipboardObserver: observer)
         copyCount = 1
         copiedItemID = item.id
@@ -178,15 +189,16 @@ struct PopoverContent: View {
     private func copyMultiSelectedItems() {
         guard let observer = store.clipboardObserver else { return }
         let itemsToCopy = store.items.filter { selectedItems.contains($0.id) }
+        guard !itemsToCopy.isEmpty else {
+            copyCount = 0
+            return
+        }
         PasteboardWriter.writeMultiple(
             itemsToCopy,
             imageStore: store.imageStore,
             clipboardObserver: observer
         )
-        copyCount = selectedItems.count
-        selectedItems.removeAll()
-        isMultiSelectActive = false
-        AutoPasteService.pasteAfterDismiss()
+        copyCount = itemsToCopy.count
     }
 
     private func dismissPopover() {
@@ -268,7 +280,7 @@ struct PopoverContent: View {
                         .padding(.horizontal, 8)
                         .padding(.top, 8)
 
-                    // Toolbar: search pill, multi-select pill, batch copy, settings
+                    // Toolbar: search pill, copy status, settings
                     HStack(spacing: 6) {
                         // Search pill — expands to input on tap
                         if isSearchExpanded {
@@ -340,54 +352,9 @@ struct PopoverContent: View {
                             ))
                         }
 
-                        // Multi-select pill
-                        Button {
-                            isMultiSelectActive.toggle()
-                            if !isMultiSelectActive {
-                                selectedItems.removeAll()
-                            }
-                        } label: {
-                            HStack(spacing: 4) {
-                                Image(systemName: isMultiSelectActive
-                                      ? "checklist.checked"
-                                      : "checklist.unchecked")
-                                    .font(.system(size: 11, weight: .medium))
-                                    .foregroundStyle(isMultiSelectActive ? Theme.accent : .secondary)
-                            }
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 5)
-                            .background(.ultraThinMaterial)
-                            .clipShape(Capsule())
-                            .overlay(
-                                Capsule()
-                                    .strokeBorder(
-                                        isMultiSelectActive
-                                            ? Theme.accent.opacity(0.4)
-                                            : Color.primary.opacity(0.1),
-                                        lineWidth: 0.5
-                                    )
-                            )
-                        }
-                        .buttonStyle(.plain)
-                        .help(isMultiSelectActive ? "Exit multi-select" : "Multi-select")
-
                         Spacer()
 
-                        if isMultiSelectActive && !selectedItems.isEmpty,
-                           store.clipboardObserver != nil {
-                            Button {
-                                copyMultiSelectedItems()
-                            } label: {
-                                Text("\(selectedItems.count) Copied")
-                                    .font(.system(size: 11, weight: .medium))
-                                    .foregroundStyle(.white)
-                                    .padding(.horizontal, 10)
-                                    .padding(.vertical, 5)
-                                    .background(Theme.accent)
-                                    .clipShape(Capsule())
-                            }
-                            .buttonStyle(.plain)
-                        } else if copyCount > 0 {
+                        if copyCount > 0 {
                             Text("\(copyCount) Copied")
                                 .font(.system(size: 11, weight: .medium))
                                 .foregroundStyle(.white)
@@ -424,7 +391,6 @@ struct PopoverContent: View {
                             Button("Wipe All") {
                                 store.removeAll()
                                 selectedItems.removeAll()
-                                isMultiSelectActive = false
                                 showWipeConfirmation = false
                             }
                             .controlSize(.small)
@@ -460,19 +426,22 @@ struct PopoverContent: View {
 
                                 LazyVStack(spacing: 0) {
                                     LazyVGrid(columns: columns, spacing: 8) {
-                                        ForEach(store.displayItems) { item in
+                                        ForEach(Array(store.displayItems.enumerated()), id: \.element.id) { index, item in
                                             ItemRow(
                                                 item: item,
                                                 imageStore: store.imageStore,
                                                 hoveredItemID: $hoveredItemID,
-                                                isMultiSelectActive: isMultiSelectActive,
                                                 selectedItems: $selectedItems,
                                                 clipboardObserver: store.clipboardObserver,
                                                 isSelected: selectedIndex.flatMap { idx in idx < store.displayItems.count ? store.displayItems[idx].id : nil } == item.id,
                                                 searchQuery: store.searchQuery,
                                                 copiedItemID: copiedItemID,
+                                                gridIndex: index,
                                                 onCopy: {
                                                     copyCount = 1
+                                                },
+                                                onCommandSelectionChanged: {
+                                                    copyMultiSelectedItems()
                                                 },
                                                 onDelete: {
                                                     selectedItems.remove(item.id)
@@ -544,6 +513,7 @@ struct PopoverContent: View {
             }
             selectedIndex = nil
             copyCount = 0
+            selectedItems.removeAll()
             isSearchFocused = false
         }
         .onChange(of: store.searchQuery) { _, _ in

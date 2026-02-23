@@ -4,13 +4,14 @@ struct ItemRow: View {
     let item: ClipItem
     let imageStore: ImageStore
     @Binding var hoveredItemID: UUID?
-    let isMultiSelectActive: Bool
     @Binding var selectedItems: Set<UUID>
     let clipboardObserver: ClipboardObserver?
     var isSelected: Bool = false
     var searchQuery: String = ""
     var copiedItemID: UUID? = nil
+    var gridIndex: Int? = nil
     var onCopy: (() -> Void)?
+    var onCommandSelectionChanged: (() -> Void)? = nil
     var onDelete: (() -> Void)?
     var onMarkSensitive: (() -> Void)?
     var onUnmarkSensitive: (() -> Void)?
@@ -35,7 +36,7 @@ struct ItemRow: View {
                             ? Theme.accent.opacity(0.6)
                             : item.isSensitive
                                 ? Color.primary.opacity(0.12)
-                                : Color.primary.opacity(hoveredItemID == item.id ? 0.15 : 0.08),
+                                : cardStrokeColor,
                         lineWidth: isSelected ? 2 : (item.isSensitive ? 1.5 : 1)
                     )
             )
@@ -50,13 +51,16 @@ struct ItemRow: View {
                 )
             }
             .simultaneousGesture(TapGesture().onEnded {
-                if isMultiSelectActive {
+                let commandHeld = NSEvent.modifierFlags.contains(.command)
+                if commandHeld {
                     if selectedItems.contains(item.id) {
                         selectedItems.remove(item.id)
                     } else {
                         selectedItems.insert(item.id)
                     }
+                    onCommandSelectionChanged?()
                 } else if let observer = clipboardObserver {
+                    selectedItems.removeAll()
                     PasteboardWriter.write(item, imageStore: imageStore, clipboardObserver: observer)
                     onCopy?()
                     if AutoPasteService.isEnabled {
@@ -103,6 +107,14 @@ struct ItemRow: View {
             }
     }
 
+    private var cardStrokeColor: Color {
+        if item.type == .image {
+            return Color.blue.opacity(hoveredItemID == item.id ? 0.4 : 0.3)
+        } else {
+            return Color.gray.opacity(hoveredItemID == item.id ? 0.4 : 0.3)
+        }
+    }
+
     @ViewBuilder
     private var cardContent: some View {
         ZStack {
@@ -113,27 +125,71 @@ struct ItemRow: View {
                 textCardContent
             }
 
-            // Timestamp overlay — bottom-right
-            VStack {
-                Spacer()
-                HStack {
+            // Bottom row — source app left, timestamp right
+            if !item.isSensitive {
+                VStack {
                     Spacer()
-                    Text(item.timestamp, style: .relative)
-                        .font(.system(size: 9))
-                        .foregroundStyle(.secondary)
+                    HStack(alignment: .bottom) {
+                        // Source app + type label — bottom-left
+                        HStack(spacing: 3) {
+                            if item.sourceAppBundleID == "com.apple.screencaptureui" {
+                                Image(systemName: "camera.viewfinder")
+                                    .font(.system(size: 8, weight: .medium))
+                                    .foregroundStyle(.secondary)
+                            } else if let bundleID = item.sourceAppBundleID,
+                               let appURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleID) {
+                                Image(nsImage: NSWorkspace.shared.icon(forFile: appURL.path))
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 12, height: 12)
+                            }
+                            Text(itemTypeLabel)
+                                .font(.system(size: 8, weight: .medium))
+                                .foregroundStyle(.secondary)
+                        }
                         .padding(.horizontal, 5)
                         .padding(.vertical, 2)
                         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 4))
-                }
-            }
-            .padding(5)
 
-            // Multi-select checkbox — top-left
-            if isMultiSelectActive {
+                        Spacer()
+
+                        // Simplified timestamp — bottom-right
+                        TimelineView(.periodic(from: .now, by: 30)) { context in
+                            Text(simplifiedTimestamp(from: item.timestamp, now: context.date))
+                                .font(.system(size: 9))
+                                .foregroundStyle(.secondary)
+                                .padding(.horizontal, 5)
+                                .padding(.vertical, 2)
+                                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 4))
+                        }
+                    }
+                }
+                .padding(5)
+            }
+
+            // ⌘ shortcut badge — top-right
+            if let idx = gridIndex, idx < 9 {
                 VStack {
                     HStack {
-                        Image(systemName: selectedItems.contains(item.id) ? "checkmark.circle.fill" : "circle")
-                            .foregroundStyle(selectedItems.contains(item.id) ? Theme.accent : .secondary)
+                        Spacer()
+                        Text("⌘\(idx + 1)")
+                            .font(.system(size: 9, weight: .semibold, design: .rounded))
+                            .foregroundStyle(.secondary)
+                            .padding(.horizontal, 5)
+                            .padding(.vertical, 2)
+                            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 4))
+                    }
+                    Spacer()
+                }
+                .padding(5)
+            }
+
+            // Command-selected indicator — top-left
+            if selectedItems.contains(item.id) {
+                VStack {
+                    HStack {
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundStyle(.green)
                             .font(.body)
                             .background(
                                 Circle()
@@ -264,6 +320,30 @@ struct ItemRow: View {
                     .padding(8)
             }
         }
+    }
+
+    private var itemTypeLabel: String {
+        if item.sourceAppBundleID == "com.apple.screencaptureui" {
+            return "Screenshot"
+        }
+        return item.type == .text ? "Text" : "Image"
+    }
+
+    private func simplifiedTimestamp(from date: Date, now: Date) -> String {
+        let seconds = Int(now.timeIntervalSince(date))
+        if seconds < 60 {
+            return "just now"
+        }
+        let minutes = seconds / 60
+        if minutes < 60 {
+            return minutes == 1 ? "1 min ago" : "\(minutes) mins ago"
+        }
+        let hours = minutes / 60
+        if hours < 24 {
+            return hours == 1 ? "1 hr ago" : "\(hours) hrs ago"
+        }
+        let days = hours / 24
+        return days == 1 ? "1 day ago" : "\(days) days ago"
     }
 
     private func highlightedText(content: String, query: String) -> AttributedString {

@@ -32,13 +32,14 @@ struct PasteboardWriter {
         clipboardObserver.finishOwnWrite()
     }
 
-    /// Copies multiple ClipItems to the system clipboard.
+    /// Copies multiple ClipItems to the system clipboard on a single pasteboard item.
     ///
-    /// Writes three complementary pasteboard types on a single item so every app
-    /// receives all content in the richest format it supports:
-    /// - `.rtfd`   — rich text with embedded images (Notes, TextEdit, Pages, Mail, Messages)
-    /// - `.string` — concatenated text for plain-text apps (Terminal, code editors)
-    /// - `.tiff`   — first image for apps that only read raw image data
+    /// Multi-select must preserve *all* selected items.
+    ///
+    /// To avoid target apps pasting only a subset, this method only publishes
+    /// formats that can carry the full selection:
+    /// - `.rtfd` for mixed/image-rich content (text + embedded images)
+    /// - `.string` only for text-only selections
     static func writeMultiple(
         _ items: [ClipItem],
         imageStore: ImageStore,
@@ -48,9 +49,13 @@ struct PasteboardWriter {
 
         clipboardObserver.skipNextChange()
 
-        // Build an attributed string with all items (text + inline images)
+        // Build an attributed string with all items (text + inline images).
+        // Images are embedded via FileWrapper so the RTFD serializer includes
+        // the actual image bytes — NSTextAttachmentCell alone only displays but
+        // does not serialize image data into the RTFD archive.
         let attributed = NSMutableAttributedString()
         var isFirst = true
+        var imageIndex = 0
 
         for item in items {
             if !isFirst {
@@ -64,45 +69,38 @@ struct PasteboardWriter {
 
             case .image:
                 if let filePath = item.filePath,
-                   let image = imageStore.loadImage(relativePath: filePath) {
+                   let image = imageStore.loadImage(relativePath: filePath),
+                   let tiffData = image.tiffRepresentation {
                     let attachment = NSTextAttachment()
-                    let cell = NSTextAttachmentCell(imageCell: image)
-                    attachment.attachmentCell = cell
+                    let wrapper = FileWrapper(regularFileWithContents: tiffData)
+                    wrapper.preferredFilename = "image\(imageIndex).tiff"
+                    attachment.fileWrapper = wrapper
                     attributed.append(NSAttributedString(attachment: attachment))
+                    imageIndex += 1
                     isFirst = false
                 }
             }
         }
 
-        // Collect all types we'll declare up front
-        var types: [NSPasteboard.PasteboardType] = []
+        let pasteboard = NSPasteboard.general
+        pasteboard.clearContents()
 
+        // RTFD — single item with full mixed payload for rich-text apps
         let range = NSRange(location: 0, length: attributed.length)
-        let rtfdData = attributed.rtfd(from: range, documentAttributes: [:])
-        if rtfdData != nil { types.append(.rtfd) }
+        if let rtfdData = attributed.rtfd(from: range, documentAttributes: [:]) {
+            pasteboard.setData(rtfdData, forType: .rtfd)
+        }
 
+        // Plain-text fallback is only safe for text-only batches.
+        // For mixed/image selections, .string would drop images in many apps.
         let allText = items
             .filter { $0.type == .text }
             .compactMap { $0.content }
             .joined(separator: "\n\n")
-        if !allText.isEmpty { types.append(.string) }
-
-        let firstImageData: Data? = {
-            guard let firstImage = items.first(where: { $0.type == .image }),
-                  let filePath = firstImage.filePath,
-                  let image = imageStore.loadImage(relativePath: filePath) else { return nil }
-            return image.tiffRepresentation
-        }()
-        if firstImageData != nil { types.append(.tiff) }
-
-        // Single clearContents + declare all types, then set data
-        let pasteboard = NSPasteboard.general
-        pasteboard.clearContents()
-        pasteboard.declareTypes(types, owner: nil)
-
-        if let rtfdData { pasteboard.setData(rtfdData, forType: .rtfd) }
-        if !allText.isEmpty { pasteboard.setString(allText, forType: .string) }
-        if let tiffData = firstImageData { pasteboard.setData(tiffData, forType: .tiff) }
+        let hasImages = items.contains { $0.type == .image }
+        if !hasImages && !allText.isEmpty {
+            pasteboard.setString(allText, forType: .string)
+        }
 
         clipboardObserver.finishOwnWrite()
     }
