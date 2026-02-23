@@ -174,10 +174,10 @@ struct ItemRow: View {
                         Spacer()
                         Text("⌘\(idx + 1)")
                             .font(.system(size: 9, weight: .semibold, design: .rounded))
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(.white)
                             .padding(.horizontal, 5)
                             .padding(.vertical, 2)
-                            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 4))
+                            .background(Color(red: 0.25, green: 0.5, blue: 1.0).opacity(0.5), in: RoundedRectangle(cornerRadius: 4))
                     }
                     Spacer()
                 }
